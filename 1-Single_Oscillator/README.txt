@@ -9,6 +9,7 @@ DESCRIPTION
 	rate model described in Ch. 7.5 of "Theoretical Neuroscience", by 
 	Peter Dayan and L. F. Abbott.
 
+
 USAGE
 
 	To compile the code, navigate into this folder and run make:
@@ -22,18 +23,20 @@ USAGE
 	The output is two vertical vectors of rates (sampled @ 10,000 Hz),
 	saved in the file "single_PING_group.dat" in this directory.
 	The first column is the Excitatory group average rate over time, 
-	and the second column is the Inhibitory group rate.  For plotting
-	tools, see the /graphing folder.	
+	and the second column is the Inhibitory group rate.  To plot the
+	data, use your own plotting software, or if you have python, numpy,
+	and matlibplot, you can run plotter.sh to plot the data:
+	
+	$	./plotter.sh
+	
+	To compile, run, and plot, simply run
+	
+	$	./run.sh
+	
 
 COPYRIGHT
 
-	Copyright 2012
-	Brendan Hasz
+	Copyright (C) 2012 Brendan Hasz
 	bhasz@brandeis.edu
 	www.cs.brandeis.edu/~bhasz/main.php
 	Brandeis University, Waltham, MA, USA
-
-	This work is licensed under a Creative Commons NonCommercial 3.0 
-	Unported License.  You can use it and modify it any way you like as
-	long as you aren't making money off it - if you are, I want some 
-	too!

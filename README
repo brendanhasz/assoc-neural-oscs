@@ -6,6 +6,14 @@ DESCRIPTION
 	Associative neural oscillators.  Explores and simulates neural
 	oscillators which are able to learn phase-relationship associations
 	between themselves.
+	
+	
+	PLOTTING
+	The programs outupt data as ascii text files, so you can use 
+	your preferred graphing software to plot the graphs.  However,
+	you can also use the provided plotting tools in /graphing.  These
+	tools require python, and the python packages numpy and matlibplot.
+	
 
 COPYRIGHT
 	
