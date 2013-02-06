@@ -1,0 +1,16 @@
+NAME
+	assoc-neural-oscs
+
+DESCRIPTION
+	
+	Associative neural oscillators.  Explores and simulates neural
+	oscillators which are able to learn phase-relationship associations
+	between themselves.
+
+COPYRIGHT
+	
+	Copyright (C) 2013 Brendan Hasz
+	bhasz@brandeis.edu
+	www.cs.brandeis.edu/~bhasz/main.php
+	Brandeis University, Waltham, MA, USA
+
