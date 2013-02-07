@@ -3,7 +3,7 @@
 
 	Simulates coupled PING oscillators - you specify the cross-group
 	connectivity and initial rates for each group. Uses the simple rate
-    model described in Ch. 7.5 of "Theoretical Neuroscience", by 
+    model described in Ch. 7.5 of "Theoretical Neuroscience", by
     Peter Dayan and L. F. Abbott.
 
 	INPUTS
@@ -25,24 +25,27 @@
 	www.cs.brandeis.edu/~bhasz/main.php
 	Brandeis University, Waltham, MA, USA
 
-	This work is licensed under a Creative Commons NonCommercial 3.0 
+	This work is licensed under a Creative Commons NonCommercial 3.0
 	Unported License.  You can use it and modify it any way you like as
-	long as you aren't commercially making money off it - if you are, 
+	long as you aren't commercially making money off it - if you are,
 	I want some too!
 
 */
 
-#include "rateN.h"
+#include <math.h>
+#include <stdlib.h>
+#include "../../basic_math/basic_math.h"
+#include "../rateN/rateN.h"
 
-void 
-pingRateN(int n, int no, double Re[n][no], double R_i[no][2], 
-	double xEE, double xEI, double xIE, double xII, 
+void
+pingRateN(int n, int no, double Re[n][no], double R_i[no][2],
+	double xEE, double xEI, double xIE, double xII,
 	double wW[2][2], double dt)
-{	
-	
+{
+
 	int g = 2*no, i, j;	//Num groups, counters
 	double R[n][g];		//Rate vectors for each group
-	
+
 	double gamma[g]; //External input
 	for (i=0; i<g; i=i+2){
 		gamma[i] = 10;		//Excitatory
@@ -54,7 +57,13 @@ pingRateN(int n, int no, double Re[n][no], double R_i[no][2],
 		tau[i] = 0.002;		//AMPA (Excitatory) - 2ms
 		tau[i+1] = 0.01;	//GABA_A (Inhibitory) - 10ms
 	}
-	
+
+	double R_i_s[g];
+	for (i=0; i<g; i++){ //set initial rates with a little
+		//R_i_s[i] = R_i[i/2][i%2]+1e-4*gen_randn(); //stochasticity
+		R_i_s[i] = R_i[i/2][i%2]; //no stochasticity
+	}
+
 	double W[g][g];	//Synaptic weights
 	for (i=0; i<g; i=i+2){
 		for (j=0; j<g; j=j+2){
@@ -69,19 +78,19 @@ pingRateN(int n, int no, double Re[n][no], double R_i[no][2],
 				W[i][j+1] = xEI;	//xEI
 				W[i+1][j] = xIE;	//xIE
 				W[i+1][j+1] = xII;	//xII
-			}			
+			}
 		}
 	}
-	
-	
-	//Simulate
-	rateN(g, n, R, R_i, W, gamma, tau, dt);
 
-	
+
+	//Simulate
+	rateN(g, n, R, R_i_s, W, gamma, tau, dt);
+
+
 	//Copy excitatory rate vectors into output vectors
 	for (i=0; i<no; i++){
-		for (t=0; t<n; t++){
-			Re[t][i] = R[t][2*i];
+		for (j=0; j<n; j++){
+			Re[j][i] = R[j][2*i];
 		}
 	}
 
