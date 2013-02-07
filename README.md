@@ -3,7 +3,7 @@
 
 
 # Usage
-The project is written in `C`, so `gcc` is required to compile the code. `make` is also required to auto-make the code.
+The project is written in `C`, so `gcc` and `make` are required to compile the code.
 
 Navigate into each of the main folders (numbered folders) and follow the directions of the README files in each.  Usually you can just navigate into a folder and execute the code by running the command `./run.sh`.
 
@@ -14,7 +14,10 @@ The routines output data into ascii text files, so you can use your preferred gr
 
 # Copyright
 Copyright (C) 2012 Brendan Hasz
+
 [bhasz@brandeis.edu](mailto:bhasz@brandeis.edu)
+
 [www.cs.brandeis.edu/~bhasz/main.php](www.cs.brandeis.edu/~bhasz/main.php)
+
 [Brandeis University](http://www.brandeis.edu/), Waltham, MA, USA
 
