@@ -19,7 +19,7 @@ int main(void){
 	double dt = 0.0001;
 	double Re[n][no], R_i[no][2];
 	double xEE_IN=0.1, xEI_IN=0, xIE_IN=0, xII_IN=0;	//SS in-phase
-	double xEE_OUT=0, xEI_OUT=0.2, xIE_OUT=-0.2, xII_OUT=0; //SS out
+	double xEE_OUT=0, xEI_OUT=0.3, xIE_OUT=-0.3, xII_OUT=0; //SS out
 	double wW[2][2];     //within-oscillator synaptic weights
 		wW[0][0]=2;			wW[0][1]=2.873;	//EE	EI
 		wW[1][0]=-2.873;	wW[1][1]=-2;		//IE	II
