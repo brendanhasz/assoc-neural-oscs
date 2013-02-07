@@ -30,5 +30,31 @@
 
 */
 
+#ifndef MAX
+#define MAX(x,y) (x > y ? x : y)
+#endif
 
-void rateN(int g, int n, double R[n][g], double R_i[], double W[g][g], double gamma[], double tau[], double dt);
+void rateN(int g, int n, double R[n][g], double R_i[], double W[g][g], double gamma[], double tau[], double dt)
+{
+
+	//Variables
+	int t,i,j,l;  //counters
+	double s; //sum of weights
+
+	//Initial rates
+	for (i=0; i<g; i++){
+		R[0][i] = R_i[i];
+	}
+	
+	//Simulate
+	for (t=1; t<=n; t++){  //for each timestep,
+		l = t-1; //find last timestep
+		for (i=0; i<g; i++){ //update each rate model
+			s = 0;  //Reset sum
+			for (j=0; j<g; j++){ //sum synaptic inputs
+				s += W[j][i]*R[l][j];
+			}
+			R[t][i]=R[l][i]+dt/tau[i]*(-R[l][i]+MAX(0,s+gamma[i])); //integrate
+		}
+	}
+}
