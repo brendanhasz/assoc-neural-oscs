@@ -22,11 +22,11 @@
 
 double
 amp(int n, double data[])
-{	
+{
 	double mn=mean(n, data), sm=0;
 	int i;
 	for (i=0; i<n; i++){
-		sm += pow(data[i]-mn,2)/n;
+		sm += pow(data[i]-mn,2);
 	}
-	return sqrt(sm);
+	return sqrt(sm/n);
 }

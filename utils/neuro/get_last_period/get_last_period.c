@@ -59,10 +59,11 @@ get_last_period(int *p, double rates[][2], double wW[2][2])
     l2peaks(n, Re, tl2p);
     
     //Determine period length in timesteps
+    int maxp = *p;
     *p = tl2p[1] - tl2p[0];
     
     //Write rates between last 2 peaks into rates
-    for (i=0; i<*p; i++){
+    for (i=0; i<*p && i<maxp; i++){
         rates[i][0] = R[tl2p[0]+i][0];
         rates[i][1] = R[tl2p[0]+i][1];
     }

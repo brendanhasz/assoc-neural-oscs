@@ -70,14 +70,15 @@ linspace(ie_min, ie_max, ie_res, ie_vec);
 
 
 //Within-oscillator synaptic strength
-double W[g][g];     //Synaptic weights
-	W[0][0]=2;		W[0][1]=2.873;	//EE	EI
-	W[1][0]=-2.873;	W[1][1]=-2;		//IE	II
+double wW[g][g];     //Synaptic weights
+	wW[0][0]=2;			wW[0][1]=2.873;	//EE	EI
+	wW[1][0]=-2.873;	wW[1][1]=-2;	//IE	II
+
 
 //DETERMINE INITIAL RATES
 //Get last period
-int p, lp_max=400;
-double lp_rates[lp_max][2];
+int p=1000;
+double lp_rates[p][2];
 get_last_period(&p, lp_rates, W);
 double R_i_IN[no][2], R_i_OUT[no][2];
 //Initially In-phase
@@ -91,9 +92,18 @@ R_i_OUT[1][0] lp_rates[p/2][0];	R_i_OUT[1][1]=lp_rates[p/2][1]; //osc2
 //Storage arrays
 double Re_IN[n][no], Re_OUT[n][no];
 double pds[no][no];
-double initIN[ee_res][ii_res][ei_res][ie_res];
-double initOUT[ee_res][ii_res][ei_res][ie_res];
-double DDpsi[ee_res][ii_res][ei_res][ie_res];
+
+double phdiff_IN[ee_res][ii_res][ei_res][ie_res];
+double phdiff_OUT[ee_res][ii_res][ei_res][ie_res];
+double phdiff_DIFF[ee_res][ii_res][ei_res][ie_res];
+
+double freq_IN[ee_res][ii_res][ei_res][ie_res];
+double freq_OUT[ee_res][ii_res][ei_res][ie_res];
+double freq_DIFF[ee_res][ii_res][ei_res][ie_res];
+
+double amp_IN[ee_res][ii_res][ei_res][ie_res];
+double amp_OUT[ee_res][ii_res][ei_res][ie_res];
+double amp_DIFF[ee_res][ii_res][ei_res][ie_res];
 	
 
 
@@ -114,28 +124,47 @@ for (ee=0; ee<ee_res; ee++){
 		pingRateN(n, no, Re_OUT, R_i_OUT, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
 		
 		
-		//PHASE DIFF
+		
+		//FIND PHASE DIFFS
 		//Phase diff: INIT-IN
+		phdiff2(n, no, Re_IN, pds);
+		phdiff_IN[ee][ii][ei][ie] = pds[0][1];
 		
 		//Phase diff: INIT-OUT
-		
+		phdiff2(n, no, Re_OUT, pds);
+		phdiff_OUT[ee][ii][ei][ie] = pds[0][1];
+
 		//Phase diff: DIFF (IN-OUT)
+		phdiff_DIFF[ee][ii][ei][ie] = phdiff_IN[ee][ii][ei][ie] - phdiff_OUT[ee][ii][ei][ie];
 
 
-		//FREQUENCY
+
+		//FIND FREQUENCY
+		double thel2[2];
+		//TODO: copy 1st oscs E rate vec from Re_IN and Re_OUT vecs into own vecs (Re_IN_o1, etc)
+		double Re_IN_o1[n], Re_OUT_o1[n];
 		//Frequency: INIT-IN
+		l2peaks(n, Re_IN_o1, thel2); //get last 2 peaks
+		freq_IN[ee][ii][ei][ie] = 10000/(tl2p[1] - tl2p[0]);
 		
 		//Frequency: INIT-OUT
-		
+		l2peaks(n, Re_OUT_o1, thel2); //get last 2 peaks
+		freq_OUT[ee][ii][ei][ie] = 10000/(tl2p[1] - tl2p[0]);
+
 		//Frequency: DIFF (IN-OUT)
+		freq_DIFF[ee][ii][ei][ie] = freq_IN[ee][ii][ei][ie] - req_OUT[ee][ii][ei][ie];
 
 
-		//FREQUENCY
-		//Frequency: INIT-IN
+
+		//FIND AMPLITUDE
+		//Amplitude: INIT-IN
+		amp_IN[ee][ii][ei][ie] = amp(n,Re_IN);
 		
-		//Frequency: INIT-OUT
-		
-		//Frequency: DIFF (IN-OUT)
+		//Amplitude: INIT-OUT
+		amp_OUT[ee][ii][ei][ie] = amp(n,Re_OUT);
+
+		//Amplitude: DIFF (IN-OUT)
+		amp_DIFF[ee][ii][ei][ie]  = amp_IN[ee][ii][ei][ie] - amp_OUT[ee][ii][ei][ie];
 		
 		
 		/* old stuff for reference
