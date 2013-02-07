@@ -45,7 +45,7 @@ int main(void){
 	/*************INIT IN, SS IN *****************/
 	pingRateN(n,no,Re,R_i_IN,xEE_IN,xEI_IN,xIE_IN,xII_IN,wW,dt);
 	
-    //Save data
+	//Save data
 	char * filename1 = "pingRateN_tester_iIN_ssIN.dat";
 	asave(n, no, Re, filename1);
 	printf("Data saved as %s\n", filename1);
@@ -54,7 +54,7 @@ int main(void){
 	/*************INIT IN, SS OUT *****************/
 	pingRateN(n,no,Re,R_i_IN,xEE_OUT,xEI_OUT,xIE_OUT,xII_OUT,wW,dt);
 	
-    //Save data
+	//Save data
 	char * filename2 = "pingRateN_tester_iIN_ssOUT.dat";
 	asave(n, no, Re, filename2);
 	printf("Data saved as %s\n", filename2);
@@ -63,7 +63,7 @@ int main(void){
 	/*************INIT OUT, SS IN *****************/
 	pingRateN(n,no,Re,R_i_OUT,xEE_IN,xEI_IN,xIE_IN,xII_IN,wW,dt);
 	
-    //Save data
+	//Save data
 	char * filename3 = "pingRateN_tester_iOUT_ssIN.dat";
 	asave(n, no, Re, filename3);
 	printf("Data saved as %s\n", filename3);
@@ -72,7 +72,7 @@ int main(void){
 	/*************INIT OUT, SS OUT *****************/
 	pingRateN(n,no,Re,R_i_OUT,xEE_OUT,xEI_OUT,xIE_OUT,xII_OUT,wW,dt);
 	
-    //Save data
+	//Save data
 	char * filename4 = "pingRateN_tester_iOUT_ssOUT.dat";
 	asave(n, no, Re, filename4);
 	printf("Data saved as %s\n", filename4);

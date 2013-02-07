@@ -3,7 +3,7 @@
 
 	FUNCTIONS
 	****************************************************************
-	
+
 	*** BASIC MATH AND DATA GENERATION FUNCTIONS ***
 	log2 - Find the log2 of a number
 	max - Find the larger of two numbers
@@ -25,7 +25,6 @@
 	aren't commercially making money off it - if you are, I want some too!
 
 */
-
 
 // log2 - Calculate the log base 2 of a number
 #ifndef log2
@@ -52,7 +51,7 @@
 #define gen_rand() ( rand() / (1.0 + RAND_MAX) )
 #endif
 
-// gen_randn - Generate a random value drawn from a normal dist. using Box–Muller transform
+// gen_randn - Generate a random value drawn from a normal dist. using Box-Muller transform
 #ifndef gen_randn
 #define gen_randn() ( sqrt(-2*log(gen_rand())) * sin(2*M_PI*gen_rand()) )
 #endif
