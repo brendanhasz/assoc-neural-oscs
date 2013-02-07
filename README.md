@@ -17,7 +17,7 @@ Copyright (C) 2012 Brendan Hasz
 
 [bhasz@brandeis.edu](mailto:bhasz@brandeis.edu)
 
-[www.cs.brandeis.edu/~bhasz/main.php](www.cs.brandeis.edu/~bhasz/main.php)
+[www.cs.brandeis.edu/~bhasz/main.php](http://www.cs.brandeis.edu/~bhasz/main.php)
 
 [Brandeis University](http://www.brandeis.edu/), Waltham, MA, USA
 
