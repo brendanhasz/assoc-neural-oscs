@@ -27,6 +27,8 @@
 
 */
 
+#include "l2peaks.h"
+
 void
 phdiff2(int n, int ng, double A[][ng], double pds[ng][ng])
 {	
