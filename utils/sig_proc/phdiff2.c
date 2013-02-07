@@ -27,6 +27,7 @@
 
 */
 
+#include <math.h>
 #include "l2peaks.h"
 
 void

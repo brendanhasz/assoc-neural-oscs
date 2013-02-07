@@ -20,6 +20,8 @@
 
 */
 
+#include <math.h>
+
 double
 amp(int n, double data[])
 {

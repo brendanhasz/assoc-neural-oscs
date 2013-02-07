@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 
+#include "../../utils/vectors/linspace.h"
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/sig_proc/phdiff2.h"
@@ -198,21 +199,10 @@ double phdiff_IN_2d[ee_res*ei_res][ii_res*ie_res];
 double phdiff_OUT_2d[ee_res*ei_res][ii_res*ie_res];
 double phdiff_DIFF_2d[ee_res*ei_res][ii_res*ie_res];
 
-matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, initIN, initIN_2d);
-char * filenameIN = "find_DDpsi_initIN.dat";
-asave2(ee_res*ei_res, ii_res*ie_res, initIN_2d, filenameIN); //Save data
-printf("Data saved as %s\n", filenameIN);
-
-matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, initOUT, initOUT_2d);
-char * filenameOUT = "find_DDpsi_initOUT.dat";
-asave2(ee_res*ei_res, ii_res*ie_res, initOUT_2d, filenameOUT); //Save data
-printf("Data saved as %s\n", filenameOUT);
-
-matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, DDpsi, DDpsi_2d);
-char * filenameDDpsi = "find_DDpsi_DDpsi.dat";
-asave2(ee_res*ei_res, ii_res*ie_res, DDpsi_2d, filenameDDpsi); //Save data
-printf("Data saved as %s\n", filenameDDpsi);
-
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, phdiff_IN, phdiff_IN_2d);
+char * fname_phdiff_IN = "Phdiff_init_IN.dat";
+asave2(ee_res*ei_res, ii_res*ie_res, phdiff_IN_2d, fname_phdiff_IN); //Save data
+printf("Data saved as %s\n", fname_phdiff_IN);
 
 
 printf("Done!\n");
