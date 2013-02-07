@@ -22,13 +22,13 @@
 */
 
 void
-vgauss(int n, double A[], double d)
+vgauss(int n, double A[], double h)
 {
 
 	double a=0, b=1;
 	double mu = (a+b)/2;
-	double sig = (b-a)/(2*d);
-    double c = h/(sqrt(2*M_PI)*pow(sig,2));
+	double sig = (b-a)/(2*h);
+	double c = h/(sqrt(2*M_PI)*pow(sig,2));
 
 	//Create the gaussian
 	linspace(a,b,n,A);

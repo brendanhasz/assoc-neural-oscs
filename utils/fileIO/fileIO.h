@@ -22,40 +22,7 @@
 
 */
 
-/* vsave - Saves a vector to a file
-	INPUTS
-		int n			Length of the vector to save to file
-		double A[]		Vector to save to file
-		char fileName[]	The name of the file to save to
-*/
 #include "vsave.h"
-
-
-/* vsave2 - Save 2 vectors to a file
-	INPUTS
-		int n			Length of the vector to save to file
-		double A[]		First vector to save to file (1st column)
-		double B[]		Second vector to save to file (2nd column)
-		char fileName[]	The name of the file to save to
-*/
 #include "vsave2.h"
-
-
-/* vsaven - Save any number of vectors to a file
-	Arguments
-		int n			Length of the vectors to be saved
-		int nv			Number of vectors to save
-		double ?? A		Array of pointers to the vectors to be saved
-		char fileName[]	The desired name of file		
-*/
 #include "vsaven.h"
-
-
-/* asave - Saves a 2d array to a file
-	INPUTS
-		int n			Height of the array to save to file
-		int m			Length of the array to save to file
-		double A[]		Vector to save to file
-		char fileName[]	The name of the file to save to
-*/
 #include "asave.h"

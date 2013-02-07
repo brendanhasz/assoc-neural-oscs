@@ -26,7 +26,6 @@
 
 */
 
-#include <math.h>
 
 // log2 - Calculate the log base 2 of a number
 #ifndef log2

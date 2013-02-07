@@ -22,6 +22,8 @@
 
 */
 
+#include <math.h>
+
 /* sum - Calculate the sum of a vector
 	Arguments
 		int n			Length of the vector to be summed

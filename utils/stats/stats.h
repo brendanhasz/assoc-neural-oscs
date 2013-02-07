@@ -22,45 +22,7 @@
 
 */
 
-/* sum - Calculate the sum of a vector
-	Arguments
-		int n			Length of the vector to be summed
-		double A[]		The vector to be summed
-		
-	Returns
-		double thesum	The sum of all elements in the vector
-*/
 #include "sum.h"
-
-
-/* mean - Calculate the mean of a vector of values
-	Arguments
-		int n			Length of the vector
-		double A[]		Vector for which to find the mean
-		
-	Returns
-		double themean	The mean of the vector
-*/
 #include "mean.h"
-
-
-/* var - Calculate the variance of a vector
-	Arguments
-		int n			Length of the vector
-		double A[]		Vector for which to find the variance
-		
-	Returns
-		double thevar	The variance of the vector
-*/
 #include "var.h"
-
-
-/* std - Calculate the standard deviation of a vector
-	Arguments
-		int n			Length of the vector
-		double A[]		Vector for which to find the standard deviation
-		
-	Returns
-		double thestd	The standard deviation of the vector
-*/
 #include "std.h"

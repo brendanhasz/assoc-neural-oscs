@@ -28,6 +28,9 @@
 
 */
 
+#include <math.h>
+#include <stdlib.h>
+#include "../basic_math/basic_math.h"
 
 #include "vcpy.c"
 #include "vrand.c"

@@ -28,7 +28,6 @@
 
 */
 
-
 #include "vcpy.h"
 #include "vrand.h"
 #include "vrandn.h"
