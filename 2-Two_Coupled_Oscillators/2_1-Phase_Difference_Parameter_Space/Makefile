@@ -75,4 +75,4 @@ fileIO.o: ../../utils/fileIO/fileIO.c
 
 
 clean :
-	rm $(name) $(objects) *.dat
+	rm -f $(name) $(objects) *.dat
