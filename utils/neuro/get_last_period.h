@@ -29,4 +29,4 @@
 
 */
 
-void get_last_period(int *p, double rates[][2], double wW[4]);
+void get_last_period(int *p, double rates[][2], double wW[2][2]);

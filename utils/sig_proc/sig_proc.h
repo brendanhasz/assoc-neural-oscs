@@ -15,3 +15,21 @@
 
 */
 
+#define SAMPLING_FREQ 10000
+
+#include "acorr.h"
+#include "amp.h"
+#include "complexfft.h"
+#include "freq1.h"
+#include "freq.h"
+#include "freqspec.h"
+#include "gsmooth.h"
+#include "gsmoothip.h"
+#include "l2peaks.h"
+#include "lnpeaks.h"
+#include "peaks.h"
+#include "phdiff2.h"
+#include "phdiff.h"
+#include "realfft.h"
+#include "speaks.h"
+#include "xcorr.h"

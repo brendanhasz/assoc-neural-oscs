@@ -1,8 +1,7 @@
 /*
-	get_init_rates - finds the rate curve over one period for steady-state 
-                        PING oscillator with passed within-group cnxn strengths
+	get_last_period - returns the E and I rate vectors of last period
     
-    get_init_rates(n, rates[], wW[4])
+    get_last_period(int *p, rates[][2], wW[4])
 
     Fills rates[] with rates of 2 groups of cells (E+I) over the last
     oscillation of a 1-second time window.
@@ -30,9 +29,10 @@
 */
 
 #include "rateN.h"
+#include "../sig_proc/l2peaks.h"
 
 void
-get_last_period(int *p, double rates[][2], double wW[4])
+get_last_period(int *p, double rates[][2], double wW[2][2])
 {
     //Initialize values
     int g=2, i, n=9999;
@@ -62,7 +62,7 @@ get_last_period(int *p, double rates[][2], double wW[4])
     *p = tl2p[1] - tl2p[0];
     
     //Write rates between last 2 peaks into rates
-    for (i=0; i<n; i++){
+    for (i=0; i<*p; i++){
         rates[i][0] = R[tl2p[0]+i][0];
         rates[i][1] = R[tl2p[0]+i][1];
     }
