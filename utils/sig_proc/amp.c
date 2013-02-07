@@ -21,7 +21,7 @@
 */
 
 #include <math.h>
-#include "../basic_math/basic_math.h"
+#include "../stats/mean.h"
 
 double
 amp(int n, double data[])

@@ -10,6 +10,7 @@
 #	l2peaks
 #	amp
 #		math lib
+#		mean
 #	matix4dTo2d
 #	fileIO
 
@@ -23,6 +24,7 @@ objects =	TwoOsc_explorer.o \
 		pingRateN.o \
 		phdiff2.o \
 		amp.o \
+		mean.o \
 		matrix4dTo2d.o \
 		fileIO.o
 			
@@ -66,6 +68,9 @@ phdiff2.o:	../../utils/sig_proc/phdiff2.c \
 
 amp.o: ../../utils/sig_proc/amp.c
 	gcc -c ../../utils/sig_proc/amp.c
+	
+mean.o: ../../utils/stats/mean.c
+	gcc -c ../../utils/stats/mean.c
 
 matrix4dTo2d.o: ../../utils/graphing/matrix4dTo2d.c
 	gcc -c ../../utils/graphing/matrix4dTo2d.c

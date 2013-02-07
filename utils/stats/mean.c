@@ -23,6 +23,12 @@
 double
 mean(int n, double A[])
 {
-	double themean = sum(n,A) / n;
+	int i;
+	double thesum = 0;
+	for (i=0; i<n; i++)
+	{
+		thesum += A[i];
+	}
+	double themean = thesum / n;
 	return themean;
 }
