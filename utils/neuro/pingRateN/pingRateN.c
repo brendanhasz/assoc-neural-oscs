@@ -65,7 +65,6 @@ pingRateN(int n, int no, double Re[n][no], double R_i[no][2],
 
 	double R_i_s[g];
 	for (i=0; i<g; i++){ //set initial rates with a little
-		//R_i_s[i] = R_i[i/2][i%2]+gen_randn(); //stochasticity
 		R_i_s[i] = R_i[i/2][i%2]+rrand(); //stochasticity
 	}
 

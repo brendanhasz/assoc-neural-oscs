@@ -40,10 +40,11 @@ int main(void)
 	
 /******************** INITIALIZE SIMULATION ***********************/
 
-//INITIALIZE RESOLUTION AND BOUNDARIES
-double dt = 0.0001;  //100 us
-int i;
+double dt = 0.0001;	//Timestep duration - 100 us
+int n = 9999;		//Number of timesteps to simulate
+int no = 2;			//Number of oscillators
 
+//BETWEEN-OSCILLATOR SYNAPTIC STRENGTH
 //EE
 int ee_res = 5;
 double ee_min = 0;
@@ -68,16 +69,28 @@ linspace(ei_min, ei_max, ei_res, ei_vec);
 linspace(ie_min, ie_max, ie_res, ie_vec);
 
 
+//Within-oscillator synaptic strength
+double W[g][g];     //Synaptic weights
+	W[0][0]=2;		W[0][1]=2.873;	//EE	EI
+	W[1][0]=-2.873;	W[1][1]=-2;		//IE	II
 
-double init_rs[]
-//TODO: get initial rate vectors
+//DETERMINE INITIAL RATES
+//Get last period
+int p, lp_max=400;
+double lp_rates[lp_max][2];
+get_last_period(&p, lp_rates, W);
+double R_i_IN[no][2], R_i_OUT[no][2];
+//Initially In-phase
+R_i_IN[0][0] = lp_rates[0][0];	R_i_IN[0][1] = lp_rates[0][1]; //osc1
+R_i_IN[1][0] = lp_rates[0][0];	R_i_IN[1][1] = lp_rates[0][1]; //osc2
+//Initially Out-of-phase
+R_i_OUT[0][0] = lp_rates[0][0];	R_i_OUT[0][1] = lp_rates[0][1]; //osc1
+R_i_OUT[1][0] lp_rates[p/2][0];	R_i_OUT[1][1]=lp_rates[p/2][1]; //osc2
 
 
-
-int n = 9999;
-int g = 2;
-double Re[n][g];
-double pds[g][g];
+//Storage arrays
+double Re_IN[n][no], Re_OUT[n][no];
+double pds[no][no];
 double initIN[ee_res][ii_res][ei_res][ie_res];
 double initOUT[ee_res][ii_res][ei_res][ie_res];
 double DDpsi[ee_res][ii_res][ei_res][ie_res];
@@ -85,7 +98,7 @@ double DDpsi[ee_res][ii_res][ei_res][ie_res];
 
 
 /******************** LOOP THROUGH PARAM SPACE ********************/
-//loop thru param space
+//counters
 int ee, ii, ei, ie;
 
 for (ee=0; ee<ee_res; ee++){
@@ -93,14 +106,49 @@ for (ee=0; ee<ee_res; ee++){
 	for (ei=0; ei<ei_res; ei++){
 	  for (ie=0; ie<ie_res; ie++){
 		
+		//GET RATE VECTORS
+		//Get rate vectors for init-IN
+		pingRateN(n, no, Re_IN, R_i_IN, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
+		
+		//Get rate vectors for init-OUT
+		pingRateN(n, no, Re_OUT, R_i_OUT, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
+		
+		
+		//PHASE DIFF
+		//Phase diff: INIT-IN
+		
+		//Phase diff: INIT-OUT
+		
+		//Phase diff: DIFF (IN-OUT)
+
+
+		//FREQUENCY
+		//Frequency: INIT-IN
+		
+		//Frequency: INIT-OUT
+		
+		//Frequency: DIFF (IN-OUT)
+
+
+		//FREQUENCY
+		//Frequency: INIT-IN
+		
+		//Frequency: INIT-OUT
+		
+		//Frequency: DIFF (IN-OUT)
+		
+		
+		/* old stuff for reference
+		pingRateN(n, no, Re_IN, R_i_IN, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
+
 		//Simulate starting IN-phase
-		PINGrate2(n, Re, R_i_IN, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
-		phdiff2(n, g, Re, pds);
+		PINGrate2(n, Re_IN, R_i_IN, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
+		phdiff2(n, no, Re, pds);
 		initIN[ee][ii][ei][ie] = pds[0][1];
 		
 		//Simulate starting OUT-of-phase
-		PINGrate2(n, Re, R_i_OUT, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
-		phdiff2(n, g, Re, pds);
+		PINGrate2(n, Re_OUT, R_i_OUT, ee_vec[ee], ei_vec[ei], ie_vec[ie], ii_vec[ii], wW, dt);
+		phdiff2(n, no, Re, pds);
 		initOUT[ee][ii][ei][ie] = pds[0][1];
 		
 		//Find D phase difference
@@ -112,7 +160,7 @@ for (ee=0; ee<ee_res; ee++){
 		//Find frequency
 		
 		//Find Amplitude
-		
+		*/
 		
 		printf("ee=%f, ii=%f, ei=%f, ie=%f: INpd=%f, OUTpd=%f, DDpsi=%f\n", ee_vec[ee], ii_vec[ii], ei_vec[ei], ie_vec[ie], initIN[ee][ii][ei][ie], initOUT[ee][ii][ei][ie], DDpsi[ee][ii][ei][ie]);
 		
