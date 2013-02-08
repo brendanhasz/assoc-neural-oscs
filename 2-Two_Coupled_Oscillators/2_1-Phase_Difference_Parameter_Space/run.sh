@@ -1,4 +1,4 @@
 #!/bin/bash
 make
-./single_PING_group
+./TwoOsc_explorer
 ./plotter.sh

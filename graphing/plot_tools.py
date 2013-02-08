@@ -35,7 +35,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' '):
     return fig
 
 
-def colorp(filename):
+def colorp(filename, tit=' ', xlab=' ', ylab=' '):
     '''
     Plots an image w/ a colormap
     http://matplotlib.org/users/image_tutorial.html
@@ -47,7 +47,10 @@ def colorp(filename):
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
     plt.colorbar()
     imgplot.set_interpolation('nearest') #pixelated
+    #imgplot.set_interpolation('bicubic') #blurry but smooth
+    plt.title(tit)
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
     plt.show()
     #imgplot.set_clim(0.0,0.7) #set color limits
-    #imgplot.set_interpolation('bicubic') #blurry but smooth
     #plt.colorbar()
