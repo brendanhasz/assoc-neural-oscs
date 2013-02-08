@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-void matix4dTo2d(int a, int b, int c, int d, double A[a][b][c][d], double B[a*c][b*d])
+void matrix4dTo2d(int a, int b, int c, int d, double A[a][b][c][d], double B[a*c][b*d])
 {
 
 

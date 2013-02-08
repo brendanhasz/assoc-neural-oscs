@@ -199,12 +199,12 @@ double phdiff_IN_2d[ee_res*ei_res][ii_res*ie_res];
 double phdiff_OUT_2d[ee_res*ei_res][ii_res*ie_res];
 double phdiff_DIFF_2d[ee_res*ei_res][ii_res*ie_res];
 
-/*
+//Init-in
 matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, phdiff_IN, phdiff_IN_2d);
 char * fname_phdiff_IN = "Phdiff_init_IN.dat";
-asave2(ee_res*ei_res, ii_res*ie_res, phdiff_IN_2d, fname_phdiff_IN); //Save data
+asave(ee_res*ei_res, ii_res*ie_res, phdiff_IN_2d, fname_phdiff_IN); //Save data
 printf("Data saved as %s\n", fname_phdiff_IN);
-*/
+
 
 //TODO: save rest of stuff
 
