@@ -184,7 +184,7 @@ for (ee=0; ee<ee_res; ee++){
 		printf("\tPD_IN=%f\tPD_OUT=%f\tPD_DIFF%f\n", phdiff_IN[ee][ii][ei][ie], phdiff_OUT[ee][ii][ei][ie], phdiff_DIFF[ee][ii][ei][ie]);
 		printf("\tFREQ_IN=%f\tFREQ_OUT=%f\tFREQ_DIFF%f\n", freq_IN[ee][ii][ei][ie], freq_OUT[ee][ii][ei][ie], freq_DIFF[ee][ii][ei][ie]);
 		printf("\tAMP_IN=%f\tAMP_OUT=%f\tAMP_DIFF%f\n", amp_IN[ee][ii][ei][ie], amp_OUT[ee][ii][ei][ie], amp_DIFF[ee][ii][ei][ie]);
-		
+		printf("%f percent done\n\n", (ee*ii_res*ei_res*ie_res+ii*ei_res*ie_res+ei*ie_res+ie+1)/(ee_res*ii_res*ei_res*ie_res));
 	  }
 	}
   }
@@ -202,11 +202,74 @@ double phdiff_DIFF_2d[ee_res*ei_res][ii_res*ie_res];
 //Init-in
 matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, phdiff_IN, phdiff_IN_2d);
 char * fname_phdiff_IN = "Phdiff_init_IN.dat";
-asave(ee_res*ei_res, ii_res*ie_res, phdiff_IN_2d, fname_phdiff_IN); //Save data
+asave(ee_res*ei_res, ii_res*ie_res, phdiff_IN_2d, fname_phdiff_IN); 
 printf("Data saved as %s\n", fname_phdiff_IN);
 
+//Init-out
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, phdiff_OUT, phdiff_OUT_2d);
+char * fname_phdiff_OUT = "Phdiff_init_OUT.dat";
+asave(ee_res*ei_res, ii_res*ie_res, phdiff_OUT_2d, fname_phdiff_OUT); 
+printf("Data saved as %s\n", fname_phdiff_OUT);
 
-//TODO: save rest of stuff
+//Difference
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, phdiff_DIFF, phdiff_DIFF_2d);
+char * fname_phdiff_DIFF = "Phdiff_DIFF.dat";
+asave(ee_res*ei_res, ii_res*ie_res, phdiff_DIFF_2d, fname_phdiff_DIFF);
+printf("Data saved as %s\n", fname_phdiff_DIFF);
+
+
+
+//FREQUENCIES
+//2d matrixes in which to put 4D data
+double freq_IN_2d[ee_res*ei_res][ii_res*ie_res];
+double freq_OUT_2d[ee_res*ei_res][ii_res*ie_res];
+double freq_DIFF_2d[ee_res*ei_res][ii_res*ie_res];
+
+//Init-in
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, freq_IN, freq_IN_2d);
+char * fname_freq_IN = "Freq_init_IN.dat";
+asave(ee_res*ei_res, ii_res*ie_res, freq_IN_2d, fname_freq_IN); 
+printf("Data saved as %s\n", fname_freq_IN);
+
+//Init-out
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, freq_OUT, freq_OUT_2d);
+char * fname_freq_OUT = "Freq_init_OUT.dat";
+asave(ee_res*ei_res, ii_res*ie_res, freq_OUT_2d, fname_freq_OUT); 
+printf("Data saved as %s\n", fname_freq_OUT);
+
+//Difference
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, freq_DIFF, freq_DIFF_2d);
+char * fname_freq_DIFF = "Freq_DIFF.dat";
+asave(ee_res*ei_res, ii_res*ie_res, freq_DIFF_2d, fname_freq_DIFF);
+printf("Data saved as %s\n", fname_freq_DIFF);
+
+
+
+//PHASE DIFFERENCES
+//2d matrixes in which to put 4D data
+double amp_IN_2d[ee_res*ei_res][ii_res*ie_res];
+double amp_OUT_2d[ee_res*ei_res][ii_res*ie_res];
+double amp_DIFF_2d[ee_res*ei_res][ii_res*ie_res];
+
+//Init-in
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, amp_IN, amp_IN_2d);
+char * fname_amp_IN = "Amp_init_IN.dat";
+asave(ee_res*ei_res, ii_res*ie_res, amp_IN_2d, fname_amp_IN);
+printf("Data saved as %s\n", fname_amp_IN);
+
+//Init-out
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, amp_OUT, amp_OUT_2d);
+char * fname_amp_OUT = "Amp_init_OUT.dat";
+asave(ee_res*ei_res, ii_res*ie_res, amp_OUT_2d, fname_amp_OUT);
+printf("Data saved as %s\n", fname_amp_OUT);
+
+//Difference
+matrix4dTo2d(ee_res, ii_res, ei_res, ie_res, amp_DIFF, amp_DIFF_2d);
+char * fname_amp_DIFF = "Amp_DIFF.dat";
+asave(ee_res*ei_res, ii_res*ie_res, amp_DIFF_2d, fname_amp_DIFF);
+printf("Data saved as %s\n", fname_amp_DIFF);
+
+
 
 printf("DONE!\n");
 
