@@ -180,12 +180,12 @@ for (ee=0; ee<ee_res; ee++){
 		amp_DIFF[ee][ii][ei][ie]  = amp_IN[ee][ii][ei][ie] - amp_OUT[ee][ii][ei][ie];
 		
 		//Print stuff as we loop through
-		printf("ee=%f, ii=%f, ei=%f, ie=%f:\n", ee_vec[ee], ii_vec[ii], ei_vec[ei], ie_vec[ie]);
-		printf("\tPD_IN=%f\tPD_OUT=%f\tPD_DIFF%f\n", phdiff_IN[ee][ii][ei][ie], phdiff_OUT[ee][ii][ei][ie], phdiff_DIFF[ee][ii][ei][ie]);
-		printf("\tFREQ_IN=%f\tFREQ_OUT=%f\tFREQ_DIFF%f\n", freq_IN[ee][ii][ei][ie], freq_OUT[ee][ii][ei][ie], freq_DIFF[ee][ii][ei][ie]);
-		printf("\tAMP_IN=%f\tAMP_OUT=%f\tAMP_DIFF%f\n", amp_IN[ee][ii][ei][ie], amp_OUT[ee][ii][ei][ie], amp_DIFF[ee][ii][ei][ie]);
-		printf("%f percent done\n\n", (ee*ii_res*ei_res*ie_res+ii*ei_res*ie_res+ei*ie_res+ie+1)/(ee_res*ii_res*ei_res*ie_res));
+//		printf("ee=%f, ii=%f, ei=%f, ie=%f:\n", ee_vec[ee], ii_vec[ii], ei_vec[ei], ie_vec[ie]);
+//		printf("\tPD_IN=%f\tPD_OUT=%f\tPD_DIFF%f\n", phdiff_IN[ee][ii][ei][ie], phdiff_OUT[ee][ii][ei][ie], phdiff_DIFF[ee][ii][ei][ie]);
+//		printf("\tFREQ_IN=%f\tFREQ_OUT=%f\tFREQ_DIFF%f\n", freq_IN[ee][ii][ei][ie], freq_OUT[ee][ii][ei][ie], freq_DIFF[ee][ii][ei][ie]);
+//		printf("\tAMP_IN=%f\tAMP_OUT=%f\tAMP_DIFF%f\n", amp_IN[ee][ii][ei][ie], amp_OUT[ee][ii][ei][ie], amp_DIFF[ee][ii][ei][ie]);
 	  }
+		printf("%f percent done\n\n", 100*((double) (ee*ii_res*ei_res*ie_res+ii*ei_res*ie_res+ei*ie_res+ie+1))/((double)(ee_res*ii_res*ei_res*ie_res)));
 	}
   }
 }

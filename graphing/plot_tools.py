@@ -54,3 +54,27 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' '):
     plt.show()
     #imgplot.set_clim(0.0,0.7) #set color limits
     #plt.colorbar()
+
+def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' '):
+	'''
+	Plots an image w/ a colormap, and adjusts the dynamic range such
+	that the upper and lower 5% of data are cropped out
+	'''
+
+	data = np.loadtxt(filename)
+	themean = np.mean(data)
+	thestd = np.std(data)
+	stds = 3
+	maxel = themean+stds*thestd
+	minel = themean-stds*thestd
+	data = [[minel if e<minel else maxel if e>maxel else e for e in r] for r in data]
+	plt.figure()
+	imgplot = plt.imshow(data)
+	imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
+	plt.colorbar()
+	imgplot.set_interpolation('nearest') #pixelated
+	#imgplot.set_interpolation('bicubic') #blurry but smooth
+	plt.title(tit)
+	plt.xlabel(xlab)
+	plt.ylabel(ylab)
+	plt.show()
