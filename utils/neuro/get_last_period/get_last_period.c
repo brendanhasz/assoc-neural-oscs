@@ -27,7 +27,7 @@
 	aren't commercially making money off it - if you are, I want some too!
 
 */
-
+#include <stdio.h>
 #include "../rateN/rateN.h"
 #include "../../sig_proc/l2peaks.h"
 
@@ -35,7 +35,7 @@ void
 get_last_period(int *p, double rates[][2], double wW[2][2])
 {
     //Initialize values
-    int g=2, i, n=9999;
+    int g=2, i, n=9999, maxp;
 	double dt=0.0001;   //Duration of timestep
     double R[n][g];
     double R_i[g];
@@ -59,9 +59,9 @@ get_last_period(int *p, double rates[][2], double wW[2][2])
     l2peaks(n, Re, tl2p);
     
     //Determine period length in timesteps
-    int maxp = *p;
+    maxp = *p;
     *p = tl2p[1] - tl2p[0];
-    
+ 
     //Write rates between last 2 peaks into rates
     for (i=0; i<*p && i<maxp; i++){
         rates[i][0] = R[tl2p[0]+i][0];

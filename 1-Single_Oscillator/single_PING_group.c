@@ -21,7 +21,7 @@
 */
 
 #include <stdio.h>
-#include "../utils/neuro/rateN.h"
+#include "../utils/neuro/rateN/rateN.h"
 #include "../utils/fileIO/fileIO.h"
 
 int main(void)

@@ -25,8 +25,8 @@ int main(void){
 		wW[1][0]=-2.873;	wW[1][1]=-2;		//IE	II
 	
 	//Get init rate vector
-	int p, lp_max=400;
-	double lp_rates[lp_max][2];
+	int p=400;
+	double lp_rates[p][2];
 	get_last_period(&p, lp_rates, wW);
 	
 	double R_i_IN[2][2], R_i_OUT[2][2];

@@ -44,8 +44,8 @@ int main(void)
 	rateN(g, n, R, R_i, W, gamma, tau, dt);
 	
 	//Get last period
-	int p, lp_max=400;
-	double lp_rates[lp_max][2];
+	int p=400;
+	double lp_rates[p][2];
 	get_last_period(&p, lp_rates, W);
 	
     //Save data
