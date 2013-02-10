@@ -185,7 +185,7 @@ for (ee=0; ee<ee_res; ee++){
 //		printf("\tFREQ_IN=%f\tFREQ_OUT=%f\tFREQ_DIFF%f\n", freq_IN[ee][ii][ei][ie], freq_OUT[ee][ii][ei][ie], freq_DIFF[ee][ii][ei][ie]);
 //		printf("\tAMP_IN=%f\tAMP_OUT=%f\tAMP_DIFF%f\n", amp_IN[ee][ii][ei][ie], amp_OUT[ee][ii][ei][ie], amp_DIFF[ee][ii][ei][ie]);
 	  }
-		printf("%f percent done\n\n", 100*((double) (ee*ii_res*ei_res*ie_res+ii*ei_res*ie_res+ei*ie_res+ie+1))/((double)(ee_res*ii_res*ei_res*ie_res)));
+		printf("%f percent done\n", 100*((double) (ee*ii_res*ei_res*ie_res+ii*ei_res*ie_res+ei*ie_res+ie+1))/((double)(ee_res*ii_res*ei_res*ie_res)));
 	}
   }
 }
