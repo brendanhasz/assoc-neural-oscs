@@ -16,7 +16,6 @@
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/sig_proc/phdiff2.h"
-#include "../../utils/graphing/matrix4dTo2d.h"
 #include "../../utils/fileIO/asave.h"
 
 int main(void)
@@ -43,7 +42,7 @@ int main(void)
 	
 	//Within-group synaptic strengths
 	double wW[2][2];
-		wW[0][0]=2;			wW[0][1]=2.873;	//EE	EI
+		wW[0][0]=2;		wW[0][1]=2.873;	//EE	EI
 		wW[1][0]=-2.873;	wW[1][1]=-2;	//IE 	II
 
 	//Find rates for one period
@@ -79,8 +78,10 @@ int main(void)
 	}
 
 	/******************* WRITE DATA TO FILE **********************/
+	char * filename = "EE_Attractor.dat";
+	asave(ee_res, ipd_res, phdiffs, filename);
+	printf("Data saved as %s\n", filename);
 	
-
 
 	return 0;
 
