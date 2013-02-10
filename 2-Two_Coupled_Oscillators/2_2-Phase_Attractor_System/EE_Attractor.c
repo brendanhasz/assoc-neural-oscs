@@ -32,8 +32,8 @@ int main(void)
 
 	//X-osc EE strength
 	double ee_a=0;
-	double ee_b=0.2;
-	int ee_res=10;
+	double ee_b=0.3;
+	int ee_res=100;
 	double ee_vec[ee_res];
 	linspace(ee_a, ee_b, ee_res, ee_vec);
 
@@ -58,10 +58,9 @@ int main(void)
 
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
 	for (i=0; i<ee_res; i++){
-		printf("Starting ee %d of %d\n", i, ee_res);
+		printf("%f percent done\n", ((double) i)/((double) ee_res));
 		for (j=0; j<ipd_res; j++){
 
-			printf("\tStarting phdiff %d of %d\n", j, ipd_res);
 			//find initial rates for this init phasediff
 			R_i[0][0]=lp_rates[0][0];
 			R_i[0][1]=lp_rates[0][1];
