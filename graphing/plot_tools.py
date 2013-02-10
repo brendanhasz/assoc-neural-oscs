@@ -35,7 +35,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' '):
     return fig
 
 
-def colorp(filename, tit=' ', xlab=' ', ylab=' '):
+def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=0):
     '''
     Plots an image w/ a colormap
     http://matplotlib.org/users/image_tutorial.html
@@ -51,9 +51,10 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' '):
     plt.title(tit)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
-    plt.show()
-    #imgplot.set_clim(0.0,0.7) #set color limits
+    if clims != 0:
+        imgplot.set_clim(clims[0],clims[1]) #set color limits
     #plt.colorbar()
+    plt.show()
 
 def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' '):
 	'''
