@@ -1,4 +1,4 @@
 #!/bin/bash
 make
-./TwoOsc_explorer
+./EE_Attractor
 ./plotter.sh

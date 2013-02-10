@@ -11,10 +11,12 @@
 	Brandeis University, Waltham, MA, USA
 */
 
+#include <stdio.h>
 #include "../../utils/vectors/linspace.h"
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/sig_proc/phdiff2.h"
+#include "../../utils/graphing/matrix4dTo2d.h"
 #include "../../utils/fileIO/asave.h"
 
 int main(void)
@@ -57,8 +59,10 @@ int main(void)
 
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
 	for (i=0; i<ee_res; i++){
+		printf("Starting ee %d of %d\n", i, ee_res);
 		for (j=0; j<ipd_res; j++){
 
+			printf("\tStarting phdiff %d of %d\n", j, ipd_res);
 			//find initial rates for this init phasediff
 			R_i[0][0]=lp_rates[0][0];
 			R_i[0][1]=lp_rates[0][1];
@@ -73,6 +77,10 @@ int main(void)
 			phdiffs[i][j]=pds[0][1];
 		}
 	}
+
+	/******************* WRITE DATA TO FILE **********************/
+	
+
 
 	return 0;
 
