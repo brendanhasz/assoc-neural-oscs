@@ -60,6 +60,12 @@ int main(void)
 	double pds[no][no];
 	double phdiffs[ee_res][ipd_res];
 
+	//THREADING
+	//TODO: this...
+	//use segment function in multithreads
+
+
+
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
 	for (i=0; i<ee_res; i++){
 		printf("%f percent done\n", 100*((double) i)/((double) ee_res));
