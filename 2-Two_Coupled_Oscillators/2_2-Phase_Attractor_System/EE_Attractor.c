@@ -60,39 +60,32 @@ int main(void)
 	double pds[no][no];
 	double phdiffs[ee_res][ipd_res];
 
-	//THREADING
+
+	/********************SIMULATION USING THREADING *****************/
 	//TODO: this...
 	//use segment function in multithreads
+	pthread_t threads[NUM_THREADS];
+	thread_struct t_args[NUM_THREADS];
+	int t_divs[NUM_THREADS+1];
 
-
-
-	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
-	for (i=0; i<ee_res; i++){
-		printf("%f percent done\n", 100*((double) i)/((double) ee_res));
-		for (j=0; j<ipd_res; j++){
-
-			//find initial rates for this init phasediff
-			R_i[0][0]=lp_rates[0][0];
-			R_i[0][1]=lp_rates[0][1];
-			R_i[1][0]=lp_rates[j*p/ipd_res][0];
-			R_i[1][1]=lp_rates[j*p/ipd_res][1];
-			
-			phdiffs[i][j]=0; //Initialize sum to 0
-
-			for (k=0; k<trials; k++){ //for several trials
-
-				//simulate
-				pingRateN(n,no,Re,R_i,ee_vec[i],ei,ie,ii,wW,dt);
-			
-				//find steady state phase difference
-				phdiff2(n, no, Re, pds);
-				phdiffs[i][j]=phdiffs[i][j]+pds[0][1]; //Add to sum
-			}
-
-			phdiffs[i][j]=phdiffs[i][j]/trials; //Find average
-
-		}
+	//segment
+	segment_threads(NUM_THREADS, 0, ee_res, t_divs);
+	
+	//Put data in thread args
+	for (i=0; i<NUM_THREADS; i++){
+		t_args.n = 
+		...
 	}
+
+	//run
+	for (i=0; i<NUM_THREADS; i++){
+		pthread_create(&threads[i], NULL, EE_Attractor_worker, &t_args[i]);
+	}
+	
+	//Join
+	waitfor_threads(NUM_THREADS, 
+
+
 
 	/******************* WRITE DATA TO FILE **********************/
 	char * filename = "EE_Attractor.dat";

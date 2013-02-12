@@ -15,8 +15,8 @@ typedef struct {
 	int ee_a;
 	int ee_b;
 	int ipd_res;
-	double lp_rates[p][2];
-	double ee_vec[ee_res];
+	double (*lp_rates)[][2];
+	double (*ee_vec)[];
 	double ei;
 	double ie;
 	double ii;
