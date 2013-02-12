@@ -12,6 +12,7 @@
 */
 
 #include <stdio.h>
+#include "../../utils/multithreads/multithreads.h"
 #include "../../utils/vectors/linspace.h"
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/pingRateN/pingRateN.h"

@@ -28,7 +28,7 @@ headers =	../../utils/vectors/linspace.h \
 
 	
 $(name): $(objects)
-	gcc -o $(name) $(objects) -lm
+	gcc -o $(name) $(objects) -lm -lpthread
 	
 $(name).o: $(name).c $(headers)
 	gcc -c $(name).c
