@@ -35,6 +35,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "../rateN/rateN.h"
+#include "../../basic_math/basic_math.h"
 
 // gen_rand - Generate a random number (double) from 0 to 1
 #ifndef rrand
@@ -64,8 +65,8 @@ pingRateN(int n, int no, double Re[n][no], double R_i[no][2],
 	}
 
 	double R_i_s[g];
-	for (i=0; i<g; i++){ //set initial rates with a little
-		R_i_s[i] = R_i[i/2][i%2]+rrand(); //stochasticity
+	for (i=0; i<g; i++){ //set initial rates with a little stochasticity
+		R_i_s[i] = max(0,R_i[i/2][i%2]+gen_randn());
 	}
 
 	double W[g][g];	//Synaptic weights

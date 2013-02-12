@@ -7,7 +7,7 @@ objects = 	pingRateN_tester.o \
 name = pingRateN_tester
 	
 $(name): $(objects)
-	gcc -o $(name) $(objects)
+	gcc -o $(name) $(objects) -lm
 	
 $(name).o: $(name).c pingRateN.h ../../fileIO/fileIO.h ../get_last_period/get_last_period.h
 	gcc -c $(name).c

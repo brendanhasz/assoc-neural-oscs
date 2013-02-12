@@ -23,7 +23,7 @@ int main(void)
 	//Simulation duration params
 	int n=9999, no=2;
 	double dt=0.0001;
-	int i, j; //counters
+	int i, j, k; //counters
 
 	//X-oscillator synaptic strengths
 	double ei=0.3;
@@ -33,12 +33,15 @@ int main(void)
 	//X-osc EE strength
 	double ee_a=0;
 	double ee_b=0.3;
-	int ee_res=100;
+	int ee_res=200;
 	double ee_vec[ee_res];
 	linspace(ee_a, ee_b, ee_res, ee_vec);
 
 	//Initial phase difference steps
-	int ipd_res = 100;
+	int ipd_res = 200;
+
+	//Number of trials per param choice
+	int trials = 20;
 	
 	//Within-group synaptic strengths
 	double wW[2][2];
@@ -58,7 +61,7 @@ int main(void)
 
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
 	for (i=0; i<ee_res; i++){
-		printf("%f percent done\n", ((double) i)/((double) ee_res));
+		printf("%f percent done\n", 100*((double) i)/((double) ee_res));
 		for (j=0; j<ipd_res; j++){
 
 			//find initial rates for this init phasediff
@@ -67,12 +70,20 @@ int main(void)
 			R_i[1][0]=lp_rates[j*p/ipd_res][0];
 			R_i[1][1]=lp_rates[j*p/ipd_res][1];
 			
-			//simulate
-			pingRateN(n, no, Re, R_i, ee_vec[i], ei, ie, ii, wW, dt);
+			phdiffs[i][j]=0; //Initialize sum to 0
+
+			for (k=0; k<trials; k++){ //for several trials
+
+				//simulate
+				pingRateN(n,no,Re,R_i,ee_vec[i],ei,ie,ii,wW,dt);
 			
-			//find steady state phase difference
-			phdiff2(n, no, Re, pds);
-			phdiffs[i][j]=pds[0][1];
+				//find steady state phase difference
+				phdiff2(n, no, Re, pds);
+				phdiffs[i][j]=phdiffs[i][j]+pds[0][1]; //Add to sum
+			}
+
+			phdiffs[i][j]=phdiffs[i][j]/trials; //Find average
+
 		}
 	}
 
