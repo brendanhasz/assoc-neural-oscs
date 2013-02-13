@@ -43,12 +43,14 @@ int main(void)
 		t_args[i].b = t_divs[i+1];
 		t_args[i].resr = ee_res;
 		t_args[i].resc = ipd_res;
+		//TODO: problem on following line...
 		t_args[i].OUT = &phdiffs;
 	}
 
 	//Run
 	for (i=0; i<NUM_THREADS; i++){
-		pthread_create(&threads[i], NULL, EE_Attractor_worker, &t_args[i]);
+		//TODO: problem on following line...
+		pthread_create(&threads[i],NULL,EE_Attractor_worker,(void*)&t_args[i]);
 	}
 	
 	//Join

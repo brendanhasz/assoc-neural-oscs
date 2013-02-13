@@ -93,7 +93,7 @@ void *EE_Attractor_worker(void *arg)
 		}
 	}
 
-
-	return NULL;
+	pthread_exit(NULL);
 
 }
+

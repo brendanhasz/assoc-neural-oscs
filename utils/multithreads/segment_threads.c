@@ -10,6 +10,7 @@ void
 segment_threads(int n, int a, int b, int divs[])
 {
 	int i;
+	divs[0]=a;
 	for (i=1; i<=n; i++){
 		divs[i]=a+i/n*(b-a);
 	}
