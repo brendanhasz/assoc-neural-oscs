@@ -13,77 +13,46 @@
 
 #include <stdio.h>
 #include "../../utils/multithreads/multithreads.h"
-#include "../../utils/vectors/linspace.h"
-#include "../../utils/neuro/get_last_period/get_last_period.h"
-#include "../../utils/neuro/pingRateN/pingRateN.h"
-#include "../../utils/sig_proc/phdiff2.h"
+#include "EE_Attractor_worker.h"
 #include "../../utils/fileIO/asave.h"
 
 int main(void)
 {
-	//Simulation duration params
-	int n=9999, no=2;
-	double dt=0.0001;
-	int i, j, k; //counters
-
-	//X-oscillator synaptic strengths
-	double ei=0.3;
-	double ie=-0.5;
-	double ii=0;
-
-	//X-osc EE strength
-	double ee_a=0;
-	double ee_b=0.3;
+	//Simulation resolution
 	int ee_res=200;
-	double ee_vec[ee_res];
-	linspace(ee_a, ee_b, ee_res, ee_vec);
+	int ipd_res=200;
+	int i;	
 
-	//Initial phase difference steps
-	int ipd_res = 200;
-
-	//Number of trials per param choice
-	int trials = 20;
-	
-	//Within-group synaptic strengths
-	double wW[2][2];
-		wW[0][0]=2;		wW[0][1]=2.873;	//EE	EI
-		wW[1][0]=-2.873;	wW[1][1]=-2;	//IE 	II
-
-	//Find rates for one period
-	int p=1000;
-	double lp_rates[p][2];
-	get_last_period(&p, lp_rates, wW);
-
-	//Initialize arrays
-	double Re[n][no];
-	double R_i[no][no];
-	double pds[no][no];
+	//phase difference storage array
 	double phdiffs[ee_res][ipd_res];
 
+	printf("well at least we got here!!!\n");
 
 	/********************SIMULATION USING THREADING *****************/
-	//TODO: this...
-	//use segment function in multithreads
+	//Declare thread arrays
 	pthread_t threads[NUM_THREADS];
-	thread_struct t_args[NUM_THREADS];
+	THREAD_DAT_2D t_args[NUM_THREADS];
 	int t_divs[NUM_THREADS+1];
 
-	//segment
+	//Segment/assign chunks to threads
 	segment_threads(NUM_THREADS, 0, ee_res, t_divs);
 	
 	//Put data in thread args
 	for (i=0; i<NUM_THREADS; i++){
-		t_args.n = 
-		...
+		t_args[i].a = t_divs[i];
+		t_args[i].b = t_divs[i+1];
+		t_args[i].resr = ee_res;
+		t_args[i].resc = ipd_res;
+		t_args[i].OUT = &phdiffs;
 	}
 
-	//run
+	//Run
 	for (i=0; i<NUM_THREADS; i++){
 		pthread_create(&threads[i], NULL, EE_Attractor_worker, &t_args[i]);
 	}
 	
 	//Join
-	waitfor_threads(NUM_THREADS, 
+	waitfor_threads(NUM_THREADS, NULL);
 
 
 
@@ -96,3 +65,4 @@ int main(void)
 	return 0;
 
 }
+

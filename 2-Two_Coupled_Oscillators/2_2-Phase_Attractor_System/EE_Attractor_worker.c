@@ -1,4 +1,4 @@
-/* EE_Attractor.c
+/* EE_Attractor_worker.c
 
 	Finds steady state phase difference for a two-oscillator system
 	as a function of initial phase difference and EE-cross-oscillator
@@ -12,74 +12,87 @@
 */
 
 #include <stdio.h>
-#include <pthread.h>
-#include "EE_Attractor_worker.h"
+#include "../../utils/multithreads/multithreads.h"
+#include "../../utils/vectors/linspace.h"
+#include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/sig_proc/phdiff2.h"
 
-/*
-typedef struct {
-	int n;
-	int no;
-	int p;
-	int trials;
-	double dt;
-	int ee_res;
-	int ee_a;
-	int ee_b;
-	int ipd_res;
-	double (*lp_rates)[][2];
-	double (*ee_vec)[];
-	double ei;
-	double ie;
-	double ii;
-	double wW[2][2];
-	double (*phdiffs)[ee_res][ipd_res];
-} thread_struct;
-*/
 
 void *EE_Attractor_worker(void *arg)
 {
 	
 	//Cast input args to structure
-	thread_struct *in = arg;	
+	THREAD_DAT_2D * in = arg;
 
-	//Counters
-	int i, j, k;
+
+	//Simulation duration params
+	int n=9999, no=2;
+	double dt=0.0001;
+	int i, j, k; //counters
+
+	//X-oscillator synaptic strengths
+	double ei=0.3;
+	double ie=-0.5;
+	double ii=0;
+
+	//X-osc EE strength
+	double ee_a=0;
+	double ee_b=0.3;
+	int ee_res=in->resr;
+	double ee_vec[ee_res];
+	linspace(ee_a, ee_b, ee_res, ee_vec);
+
+	//Initial phase difference steps
+	int ipd_res = in->resc;
+
+	//Number of trials per param choice
+	int trials = 20;
 	
+	//Within-group synaptic strengths
+	double wW[2][2];
+		wW[0][0]=2;		wW[0][1]=2.873;	//EE	EI
+		wW[1][0]=-2.873;	wW[1][1]=-2;	//IE 	II
+
+	//Find rates for one period
+	int p=1000;
+	double lp_rates[p][2];
+	get_last_period(&p, lp_rates, wW);
+
 	//Initialize arrays
-	double Re[in->n][in->no];
-	double R_i[in->no][in->no];
-	double pds[in->no][in->no];
-	
+	double Re[n][no];
+	double R_i[no][no];
+	double pds[no][no];
+	double phdiffs[ee_res][ipd_res];
+
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
-	for (i=in->ee_a; i<in->ee_b; i++){
-		printf("%f percent done\n", 100*((double) i-in->ee_a)/((double) in->ee_b-in->ee_a));
-		for (j=0; j<in->ipd_res; j++){
+	for (i=in->a; i<in->b; i++){
+		printf("%f percent done\n", 100*((double) i)/((double) ee_res));
+		for (j=0; j<ipd_res; j++){
 
 			//find initial rates for this init phasediff
-			R_i[0][0]=in->lp_rates[0][0];
-			R_i[0][1]=in->lp_rates[0][1];
-			R_i[1][0]=in->lp_rates[j*in->p/in->ipd_res][0];
-			R_i[1][1]=in->lp_rates[j*in->p/in->ipd_res][1];
+			R_i[0][0]=lp_rates[0][0];
+			R_i[0][1]=lp_rates[0][1];
+			R_i[1][0]=lp_rates[j*p/ipd_res][0];
+			R_i[1][1]=lp_rates[j*p/ipd_res][1];
 			
-			in->phdiffs[i][j]=0; //Initialize sum to 0
+			in->OUT[i][j]=0; //Initialize sum to 0
 
-			for (k=0; k<in->trials; k++){ //for several trials
+			for (k=0; k<trials; k++){ //for several trials
 
 				//simulate
-				pingRateN(in->n,in->no,Re,R_i,in->ee_vec[i],
-					in->ei,in->ie,in->ii,in->wW,in->dt);
+				pingRateN(n,no,Re,R_i,ee_vec[i],ei,ie,ii,wW,dt);
 			
 				//find steady state phase difference
-				phdiff2(in->n, in->no, Re, pds);
-				in->phdiffs[i][j]=in->phdiffs[i][j]+pds[0][1]; //Add to sum
+				phdiff2(n, no, Re, pds);
+				in->OUT[i][j]=in->OUT[i][j]+pds[0][1]; //Add to sum
 			}
 
-			in->phdiffs[i][j]=in->phdiffs[i][j]/in->trials; //Find average
+			in->OUT[i][j]=in->OUT[i][j]/trials; //Find average
 
 		}
 	}
+
 
 	return NULL;
 

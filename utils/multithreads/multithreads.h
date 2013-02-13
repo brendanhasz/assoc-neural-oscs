@@ -10,7 +10,15 @@
 
 #define NUM_THREADS 4
 
-//TODO: waitfor_threads - waits for threads to join
+typedef struct {
+	int a;		//Start pos
+	int b;		//End pos
+	int resr;	//Rows
+	int resc;	//Columns
+	double **OUT;	//2d-array
+} THREAD_DAT_2D;
+
+//waitfor_threads - waits for threads to join
 void waitfor_threads(int n, pthread_t threadps[]);
 
 //segment_threads - segments a loop for threading

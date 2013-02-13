@@ -1,17 +1,24 @@
 #EE_Attractor
-#	linspace
-#	get_last_period
-#		rateN
-#		l2peaks
-#	pingRateN
-#		rateN
-#	phdiff2
-#		l2peaks
+#	EE_Attractor_worker
+#		multithreads
+#		linspace
+#		get_last_period
+#			rateN
+#			l2peaks
+#		pingRateN
+#			rateN
+#		phdiff2
+#			l2peaks
+#	multithreads
 #	asave
 
 name = EE_Attractor
 
+uts = ../../utils
+
 objects =	EE_Attractor.o \
+		EE_Attractor_worker.o \
+		multithreads.o \
 		linspace.o \
 		get_last_period.o \
 		rateN.o \
@@ -20,43 +27,51 @@ objects =	EE_Attractor.o \
 		phdiff2.o \
 		fileIO.o
 			
-headers =	../../utils/vectors/linspace.h \
-		../../utils/neuro/get_last_period/get_last_period.h \
-		../../utils/neuro/pingRateN/pingRateN.h \
-		../../utils/sig_proc/phdiff2.h \
-		../../utils/fileIO/fileIO.h
-
-	
 $(name): $(objects)
 	gcc -o $(name) $(objects) -lm -lpthread
 	
-$(name).o: $(name).c $(headers)
-	gcc -c $(name).c
+EE_Attractor.o: EE_Attractor.c \
+		$(uts)/multithreads/multithreads.h \
+		EE_Attractor_worker.h \
+		$(uts)/fileIO/asave.h
+	gcc -c EE_Attractor.c
 
-linspace.o:	../../utils/vectors/linspace.c
-	gcc -c ../../utils/vectors/linspace.c
+EE_Attractor_worker.o:	EE_Attractor_worker.c \
+			$(uts)/multithreads/multithreads.h \
+			$(uts)/vectors/linspace.h \
+			$(uts)/neuro/get_last_period/get_last_period.h \
+			$(uts)/neuro/pingRateN/pingRateN.h \
+			$(uts)/sig_proc/phdiff2.h
+	gcc -c EE_Attractor_worker.c
 	
-get_last_period.o:	../../utils/neuro/get_last_period/get_last_period.c \
-			../../utils/neuro/rateN/rateN.h \
-			../../utils/sig_proc/l2peaks.h
-	gcc -c ../../utils/neuro/get_last_period/get_last_period.c
+multithreads.o:	$(uts)/multithreads/multithreads.c \
+		$(uts)/multithreads/multithreads.h
+	gcc -c $(uts)/multithreads/multithreads.c
 
-rateN.o: ../../utils/neuro/rateN/rateN.c
-	gcc -c ../../utils/neuro/rateN/rateN.c
+linspace.o:	$(uts)/vectors/linspace.c
+	gcc -c $(uts)/vectors/linspace.c
+	
+get_last_period.o:	$(uts)/neuro/get_last_period/get_last_period.c \
+			$(uts)/neuro/rateN/rateN.h \
+			$(uts)/sig_proc/l2peaks.h
+	gcc -c $(uts)/neuro/get_last_period/get_last_period.c
 
-l2peaks.o: ../../utils/sig_proc/l2peaks.c
-	gcc -c ../../utils/sig_proc/l2peaks.c
+rateN.o: $(uts)/neuro/rateN/rateN.c
+	gcc -c $(uts)/neuro/rateN/rateN.c
 
-pingRateN.o:	../../utils/neuro/pingRateN/pingRateN.c \
-		../../utils/neuro/rateN/rateN.h
-	gcc -c ../../utils/neuro/pingRateN/pingRateN.c
+l2peaks.o: $(uts)/sig_proc/l2peaks.c
+	gcc -c $(uts)/sig_proc/l2peaks.c
 
-phdiff2.o:	../../utils/sig_proc/phdiff2.c \
-		../../utils/sig_proc/l2peaks.h
-	gcc -c ../../utils/sig_proc/phdiff2.c
+pingRateN.o:	$(uts)/neuro/pingRateN/pingRateN.c \
+		$(uts)/neuro/rateN/rateN.h
+	gcc -c $(uts)/neuro/pingRateN/pingRateN.c
 
-fileIO.o: ../../utils/fileIO/fileIO.c
-	gcc -c ../../utils/fileIO/fileIO.c
+phdiff2.o:	$(uts)/sig_proc/phdiff2.c \
+		$(uts)/sig_proc/l2peaks.h
+	gcc -c $(uts)/sig_proc/phdiff2.c
+
+fileIO.o: $(uts)/fileIO/fileIO.c
+	gcc -c $(uts)/fileIO/fileIO.c
 
 
 clean :
