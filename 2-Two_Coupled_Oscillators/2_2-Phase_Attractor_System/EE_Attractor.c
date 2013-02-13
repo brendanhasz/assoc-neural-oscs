@@ -25,8 +25,13 @@ int main(void)
 
 	//phase difference storage array
 	double phdiffs[ee_res][ipd_res];
+	/*
+	double **phdiffs;
+	phdiffs = (double**) malloc(ee_res*sizeof(double*));
+	for (i=0; i<ee_res; i++)
+		phdiffs[i] = (double*) malloc(ipd_res*sizeof(double));
+	*/
 
-	printf("well at least we got here!!!\n");
 
 	/********************SIMULATION USING THREADING *****************/
 	//Declare thread arrays
@@ -47,6 +52,8 @@ int main(void)
 		t_args[i].OUT = &phdiffs;
 	}
 
+	printf("Well we got here... problem creating threads...\n");
+
 	//Run
 	for (i=0; i<NUM_THREADS; i++){
 		//TODO: problem on following line...
@@ -55,7 +62,6 @@ int main(void)
 	
 	//Join
 	waitfor_threads(NUM_THREADS, NULL);
-
 
 
 	/******************* WRITE DATA TO FILE **********************/
