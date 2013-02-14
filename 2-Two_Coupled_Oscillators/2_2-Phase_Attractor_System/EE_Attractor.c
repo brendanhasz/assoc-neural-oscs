@@ -46,7 +46,7 @@ int main(void)
 		t_args[i].a = t_divs[i];
 		t_args[i].b = t_divs[i+1];
 		t_args[i].res = ee_res;
-		t_args[i].DATA = &phdiffs;
+		t_args[i].DATA = (double *)&phdiffs;
 	}
 
 	printf("Well we got here... problem creating threads...\n");

@@ -11,6 +11,7 @@
 #define NUM_THREADS 4
 
 typedef struct {
+	int id;		//Thread id number
 	int a;		//Start pos
 	int b;		//End pos
 	int res;	//Rows
@@ -18,6 +19,7 @@ typedef struct {
 } THREAD_DAT_1D;
 
 typedef struct {
+	int id;		//Thread id number
 	int a;		//Start pos
 	int b;		//End pos
 	int resr;	//Rows

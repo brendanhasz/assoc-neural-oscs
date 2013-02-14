@@ -70,7 +70,7 @@ void *EE_Attractor_worker(void *arg)
 
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
 	for (i=in->a; i<in->b; i++){
-		printf("%f percent done\n", 100*((double) i-in->a)/((double) ee_res-in->a));
+		printf("T%d: %f percent done\n", in->id, 100*((double) i-in->a)/((double) ee_res-in->a));
 		for (j=0; j<ipd_res; j++){
 
 			//find initial rates for this init phasediff

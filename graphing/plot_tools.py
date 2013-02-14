@@ -46,8 +46,8 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=0):
     #plt.pcolor(data, cmap='spectral')
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
     plt.colorbar()
-    #imgplot.set_interpolation('nearest') #pixelated
-    imgplot.set_interpolation('bicubic') #blurry but smooth
+    imgplot.set_interpolation('nearest') #pixelated
+    #imgplot.set_interpolation('bicubic') #blurry but smooth
     plt.title(tit)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
