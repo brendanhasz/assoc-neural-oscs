@@ -42,6 +42,11 @@ int main(void)
 	//Segment/assign chunks to threads
 	segment_threads(NUM_THREADS, 0, ee_res, t_divs);
 	
+	printf("t_divs[0]=%d\n", t_divs[0]);
+	for (i=1; i<=NUM_THREADS; i++){
+		printf("t_divs[%d]=%d\n", i, t_divs[i]);
+	}
+
 	//Put data in thread args
 	for (i=0; i<NUM_THREADS; i++){
 		t_args[i].a = t_divs[i];
@@ -49,7 +54,7 @@ int main(void)
 		t_args[i].resr = ee_res;
 		t_args[i].resc = ipd_res;
 		//TODO: problem on following line...
-		t_args[i].OUT = &phdiffs;
+		//t_args[i].DATA = &phdiffs;
 	}
 
 	printf("Well we got here... problem creating threads...\n");
@@ -60,8 +65,8 @@ int main(void)
 		pthread_create(&threads[i],NULL,EE_Attractor_worker,(void*)&t_args[i]);
 	}
 	
-	//Join
-	waitfor_threads(NUM_THREADS, NULL);
+	//Wait for the threads to finish
+	waitfor_threads(NUM_THREADS, threads);
 
 
 	/******************* WRITE DATA TO FILE **********************/

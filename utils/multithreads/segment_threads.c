@@ -12,7 +12,8 @@ segment_threads(int n, int a, int b, int divs[])
 	int i;
 	divs[0]=a;
 	for (i=1; i<=n; i++){
-		divs[i]=a+i/n*(b-a);
+		divs[i]=a+((double) i)/((double) n)*(b-a);
+		//printf("segment_threads: divs[%d]=%d\n", i, divs[i]);
 	}
 
 }

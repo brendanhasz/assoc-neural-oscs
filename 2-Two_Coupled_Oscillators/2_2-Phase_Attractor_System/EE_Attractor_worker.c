@@ -21,10 +21,12 @@
 
 void *EE_Attractor_worker(void *arg)
 {
+	printf("Inside string...");
 	
 	//Cast input args to structure
 	THREAD_DAT_2D * in = arg;
 
+	printf("%d to %d\n", in->a, in->b);
 
 	//Simulation duration params
 	int n=9999, no=2;
@@ -67,7 +69,7 @@ void *EE_Attractor_worker(void *arg)
 
 	/**************LOOP THROUGH EE STRS AND INIT PHASE DIFFS *************/
 	for (i=in->a; i<in->b; i++){
-		printf("%f percent done\n", 100*((double) i)/((double) ee_res));
+		printf("%f percent done\n", 100*((double) i-in->a)/((double) ee_res-in->a));
 		for (j=0; j<ipd_res; j++){
 
 			//find initial rates for this init phasediff
@@ -76,7 +78,7 @@ void *EE_Attractor_worker(void *arg)
 			R_i[1][0]=lp_rates[j*p/ipd_res][0];
 			R_i[1][1]=lp_rates[j*p/ipd_res][1];
 			
-			in->OUT[i][j]=0; //Initialize sum to 0
+			in->DATA[i][j]=0; //Initialize sum to 0
 
 			for (k=0; k<trials; k++){ //for several trials
 
@@ -85,10 +87,10 @@ void *EE_Attractor_worker(void *arg)
 			
 				//find steady state phase difference
 				phdiff2(n, no, Re, pds);
-				in->OUT[i][j]=in->OUT[i][j]+pds[0][1]; //Add to sum
+				in->DATA[i][j]=in->DATA[i][j]+pds[0][1]; //Add to sum
 			}
 
-			in->OUT[i][j]=in->OUT[i][j]/trials; //Find average
+			in->DATA[i][j]=in->DATA[i][j]/trials; //Find average
 
 		}
 	}
