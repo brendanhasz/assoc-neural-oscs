@@ -21,22 +21,16 @@ int main(void)
 	//Simulation resolution
 	int ee_res=200;
 	int ipd_res=200;
-	int i;	
+	int i, j;	
 
 	//phase difference storage array
-	double phdiffs[ee_res][ipd_res];
-	/*
-	double **phdiffs;
-	phdiffs = (double**) malloc(ee_res*sizeof(double*));
-	for (i=0; i<ee_res; i++)
-		phdiffs[i] = (double*) malloc(ipd_res*sizeof(double));
-	*/
+	double phdiffs[ee_res*ipd_res];
 
 
 	/********************SIMULATION USING THREADING *****************/
 	//Declare thread arrays
 	pthread_t threads[NUM_THREADS];
-	THREAD_DAT_2D t_args[NUM_THREADS];
+	THREAD_DAT_1D t_args[NUM_THREADS];
 	int t_divs[NUM_THREADS+1];
 
 	//Segment/assign chunks to threads
@@ -51,27 +45,31 @@ int main(void)
 	for (i=0; i<NUM_THREADS; i++){
 		t_args[i].a = t_divs[i];
 		t_args[i].b = t_divs[i+1];
-		t_args[i].resr = ee_res;
-		t_args[i].resc = ipd_res;
-		//TODO: problem on following line...
-		//t_args[i].DATA = &phdiffs;
+		t_args[i].res = ee_res;
+		t_args[i].DATA = &phdiffs;
 	}
 
 	printf("Well we got here... problem creating threads...\n");
 
 	//Run
 	for (i=0; i<NUM_THREADS; i++){
-		//TODO: problem on following line...
 		pthread_create(&threads[i],NULL,EE_Attractor_worker,(void*)&t_args[i]);
 	}
 	
 	//Wait for the threads to finish
 	waitfor_threads(NUM_THREADS, threads);
 
+	//Put 1d vector -> 2d array
+	double phdiffs_2d[ee_res][ipd_res];
+	for (i=0; i<ee_res; i++){
+		for (j=0; j<ipd_res; j++){
+			phdiffs_2d[i][j]=phdiffs[i*ee_res+j];
+		}
+	}	
 
 	/******************* WRITE DATA TO FILE **********************/
 	char * filename = "EE_Attractor.dat";
-	asave(ee_res, ipd_res, phdiffs, filename);
+	asave(ee_res, ipd_res, phdiffs_2d, filename);
 	printf("Data saved as %s\n", filename);
 	
 

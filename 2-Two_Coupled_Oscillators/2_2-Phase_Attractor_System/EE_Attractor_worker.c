@@ -24,7 +24,7 @@ void *EE_Attractor_worker(void *arg)
 	printf("Inside string...");
 	
 	//Cast input args to structure
-	THREAD_DAT_2D * in = arg;
+	THREAD_DAT_1D * in = arg;
 
 	printf("%d to %d\n", in->a, in->b);
 
@@ -41,12 +41,13 @@ void *EE_Attractor_worker(void *arg)
 	//X-osc EE strength
 	double ee_a=0;
 	double ee_b=0.3;
-	int ee_res=in->resr;
+	int ee_res=in->res;
 	double ee_vec[ee_res];
 	linspace(ee_a, ee_b, ee_res, ee_vec);
 
 	//Initial phase difference steps
-	int ipd_res = in->resc;
+	//int ipd_res = in->resc;
+	int ipd_res = 200;
 
 	//Number of trials per param choice
 	int trials = 20;
@@ -78,7 +79,7 @@ void *EE_Attractor_worker(void *arg)
 			R_i[1][0]=lp_rates[j*p/ipd_res][0];
 			R_i[1][1]=lp_rates[j*p/ipd_res][1];
 			
-			in->DATA[i][j]=0; //Initialize sum to 0
+			in->DATA[i*ee_res+j]=0; //Initialize sum to 0
 
 			for (k=0; k<trials; k++){ //for several trials
 
@@ -87,10 +88,10 @@ void *EE_Attractor_worker(void *arg)
 			
 				//find steady state phase difference
 				phdiff2(n, no, Re, pds);
-				in->DATA[i][j]=in->DATA[i][j]+pds[0][1]; //Add to sum
+				in->DATA[i*ee_res+j]=in->DATA[i*ee_res+j]+pds[0][1]; //Add to sum
 			}
 
-			in->DATA[i][j]=in->DATA[i][j]/trials; //Find average
+			in->DATA[i*ee_res+j]=in->DATA[i*ee_res+j]/trials; //Find average
 
 		}
 	}
