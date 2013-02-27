@@ -19,15 +19,15 @@
     double W[n/100][g][g]  Weight vectors of each synapse over time
     int W_c[g][g]    Do the weights change over time? 0 (no) or nonzero (y)
     double W_i[g][g] Initial synaptic weights between groups (W[i][j]: i->j)
-    double tau_w[g][g]      Time constants for syn. weight change
-    double theta_i[g][g]    Inital sliding thresh values
-    double tau_theta[g][g]  Sliding thesh time constants
+    double t_w[g][g]      Time constants for syn. weight change
+    double th[g][g]    Inital sliding thresh values
+    double t_th[g][g]  Sliding thesh time constants
     double gamma[g]  Constant input to each group
     double tau[g]    Time constant of each group
     double dt        Timestep duration
 	
 	
-    Copyright 2012
+    Copyright 2013
     Brendan Hasz
     bhasz@brandeis.edu
     www.cs.brandeis.edu/~bhasz/main.php
