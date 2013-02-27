@@ -42,16 +42,17 @@
 void
 plasticRateN_recW(int g, int n, double R[n][g], double R_i[], 
     double W_t[n/100][g][g], int W_c[g][g], double W[g][g], 
-    double tau_w, double theta[g][g], double tau_theta,
+    double t_w, double th[g][g], double t_th,
     double gamma[], double tau[], double dt)
 {
 
     //Variables
-    int t,i,j,l;  //counters
-    double s; //sum of weights
-    int uw=10; //update syn weights each uw timesteps
-    int rw=100; //record syn weights each rw timesteps
-
+    int t,i,j,l;    //counters
+    double s;       //sum of weights
+    int uw=10;      //update syn weights each uw timesteps
+    int rw=100;     //record syn weights each rw timesteps
+    double w_pre = uw*dt/t_w;   //pre-calculate constant part of dw/dt
+    double th_pre = uw*dt/t_th; //pre-calculate constant part of dtheta/dt
     //Initial rates
     for (i=0; i<g; i++){
 	R[0][i] = R_i[i];
@@ -72,8 +73,8 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
             for (i=0; i<g; i++){
                 for (j=0; j<g; j++){
                     if (W_c[i][j]>0){ //only update if this syn is updatable
-                    W[i][j]=W[i][j]+uw*dt/tau_w*(R[t][j]*R[t][i]*(R[t][j]-theta[i][j]));
-                    theta[i][j]=uw*dt/tau_theta*(R[t][j]*R[t][j]-theta[i][j]);
+                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
+                    th[i][j]=th_pre*(R[t][j]*R[t][j]-th[i][j]);
                     }
                 }
             }
@@ -88,3 +89,4 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
     }
 
 }
+
