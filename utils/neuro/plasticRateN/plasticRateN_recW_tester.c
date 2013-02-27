@@ -76,7 +76,7 @@ int main(void)
     plasticRateN_recW(g, n, R, R_i, W_t, W_c, W, t_w, th, t_th, gamma, tau, dt); //Simulate
 	
     //Save data
-    char * filename = "rateN_tester.dat";
+    char * filename = "plasticRateN_recW_tester_rate.dat";
     asave(n, g, R, filename);
 	
     char * filename_w = "plasticRateN_recW_tester_w.dat";
