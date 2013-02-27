@@ -16,11 +16,13 @@
 */
 
 #include <stdio.h>
-#include "rateN.h"
+#include "plasticRateN_recW.h"
 #include "../../fileIO/fileIO.h"
 
 int main(void)
 {
+
+    int i,j,t;
 
     int g = 4;          //Number of groups
     int n = 9999;       //Timesteps
@@ -33,6 +35,12 @@ int main(void)
 	R_i[1] = 20.1; //Inhibitory
 	R_i[2] = 30.1; //Excitatory
 	R_i[3] = 20; //Inhibitory
+
+    double W_t[n/100][g][g];
+    
+    int W_c[g][g];
+        for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
+        W_c[0][2]=1;    W_c[2][0]=1;  //Only allow xEE weights to change
         
     double W[g][g];     //Synaptic weights - in-phase steady state
         double wee=2, wei=2.873, wie=-2.873, wii=-2;
@@ -42,7 +50,15 @@ int main(void)
 	W[1][0]=wie;    W[1][1]=wii;    W[1][2]=xie;    W[1][3]=xii;
         W[2][0]=xee;    W[2][1]=xei;    W[2][2]=wee;    W[2][3]=wei;
         W[3][0]=xei;    W[3][1]=xii;    W[3][2]=wei;    W[3][3]=wii; 
-        
+       
+    double t_w = 0.5; //time constant for syn weight change (secs) 
+
+    double th[g][g];
+        for (i=0; i<g; i++){ for (j=0; j<g; j++){ th[i][j]=0; }}
+        th[0][2]=10;    th[2][0]=10;  //Thresh for depression is avg E rate
+
+    double t_th = 0.1;  //time constant for sliding threshold
+ 
     double gamma[g];    //External input
 	gamma[0] = 10;      //->E cells - G1
 	gamma[1] = -10;     //->I cells - G1
@@ -57,14 +73,20 @@ int main(void)
 	
     
     //Simulate
-	rateN(g, n, R, R_i, W, gamma, tau, dt); //Simulate
+    plasticRateN_recW(g, n, R, R_i, W_t, W_c, W, t_w, th, t_th, gamma, tau, dt); //Simulate
 	
     //Save data
-	char * filename = "rateN_tester.dat";
-	asave(n, g, R, filename);
+    char * filename = "rateN_tester.dat";
+    asave(n, g, R, filename);
 	
-	printf("Done!  Data saved as %s\n", filename);
+    char * filename_w = "plasticRateN_recW_tester_w.dat";
+    double output_w[n/100][g*g];
+    for (t=0; t<n/100; t++){ for (i=0; i<g; i++){ for (j=0; j<g; j++){
+        output_w[t][2*i+j] = W_t[t][i][j];
+    }}}
+    asave(n/100, g*g, output_w, filename_w);
+    printf("Done!  Data saved as %s\n", filename);
 
-	return 0;
+    return 0;
 
 }

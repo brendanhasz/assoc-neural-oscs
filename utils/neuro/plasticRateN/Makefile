@@ -2,7 +2,7 @@ objects =   plasticRateN_recW_tester.o \
 	    plasticRateN_recW.o \
 	    fileIO.o
 
-name = rateN_tester
+name = plasticRateN_recW_tester
 	
 $(name): $(objects)
 	gcc -o $(name) $(objects)
