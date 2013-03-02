@@ -68,7 +68,6 @@ int main(void)
 	tau[2] = 0.002; //AMPA (excitatory)  - G2
 	tau[3] = 0.010;	//GABA_A (inhibitory)- G2
 	
-/*    
     //Simulate
     plasticRateN_recW(g, n, R, R_i, W_t, W_c, W, t_w, th, t_th, gamma, tau, dt); //Simulate
 
@@ -83,14 +82,15 @@ int main(void)
     }}}
     asave(n/100, g*g, output_w, filename_w);
     printf("Done!  Data saved as %s\n", filename);
-   */
  
+/*
     //Simulate without plasticity
     rateN(g, n, R, R_i, W, gamma, tau, dt);
 
     //Save data
     char * filename_n = "plasticRateN_recW_tester_np.dat";
     asave(n, g, R, filename_n);
+*/
 
     return 0;
 

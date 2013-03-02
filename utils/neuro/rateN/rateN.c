@@ -43,11 +43,6 @@ void rateN(int g, int n, double R[n][g], double R_i[], double W[g][g], double ga
 	int t,i,j,l;  //counters
 	double s; //sum of weights
 
-    //PRINT INPUTS
-    printf("g=%d\tn=%d\tdt=%f\n", g, n, dt);
-    for (i=0; i<g; i++){ for (j=0; j<g; j++){ printf("W[%d][%d]=%f\n", i, j, W[i][j]); }}
-    for (i=0; i<g; i++){  printf("[%d]\tR_i=%f\tg=%f\tt=%f\n", i, R_i[i], gamma[i], tau[i]); }
-
 	//Initial rates
 	for (i=0; i<g; i++){
 		R[0][i] = R_i[i];
