@@ -46,7 +46,7 @@ int main(void)
 	W[0][0]=wee;    W[0][1]=wei;    W[0][2]=xee;    W[0][3]=xei;
 	W[1][0]=wie;    W[1][1]=wii;    W[1][2]=xie;    W[1][3]=xii;
         W[2][0]=xee;    W[2][1]=xei;    W[2][2]=wee;    W[2][3]=wei;
-        W[3][0]=xei;    W[3][1]=xii;    W[3][2]=wei;    W[3][3]=wii; 
+        W[3][0]=xie;    W[3][1]=xii;    W[3][2]=wie;    W[3][3]=wii; 
        
     double t_w = 0.5; //time constant for syn weight change (secs) 
 
