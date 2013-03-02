@@ -57,6 +57,12 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
     for (i=0; i<g; i++){
 	R[0][i] = R_i[i];
     }
+    //Initial weights
+    for (i=0; i<g; i++){
+        for (j=0; j<g; j++){
+            W_t[0][i][j] = W[i][j];
+        }
+    }
 	
     //Simulate
     for (t=1; t<n; t++){  //for each timestep,

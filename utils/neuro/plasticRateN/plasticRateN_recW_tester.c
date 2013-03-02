@@ -9,10 +9,6 @@
 	www.cs.brandeis.edu/~bhasz/main.php
 	Brandeis University, Waltham, MA, USA
 
-	This work is licensed under a Creative Commons NonCommercial 3.0 Unported
-	License.  You can use it and modify it any way you like as long as you
-	aren't commercially making money off it - if you are, I want some too!
-
 */
 
 #include <stdio.h>
@@ -82,7 +78,7 @@ int main(void)
     char * filename_w = "plasticRateN_recW_tester_w.dat";
     double output_w[n/100][g*g];
     for (t=0; t<n/100; t++){ for (i=0; i<g; i++){ for (j=0; j<g; j++){
-        output_w[t][2*i+j] = W_t[t][i][j];
+        output_w[t][g*i+j] = W_t[t][i][j];
     }}}
     asave(n/100, g*g, output_w, filename_w);
     printf("Done!  Data saved as %s\n", filename);
