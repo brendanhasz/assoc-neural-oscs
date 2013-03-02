@@ -35,6 +35,8 @@
 
 */
 
+#include <stdio.h>
+
 #ifndef MAX
 #define MAX(x,y) (x > y ? x : y)
 #endif
@@ -79,8 +81,12 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
             for (i=0; i<g; i++){
                 for (j=0; j<g; j++){
                     if (W_c[i][j]>0){ //only update if this syn is updatable
-                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
-                    th[i][j]=th_pre*(R[t][j]*R[t][j]-th[i][j]);
+                    printf("t=%d, W[%d][%d]=%f, w_pre=%f,\tR[t][j]=%f\tR[t][i]=%f\tth=%f\n", t, i, j, W[i][j],w_pre,R[t][j],R[t][i],th[i][j]);
+                    printf("\tprod=%f\n",(R[t][j]*R[t][i]*(R[t][j]-th[i][j])));
+                    //th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
+                    //W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
+                    printf("\tnew th=%f\n", th[i][j]);
+                    printf("\tnew W=%f\n", W[i][j]);
                     }
                 }
             }

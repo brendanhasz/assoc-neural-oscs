@@ -1,4 +1,5 @@
 #!/bin/bash
+make cleanest
 make
-./rateN_tester
+./plasticRateN_recW_tester
 ./plotter.sh

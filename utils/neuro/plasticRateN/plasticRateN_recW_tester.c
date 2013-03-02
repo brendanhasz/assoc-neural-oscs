@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include "plasticRateN_recW.h"
+#include "../rateN/rateN.h"
 #include "../../fileIO/fileIO.h"
 
 int main(void)
@@ -21,16 +22,16 @@ int main(void)
     int i,j,t;
 
     int g = 4;          //Number of groups
-    int n = 9999;       //Timesteps
+    int n = 999;       //Timesteps
     double dt=0.0001;   //Duration of timestep
     
     double R[n][g];     //Rate vectors
     
     double R_i[g];      //Initial rates - initially in-phase
 	R_i[0] = 30; //Excitatory
-	R_i[1] = 20.1; //Inhibitory
+	R_i[1] = 20; //Inhibitory
 	R_i[2] = 30.1; //Excitatory
-	R_i[3] = 20; //Inhibitory
+	R_i[3] = 20.1; //Inhibitory
 
     double W_t[n/100][g][g];
     
@@ -40,7 +41,7 @@ int main(void)
         
     double W[g][g];     //Synaptic weights - in-phase steady state
         double wee=2, wei=2.873, wie=-2.873, wii=-2;
-        double xee=0.1, xei=0, xie=0, xii=0; //SS in-phase
+        double xee=0, xei=0, xie=0, xii=0; //SS in-phase
         //double xee=0, xei=0.3, xie=0.3, xii=0; //SS out-of-phase
 	W[0][0]=wee;    W[0][1]=wei;    W[0][2]=xee;    W[0][3]=xei;
 	W[1][0]=wie;    W[1][1]=wii;    W[1][2]=xie;    W[1][3]=xii;
@@ -67,10 +68,10 @@ int main(void)
 	tau[2] = 0.002; //AMPA (excitatory)  - G2
 	tau[3] = 0.010;	//GABA_A (inhibitory)- G2
 	
-    
+/*    
     //Simulate
     plasticRateN_recW(g, n, R, R_i, W_t, W_c, W, t_w, th, t_th, gamma, tau, dt); //Simulate
-	
+
     //Save data
     char * filename = "plasticRateN_recW_tester_rate.dat";
     asave(n, g, R, filename);
@@ -82,6 +83,14 @@ int main(void)
     }}}
     asave(n/100, g*g, output_w, filename_w);
     printf("Done!  Data saved as %s\n", filename);
+   */
+ 
+    //Simulate without plasticity
+    rateN(g, n, R, R_i, W, gamma, tau, dt);
+
+    //Save data
+    char * filename_n = "plasticRateN_recW_tester_np.dat";
+    asave(n, g, R, filename_n);
 
     return 0;
 
