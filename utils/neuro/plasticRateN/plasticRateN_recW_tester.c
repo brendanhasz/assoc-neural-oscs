@@ -41,7 +41,7 @@ int main(void)
         
     double W[g][g];     //Synaptic weights - in-phase steady state
         double wee=2, wei=2.873, wie=-2.873, wii=-2;
-        double xee=0, xei=0, xie=0, xii=0; //SS in-phase
+        double xee=0.1, xei=0, xie=0, xii=0; //SS in-phase
         //double xee=0, xei=0.3, xie=0.3, xii=0; //SS out-of-phase
 	W[0][0]=wee;    W[0][1]=wei;    W[0][2]=xee;    W[0][3]=xei;
 	W[1][0]=wie;    W[1][1]=wii;    W[1][2]=xie;    W[1][3]=xii;

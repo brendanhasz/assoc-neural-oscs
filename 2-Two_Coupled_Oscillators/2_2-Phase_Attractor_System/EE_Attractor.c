@@ -36,11 +36,6 @@ int main(void)
 	//Segment/assign chunks to threads
 	segment_threads(NUM_THREADS, 0, ee_res, t_divs);
 	
-	printf("t_divs[0]=%d\n", t_divs[0]);
-	for (i=1; i<=NUM_THREADS; i++){
-		printf("t_divs[%d]=%d\n", i, t_divs[i]);
-	}
-
 	//Put data in thread args
 	for (i=0; i<NUM_THREADS; i++){
 		t_args[i].a = t_divs[i];
@@ -48,8 +43,6 @@ int main(void)
 		t_args[i].res = ee_res;
 		t_args[i].DATA = (double *)&phdiffs;
 	}
-
-	printf("Well we got here... problem creating threads...\n");
 
 	//Run
 	for (i=0; i<NUM_THREADS; i++){
