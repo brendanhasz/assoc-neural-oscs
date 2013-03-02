@@ -22,7 +22,7 @@ int main(void)
     int i,j,t;
 
     int g = 4;          //Number of groups
-    int n = 999;       //Timesteps
+    int n = 100000;       //Timesteps
     double dt=0.0001;   //Duration of timestep
     
     double R[n][g];     //Rate vectors
@@ -33,7 +33,8 @@ int main(void)
 	R_i[2] = 30.1; //Excitatory
 	R_i[3] = 20.1; //Inhibitory
 
-    double W_t[n/100][g][g];
+    int rw=10;
+    double W_t[n/rw][g][g];
     
     int W_c[g][g];
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
@@ -41,20 +42,20 @@ int main(void)
         
     double W[g][g];     //Synaptic weights - in-phase steady state
         double wee=2, wei=2.873, wie=-2.873, wii=-2;
-        double xee=0.1, xei=0, xie=0, xii=0; //SS in-phase
+        double xee=0.01, xei=0, xie=0, xii=0; //SS in-phase
         //double xee=0, xei=0.3, xie=0.3, xii=0; //SS out-of-phase
 	W[0][0]=wee;    W[0][1]=wei;    W[0][2]=xee;    W[0][3]=xei;
 	W[1][0]=wie;    W[1][1]=wii;    W[1][2]=xie;    W[1][3]=xii;
         W[2][0]=xee;    W[2][1]=xei;    W[2][2]=wee;    W[2][3]=wei;
         W[3][0]=xie;    W[3][1]=xii;    W[3][2]=wie;    W[3][3]=wii; 
        
-    double t_w = 0.5; //time constant for syn weight change (secs) 
+    double t_w = 10000; //time constant for syn weight change (secs) 
 
     double th[g][g];
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ th[i][j]=0; }}
-        th[0][2]=10;    th[2][0]=10;  //Thresh for depression is avg E rate
+        th[0][2]=20;    th[2][0]=20;  //Thresh for depression is avg E rate
 
-    double t_th = 0.1;  //time constant for sliding threshold
+    double t_th = 100;  //time constant for sliding threshold
  
     double gamma[g];    //External input
 	gamma[0] = 10;      //->E cells - G1
@@ -76,11 +77,11 @@ int main(void)
     asave(n, g, R, filename);
 	
     char * filename_w = "plasticRateN_recW_tester_w.dat";
-    double output_w[n/100][g*g];
-    for (t=0; t<n/100; t++){ for (i=0; i<g; i++){ for (j=0; j<g; j++){
+    double output_w[n/rw][g*g];
+    for (t=0; t<n/rw; t++){ for (i=0; i<g; i++){ for (j=0; j<g; j++){
         output_w[t][g*i+j] = W_t[t][i][j];
     }}}
-    asave(n/100, g*g, output_w, filename_w);
+    asave(n/rw, g*g, output_w, filename_w);
     printf("Done!  Data saved as %s\n", filename);
  
 /*

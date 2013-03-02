@@ -35,7 +35,7 @@
 
 */
 
-#include <stdio.h>
+//#include <stdio.h>
 
 #ifndef MAX
 #define MAX(x,y) (x > y ? x : y)
@@ -52,7 +52,7 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
     int t,i,j,l;    //counters
     double s;       //sum of weights
     int uw=10;      //update syn weights each uw timesteps
-    int rw=100;     //record syn weights each rw timesteps
+    int rw=10;     //record syn weights each rw timesteps
     double w_pre = uw*dt/t_w;   //pre-calculate constant part of dw/dt
     double th_pre = uw*dt/t_th; //pre-calculate constant part of dtheta/dt
     //Initial rates
@@ -81,12 +81,10 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
             for (i=0; i<g; i++){
                 for (j=0; j<g; j++){
                     if (W_c[i][j]>0){ //only update if this syn is updatable
-                    printf("t=%d, W[%d][%d]=%f, w_pre=%f,\tR[t][j]=%f\tR[t][i]=%f\tth=%f\n", t, i, j, W[i][j],w_pre,R[t][j],R[t][i],th[i][j]);
-                    printf("\tprod=%f\n",(R[t][j]*R[t][i]*(R[t][j]-th[i][j])));
-                    //th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
-                    //W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
-                    printf("\tnew th=%f\n", th[i][j]);
-                    printf("\tnew W=%f\n", W[i][j]);
+                    th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
+                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
+                    W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
+                    W[i][j]=-MAX(-W[i][j],-0.2);  //TODO: stay within bounds
                     }
                 }
             }
