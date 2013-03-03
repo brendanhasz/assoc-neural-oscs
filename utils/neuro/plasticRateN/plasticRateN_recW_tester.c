@@ -99,7 +99,16 @@ int main(void)
 
 
     /**************INITIALLY OUT-OF-PHASE****************/
-/*
+    //re-write init weights and theta
+    W[0][0]=wee;    W[0][1]=wei;    W[0][2]=xee;    W[0][3]=xei;
+    W[1][0]=wie;    W[1][1]=wii;    W[1][2]=xie;    W[1][3]=xii;
+    W[2][0]=xee;    W[2][1]=xei;    W[2][2]=wee;    W[2][3]=wei;
+    W[3][0]=xie;    W[3][1]=xii;    W[3][2]=wie;    W[3][3]=wii; 
+
+    //re-write init theta
+    for (i=0; i<g; i++){ for (j=0; j<g; j++){ th[i][j]=0; }}
+    th[0][2]=20;    th[2][0]=20;  //Thresh for depression is avg E rate
+
     //Simulate
     plasticRateN_recW(g, n, R, R_i_out, W_t, W_c, W, W_b, t_w, th, t_th, gamma, tau, dt);
 
@@ -114,7 +123,6 @@ int main(void)
     }}}
     asave(n/rw, g*g, output_w_out, filename_w_out);
     printf("Done w/ R_i_in!  Data saved as %s\n", filename_out);
-*/
 
     return 0;
 
