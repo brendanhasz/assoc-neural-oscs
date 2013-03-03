@@ -38,7 +38,7 @@
 
 void
 plasticRateN_recW(int g, int n, double R[n][g], double R_i[], 
-    double W_t[n/100][g][g], int W_c[g][g], double W[g][g], 
+    double W_t[n/100][g][g], int W_c[g][g], double W[g][g], double W_b[g][g],
     double t_w, double th[g][g], double t_th,
     double gamma[], double tau[], double dt);
 

@@ -41,9 +41,13 @@
 #define MAX(x,y) (x > y ? x : y)
 #endif
 
+#ifndef MIN
+#define MIN(x,y) (x > y ? y : x)
+#endif
+
 void
 plasticRateN_recW(int g, int n, double R[n][g], double R_i[], 
-    double W_t[n/100][g][g], int W_c[g][g], double W[g][g], 
+    double W_t[n/100][g][g], int W_c[g][g], double W[g][g], double W_b[g][g], 
     double t_w, double th[g][g], double t_th,
     double gamma[], double tau[], double dt)
 {
@@ -84,7 +88,7 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
                     th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
                     W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
                     W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
-                    W[i][j]=-MAX(-W[i][j],-0.2);  //TODO: stay within bounds
+                    W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
                     }
                 }
             }
