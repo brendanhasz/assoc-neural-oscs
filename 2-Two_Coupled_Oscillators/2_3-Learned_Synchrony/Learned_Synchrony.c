@@ -14,11 +14,15 @@
 #include "../../utils/neuro/plasticPingRateN_recW/plasticPingRateN_recW.h"
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/fileIO/fileIO.h"
+#include "../../utils/multithreads/multithreads.h"
+#include "Learned_Synchrony_worker.h"
 
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
     //Init weights
+    double W[4];
+        W[0] = 0.2;
 
     //Multithreading stuff
     int pd_res = 100;
