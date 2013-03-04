@@ -17,6 +17,19 @@
 
 int main(void){
 
+    /*********** INITIALIZE STUFF *************/
+
+
+
+
+    /*********** INITIALIZE STUFF *************/
+
+
+
+
+
+
+
 
 
 
