@@ -81,3 +81,4 @@ fileIO.o: ../../utils/fileIO/fileIO.c
 
 clean :
 	rm -f $(name) $(objects)
+
