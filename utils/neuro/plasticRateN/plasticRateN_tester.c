@@ -38,9 +38,6 @@ int main(void)
 	R_i_out[2] = 0.1; //Excitatory -OUT
 	R_i_out[3] = 5; //Inhibitory -OUT
 
-    int rw=10;
-    double W_t[n/rw][g][g];
-    
     int W_c[g][g];
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
         W_c[0][2]=1;    W_c[2][0]=1;  //Only allow xEE weights to change
@@ -81,22 +78,17 @@ int main(void)
 	
 
     /**************INITIALLY IN-PHASE****************/
+    //Print init weights
+    printf("Init EE weights, init-IN:\t%f \t%f\n", W[0][2], W[2][0]);
+
     //Simulate
-    plasticRateN_recW(g, n, R, R_i_in, W_t, W_c, W, W_b, t_w, th, t_th, gamma, tau, dt);
+    plasticRateN(g, n, R, R_i_in, W_c, W, W_b, t_w, th, t_th, gamma, tau, dt);
 
     //Save data
-    char * filename = "plasticRateN_recW_tester_rate.dat";
+    char * filename = "plasticRateN_tester_rate.dat";
     asave(n, g, R, filename);
+    printf("Final EE weights, init-IN:\t%f \t%f\n", W[0][2], W[2][0]);
 	
-    char * filename_w = "plasticRateN_recW_tester_w.dat";
-    double output_w[n/rw][g*g];
-    for (t=0; t<n/rw; t++){ for (i=0; i<g; i++){ for (j=0; j<g; j++){
-        output_w[t][g*i+j] = W_t[t][i][j];
-    }}}
-    asave(n/rw, g*g, output_w, filename_w);
-    printf("Done w/ R_i_in!  Data saved as %s\n", filename);
- 
-
 
     /**************INITIALLY OUT-OF-PHASE****************/
     //re-write init weights and theta
@@ -109,20 +101,17 @@ int main(void)
     for (i=0; i<g; i++){ for (j=0; j<g; j++){ th[i][j]=0; }}
     th[0][2]=20;    th[2][0]=20;  //Thresh for depression is avg E rate
 
+    //Print init weights
+    printf("Init EE weights, init-OUT:\t%f \t%f\n", W[0][2], W[2][0]);
+
+
     //Simulate
-    plasticRateN_recW(g, n, R, R_i_out, W_t, W_c, W, W_b, t_w, th, t_th, gamma, tau, dt);
+    plasticRateN(g, n, R, R_i_out, W_c, W, W_b, t_w, th, t_th, gamma, tau, dt);
 
     //Save data
     char * filename_out = "plasticRateN_recW_tester_rate_iOUT.dat";
     asave(n, g, R, filename_out);
-	
-    char * filename_w_out = "plasticRateN_recW_tester_w_iOUT.dat";
-    double output_w_out[n/rw][g*g];
-    for (t=0; t<n/rw; t++){ for (i=0; i<g; i++){ for (j=0; j<g; j++){
-        output_w_out[t][g*i+j] = W_t[t][i][j];
-    }}}
-    asave(n/rw, g*g, output_w_out, filename_w_out);
-    printf("Done w/ R_i_in!  Data saved as %s\n", filename_out);
+    printf("Final EE weights, init-OUT:\t%f \t%f\n", W[0][2], W[2][0]);
 
     return 0;
 
