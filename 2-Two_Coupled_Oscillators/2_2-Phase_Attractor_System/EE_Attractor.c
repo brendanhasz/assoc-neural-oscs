@@ -38,6 +38,7 @@ int main(void)
 	
 	//Put data in thread args
 	for (i=0; i<NUM_THREADS; i++){
+                t_args[i].id = i;
 		t_args[i].a = t_divs[i];
 		t_args[i].b = t_divs[i+1];
 		t_args[i].res = ee_res;

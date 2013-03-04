@@ -18,18 +18,34 @@
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
+    //Multithreading stuff
+    int pd_res = 100;
+    int i,j;
+    double phdiffs[pd_res];
+    pthread_t threads[NUM_THREADS];
+    THREAD_DAT_1D t_args[NUM_THREADS];
+    int t_divs[NUM_THREADS+1];
+    segment_threads(NUM_THREADS, 0, pd_res, t_divs);
+    
+    //put data in thread args
+    for (i=0;i<NUM_THREADS;i++){
+        
+        t_args[i].a = 
+    }
+
+
+    /*********** BEFORE PLASTICITY PD_INIT VS PD_SS PLOT  *************/
 
 
 
 
-    /*********** INITIALIZE STUFF *************/
+    /*********** DO PLASTIC RUN ******************/
 
 
+ 
 
 
-
-
-
+    /*********** AFTER PLASTICITY PD_INIT VS PD_SS PLOT  *************/
 
 
 
