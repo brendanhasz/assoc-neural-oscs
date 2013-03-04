@@ -34,6 +34,6 @@
 
 void pingRateN(int n, int no, double Re[n][no], double R_i[no][2], 
     double xEE, double xEI, double xIE, double xII, 
-    double xEE_c, double xEI_c, double xIE_c, double xII_c, 
+    int xEE_c, int xEI_c, int xIE_c, int xII_c, 
     double wW[2][2], double dt, double W[2*no][2*no]);
 	

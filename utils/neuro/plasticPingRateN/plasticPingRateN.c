@@ -34,7 +34,7 @@
 
 #include <math.h>
 #include <stdlib.h>
-#include "../rateN/rateN.h"
+#include "../plasticRateN/plasticRateN.h"
 #include "../../basic_math/basic_math.h"
 
 // gen_rand - Generate a random number (double) from 0 to 1
@@ -46,7 +46,7 @@
 void
 plasticPingRateN(int n, int no, double Re[n][no], double R_i[no][2],
     double xEE, double xEI, double xIE, double xII,
-    double xEE_c, double xEI_c, double xIE_c, double xII_c,
+    int xEE_c, int xEI_c, int xIE_c, int xII_c,
     double wW[2][2], double dt, double W[2*no][2*no])
 {
 
@@ -78,7 +78,7 @@ plasticPingRateN(int n, int no, double Re[n][no], double R_i[no][2],
 
     double W_b[g][g];   //Synaptic weight bounds
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_b[i][j]=0; }}
-    double W_c[g][g];   //Syn weights allowed to change?
+    int W_c[g][g];   //Syn weights allowed to change?
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
     for (i=0; i<g; i=i+2){
         for (j=0; j<g; j=j+2){
