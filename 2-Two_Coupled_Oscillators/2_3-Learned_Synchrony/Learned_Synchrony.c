@@ -18,6 +18,8 @@
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
+    //Init weights
+
     //Multithreading stuff
     int pd_res = 100;
     int i,j;
@@ -29,14 +31,28 @@ int main(void){
     
     //put data in thread args
     for (i=0;i<NUM_THREADS;i++){
-        
-        t_args[i].a = 
+        t_args[i].id = i;
+        t_args[i].a = t_divs[i];
+        t_args[i].b = t_divs[i+1];
+        t_args[i].res = pd_res;
+        t_args[i].DATA = (double *)&phdiffs;
+        t_args[i].DATA_IN = (double *)&W;
     }
 
 
     /*********** BEFORE PLASTICITY PD_INIT VS PD_SS PLOT  *************/
+    //Run threads
+    for (i=0;i<NUM_THREADS;i++){
+        pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
+    }
 
+    //Wait for threads to finish
+    waitfor_threads(NUM_THREADS, threads);
 
+    //Write data to file
+    char * fn_pre_pdvpd = "Learned_Synchrony_pre_pdvpd.dat";
+    vsave(pd_res, phdiffs, fn_pre_pdvpd);
+    printf("Done with PRE - data saved as %s\n", fn_pre_pdvpd);
 
 
     /*********** DO PLASTIC RUN ******************/
