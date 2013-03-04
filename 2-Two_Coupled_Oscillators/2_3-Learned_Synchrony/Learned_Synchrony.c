@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/plasticPingRateN_recW/plasticPingRateN_recW.h"
-#include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/fileIO/fileIO.h"
 #include "../../utils/multithreads/multithreads.h"
 #include "Learned_Synchrony_worker.h"
@@ -59,8 +58,13 @@ int main(void){
     printf("Done with PRE - data saved as %s\n", fn_pre_pdvpd);
 
 
-    /*********** DO PLASTIC RUN ******************/
+    /*********** DO PLASTIC RUN STARTING *IN* PHASE ******************/
 
+
+
+
+
+    /*********** DO PLASTIC RUN STARTING *OUT-OF* PHASE ******************/
 
  
 
