@@ -15,14 +15,15 @@
 
 int main(void){
 	
-    int n=9999, no=2;
+    int n=100000, no=2;
     double dt = 0.0001;
+    double W[2*no][2*no]; //Weight matrix (filled in by plasticPingRateN)
     double Re[n][no], R_i[no][2];
-    double xEE_IN=0.1, xEI_IN=0, xIE_IN=0, xII_IN=0;	//SS in-phase
-    double xEE_OUT=0, xEI_OUT=0.3, xIE_OUT=-0.3, xII_OUT=0; //SS out
+    double xEE=0, xEI=0, xIE=0, xII=0;	//init x-group syn weights
+    double xEE_c=1, xEI_c=0, xIE_c=0, xII_c=0; //allow synapses to change?
     double wW[2][2];     //within-oscillator synaptic weights
-        wW[0][0]=2;			wW[0][1]=2.873;	//EE	EI
-        wW[1][0]=-2.873;	wW[1][1]=-2;		//IE	II
+        wW[0][0]=2;         wW[0][1]=2.873; //EE    EI
+        wW[1][0]=-2.873;    wW[1][1]=-2;    //IE    II
 	
     //Get init rate vector
     int p=400;
@@ -42,41 +43,37 @@ int main(void){
 	
 	
 	
-    /*************INIT IN, SS IN *****************/
+    /*************INIT IN *****************/
+    //Print init weights
+    printf("Init weights - xEE - initIN: %f\t%f\n",xEE, xEE);
+
+    //Simulate
     pingRateN(n,no,Re,R_i_IN,xEE_IN,xEI_IN,xIE_IN,xII_IN,wW,dt);
 
     //Save data
-    char * filename1 = "pingRateN_tester_iIN_ssIN.dat";
-    asave(n, no, Re, filename1);
-    printf("Data saved as %s\n", filename1);
+    char * filename_in = "plasticPingRateN_tester_iIN.dat";
+    asave(n, no, Re, filename_in);
+    printf("Data saved as %s\n", filename_in);
 	
+    //Print final weights
+    printf("Final weights - xEE - initIN: %f\t%f\n",W[0][2],W[2][0]);
 	
-    /*************INIT IN, SS OUT *****************/
-    pingRateN(n,no,Re,R_i_IN,xEE_OUT,xEI_OUT,xIE_OUT,xII_OUT,wW,dt);
+
+
+    /************* INIT OUT *****************/
+    //Print init weights
+    printf("Init weights - xEE - initOUT: %f\t%f\n",xEE, xEE);
+
+    //Simulate
+    pingRateN(n,no,Re,R_i_IN,xEE_IN,xEI_IN,xIE_IN,xII_IN,wW,dt);
 
     //Save data
-    char * filename2 = "pingRateN_tester_iIN_ssOUT.dat";
-    asave(n, no, Re, filename2);
-    printf("Data saved as %s\n", filename2);
-
-
-    /*************INIT OUT, SS IN *****************/
-    pingRateN(n,no,Re,R_i_OUT,xEE_IN,xEI_IN,xIE_IN,xII_IN,wW,dt);
+    char * filename_out = "plasticPingRateN_tester_iOUT.dat";
+    asave(n, no, Re, filename_out);
+    printf("Data saved as %s\n", filename_out);
 	
-    //Save data
-    char * filename3 = "pingRateN_tester_iOUT_ssIN.dat";
-    asave(n, no, Re, filename3);
-    printf("Data saved as %s\n", filename3);
-
-
-    /*************INIT OUT, SS OUT *****************/
-    pingRateN(n,no,Re,R_i_OUT,xEE_OUT,xEI_OUT,xIE_OUT,xII_OUT,wW,dt);
-	
-    //Save data
-    char * filename4 = "pingRateN_tester_iOUT_ssOUT.dat";
-    asave(n, no, Re, filename4);
-    printf("Data saved as %s\n", filename4);
-
+    //Print final weights
+    printf("Final weights - xEE - initOUT: %f\t%f\n",W[0][2],W[2][0]);
 
     return 0;
 	
