@@ -44,59 +44,69 @@
 
 
 void
-pingRateN(int n, int no, double Re[n][no], double R_i[no][2],
-	double xEE, double xEI, double xIE, double xII,
-	double wW[2][2], double dt)
+plasticPingRateN(int n, int no, double Re[n][no], double R_i[no][2],
+    double xEE[], double xEI[], double xIE[], double xII[],
+    double xEE_c[], double xEI_c[], double xIE_c[], double xII_c[],
+    double wW[2][2], double dt, double W[2*no][2*no])
 {
 
-	int g = 2*no, i, j;	//Num groups, counters
-	double R[n][g];		//Rate vectors for each group
+    int g = 2*no, i, j, k, l; //Num groups, counters
+    double t_w = 100000;    //time constant for syn weight change
+    double t_th = 1000;     //time constant for sliding threshold
 
-	double gamma[g]; //External input
-	for (i=0; i<g; i=i+2){
-		gamma[i] = 10;		//Excitatory
-		gamma[i+1] = -10;	//Inhibitory
-	}
+    double R[n][g];     //Rate vectors for each group
 
-	double tau[g]; //Synaptic time constants
-	for (i=0; i<g; i=i+2){
-		tau[i] = 0.002;		//AMPA (Excitatory) - 2ms
-		tau[i+1] = 0.01;	//GABA_A (Inhibitory) - 10ms
-	}
+    double R_i_s[g];
+    for (i=0; i<g; i++){ //set initial rates with a little stochasticity
+        R_i_s[i] = max(0,R_i[i/2][i%2]+gen_randn());
+    }
 
-	double R_i_s[g];
-	for (i=0; i<g; i++){ //set initial rates with a little stochasticity
-		R_i_s[i] = max(0,R_i[i/2][i%2]+gen_randn());
-	}
+    double gamma[g]; //External input
+    for (i=0; i<g; i=i+2){
+        gamma[i] = 10;      //Excitatory
+	gamma[i+1] = -10;   //Inhibitory
+    }
 
-	double W[g][g];	//Synaptic weights
-	for (i=0; i<g; i=i+2){
-		for (j=0; j<g; j=j+2){
-			if (i==j){	//Within-group weights
-				W[i][i] = wW[0][0];		//wEE
-				W[i][i+1] = wW[0][1];	//wEI
-				W[i+1][i] = wW[1][0];	//wIE
-				W[i+1][i+1] = wW[1][1];	//wII
-			}
-			else {	//Cross-group weights
-				W[i][j] = xEE;		//xEE
-				W[i][j+1] = xEI;	//xEI
-				W[i+1][j] = xIE;	//xIE
-				W[i+1][j+1] = xII;	//xII
-			}
-		}
-	}
+    double tau[g]; //Synaptic time constants
+    for (i=0; i<g; i=i+2){
+        tau[i] = 0.002;     //AMPA (Excitatory) - 2ms
+        tau[i+1] = 0.01;    //GABA_A (Inhibitory) - 10ms
+    }
+
+    double th[g][g];
+        for (i=0; i<g; i++){ for (j=0; j<g; j++){ th[i][j]=0; }}
+
+    double W_b[g][g];   //Synaptic weight bounds
+        for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_b[i][j]=0; }}
+    double W_c[g][g];   //Syn weights allowed to change?
+        for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
+    for (i=0; i<g; i=i+2){
+        for (j=0; j<g; j=j+2){
+            if (i==j){	//Within-group weights
+                for (k=0;k<2;k++){ for (l=0;l<2;l++){ W[i+k][i+l]=wW[k][l]; }}
+            }
+            else {  //Cross-group weights
+                W_c[i][j] = 1;      //ALLOW xEE SYNAPSES TO CHANGE WEIGHTS
+                W_b[i][j] = 0.2;    //SET xEE WEIGHT BOUND
+                th[i][j] = 20;      //set thresh for depression for xEE as 20hz
+                W[i][j] = xEE;      //xEE
+                W[i][j+1] = xEI;    //xEI
+                W[i+1][j] = xIE;    //xIE
+                W[i+1][j+1] = xII;  //xII
+            }
+        }
+    }
 
 
-	//Simulate
-	rateN(g, n, R, R_i_s, W, gamma, tau, dt);
+    //Simulate with plasticity
+    plasticRateN(g, n, R, R_i_s, W_c, W, W_b, t_w, th, t_th, gamma, tau, dt);
 
 
-	//Copy excitatory rate vectors into output vectors
-	for (i=0; i<no; i++){
-		for (j=0; j<n; j++){
-			Re[j][i] = R[j][2*i];
-		}
-	}
+    //Copy excitatory rate vectors into output vectors
+    for (i=0; i<no; i++){
+        for (j=0; j<n; j++){
+            Re[j][i] = R[j][2*i];
+        }
+    }
 
 }
