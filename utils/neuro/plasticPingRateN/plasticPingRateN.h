@@ -32,5 +32,8 @@
 
 */
 
-void pingRateN(int n, int no, double Re[n][no], double R_i[no][2], double xEE, double xEI, double xIE, double xII, double wW[2][2], double dt);
+void pingRateN(int n, int no, double Re[n][no], double R_i[no][2], 
+    double xEE, double xEI, double xIE, double xII, 
+    double xEE_c, double xEI_c, double xIE_c, double xII_c, 
+    double wW[2][2], double dt, double W[2*no][2*no]);
 	

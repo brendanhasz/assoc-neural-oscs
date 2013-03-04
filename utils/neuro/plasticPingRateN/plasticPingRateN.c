@@ -45,8 +45,8 @@
 
 void
 plasticPingRateN(int n, int no, double Re[n][no], double R_i[no][2],
-    double xEE[], double xEI[], double xIE[], double xII[],
-    double xEE_c[], double xEI_c[], double xIE_c[], double xII_c[],
+    double xEE, double xEI, double xIE, double xII,
+    double xEE_c, double xEI_c, double xIE_c, double xII_c,
     double wW[2][2], double dt, double W[2*no][2*no])
 {
 
@@ -86,9 +86,14 @@ plasticPingRateN(int n, int no, double Re[n][no], double R_i[no][2],
                 for (k=0;k<2;k++){ for (l=0;l<2;l++){ W[i+k][i+l]=wW[k][l]; }}
             }
             else {  //Cross-group weights
-                W_c[i][j] = 1;      //ALLOW xEE SYNAPSES TO CHANGE WEIGHTS
                 W_b[i][j] = 0.2;    //SET xEE WEIGHT BOUND
                 th[i][j] = 20;      //set thresh for depression for xEE as 20hz
+                //Allow synapses to change?
+                W_c[i][j] = xEE_c;      //xEE
+                W_c[i][j+1] = xEI_c;    //xEI
+                W_c[i+1][j] = xIE_c;    //xIE
+                W_c[i+1][j+1] = xII_c;  //xII
+                //Init syn weights
                 W[i][j] = xEE;      //xEE
                 W[i][j+1] = xEI;    //xEI
                 W[i+1][j] = xIE;    //xIE
