@@ -64,7 +64,7 @@ int main(void){
 	
     //Save data for weights
     char * filename_w_in = "plasticPingRateN_recW_tester_w_iIN.dat";
-    asave(n/rw, no, output_w, filename_w_in);
+    asave(n/rw, g*g, output_w, filename_w_in);
     printf("Init-in, Weight data saved as %s\n", filename_w_in);
 
 
@@ -86,7 +86,7 @@ int main(void){
 
     //Save data for weights
     char * filename_w_out = "plasticPingRateN_recW_tester_w_iOUT.dat";
-    asave(n/rw, no, output_w, filename_w_out);
+    asave(n/rw, g*g, output_w, filename_w_out);
     printf("Init-in, Weight data saved as %s\n", filename_w_out);
 
     return 0;
