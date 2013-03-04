@@ -1,5 +1,5 @@
 #!/bin/bash
 make cleanest
 make
-./plasticPingRateN_tester
+./plasticPingRateN_recW_tester
 ./plotter.sh

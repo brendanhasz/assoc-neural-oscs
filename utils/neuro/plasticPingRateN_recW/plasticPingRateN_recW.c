@@ -76,6 +76,7 @@ plasticPingRateN_recW(int n, int no, double Re[n][no], double R_i[no][2],
     double th[g][g];
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ th[i][j]=0; }}
 
+    double W[g][g];     //Initial synaptic weight
     double W_b[g][g];   //Synaptic weight bounds
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_b[i][j]=0; }}
     int W_c[g][g];   //Syn weights allowed to change?

@@ -15,9 +15,12 @@
 
 int main(void){
 	
-    int n=100000, no=2;
+    int n=100000, no=2; //timesteps and number of oscillators
+    int g=2*no; //number of groups
     double dt = 0.0001;
-    double W_t[n/10][2*no][2*no]; //Weight matrix over time (filled in by plasticPingRateN)
+    int rw = 10;
+    int t,i,j; //counters
+    double W_t[n/rw][2*no][2*no]; //Weight matrix over time (filled in by plasticPingRateN)
     double Re[n][no], R_i[no][2];
     double xEE=0, xEI=0, xIE=0, xII=0;	//init x-group syn weights
     int xEE_c=1, xEI_c=0, xIE_c=0, xII_c=0; //allow synapses to change?
@@ -45,40 +48,45 @@ int main(void){
 	
     /*************INIT IN *****************/
     //Simulate
-    plasticPingRateN(n,no,Re,R_i_IN,xEE,xEI,xIE,xII,
+    plasticPingRateN_recW(n,no,Re,R_i_IN,xEE,xEI,xIE,xII,
                     xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);
 
     //Save data
-    char * filename_in = "plasticPingRateN_tester_iIN.dat";
+    char * filename_in = "plasticPingRateN_recW_tester_iIN.dat";
     asave(n, no, Re, filename_in);
     printf("Init-in, Rate data saved as %s\n", filename_in);
 
     //Convert weight over time to a 2d printable matrix
-    //TODO:
+    double output_w[n/rw][g*g];
+    for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
+        output_w[t][g*i+j] = W_t[t][i][j];
+    }}}
 	
     //Save data for weights
-    char * filename_w_in = "plasticPingRateN_tester_w_iIN.dat";
-    asave(n, no/10, W_t, filename_w_in);
+    char * filename_w_in = "plasticPingRateN_recW_tester_w_iIN.dat";
+    asave(n/rw, no, output_w, filename_w_in);
     printf("Init-in, Weight data saved as %s\n", filename_w_in);
 
 
 
     /************* INIT OUT *****************/
     //Simulate
-    plasticPingRateN(n,no,Re,R_i_OUT,xEE,xEI,xIE,xII,
+    plasticPingRateN_recW(n,no,Re,R_i_OUT,xEE,xEI,xIE,xII,
                     xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);
 
     //Save data
-    char * filename_out = "plasticPingRateN_tester_iOUT.dat";
+    char * filename_out = "plasticPingRateN_recW_tester_iOUT.dat";
     asave(n, no, Re, filename_out);
     printf("Data saved as %s\n", filename_out);
 	
     //Convert weight over time to a 2d printable matrix
-    //TODO:
+    for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
+        output_w[t][g*i+j] = W_t[t][i][j];
+    }}}
 
     //Save data for weights
-    char * filename_w_out = "plasticPingRateN_tester_w_iIN.dat";
-    asave(n, no/10, W_t, filename_w_out);
+    char * filename_w_out = "plasticPingRateN_recW_tester_w_iOUT.dat";
+    asave(n/rw, no, output_w, filename_w_out);
     printf("Init-in, Weight data saved as %s\n", filename_w_out);
 
     return 0;
