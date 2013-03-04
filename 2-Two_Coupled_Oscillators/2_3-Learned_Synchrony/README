@@ -1,0 +1,14 @@
+Learned Synchrony between 2 oscillators
+
+We start with cross-oscillator syn strengths which give rise to 
+attractor-like properties (as in 2-3).
+
+This causes the oscillators to be in-phase when started in-phase, and
+out-of-phase when started out-of-phase.
+
+Then we allow the xEE strength to change over time as we synchronize
+them, or simulate them out-of-phase
+
+Simulating init-in and init-out with new weights for each case, we see
+that...?
+
