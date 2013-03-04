@@ -1,5 +1,5 @@
 # Associative Neural Oscillators
-`assoc-neural-oscs` is a collection of programs which simulate and explore the ability of [neural oscillators](http://en.wikipedia.org/wiki/Neural_oscillation) to "remember" phase associations amongst themselves.  Specifically, the programs study [Pyramidal-Interneuron gamma-frequency oscillators](http://www.ncbi.nlm.nih.gov/pubmed/15802007) (PING oscillators), which resemble networks found in the cortex and hippocampus.  For more information on the neuroscience behind the project, see the [literature review](http://www.cs.brandeis.edu/~bhasz/files/HaszMiller2012_Associative-Neural-Oscillators-Review.pdf) which discusses the theory which inspired the code.
+`assoc-neural-oscs` is a collection of programs which simulate and explore the ability of [neural oscillators](http://en.wikipedia.org/wiki/Neural_oscillation) to "remember" phase associations amongst themselves.  Specifically, the programs study [Pyramidal-Interneuron gamma-frequency oscillators](http://www.ncbi.nlm.nih.gov/pubmed/15802007) (PING oscillators), which resemble networks found in the cortex and hippocampus.  For more information on the neuroscience behind the project, see the [literature review](http://www.cs.brandeis.edu/~bhasz/files/HaszMiller2012_Associative_Neural_Oscillators_Review.pdf) which discusses the theory which inspired the code.
 
 
 # Usage
