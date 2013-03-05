@@ -10,7 +10,7 @@ def open_array(filename):
     return a
 
 
-def linep(filename, tit=' ', xlab=' ', ylab=' '):
+def linep(filename, tit=' ', xlab=' ', ylab=' ', xran=None):
     '''
     Plots a line or set of lines
     http://matplotlib.org/users/pyplot_tutorial.html
@@ -22,6 +22,12 @@ def linep(filename, tit=' ', xlab=' ', ylab=' '):
     plt.title(tit)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
+    if xran!=None:
+        numlabs = 6
+        newlabs = np.linspace(xran[0],xran[1],numlabs).tolist()
+        newlabstrs = [('%.3f' % e) for e in newlabs]
+        newlabpos = np.linspace(0,len(data),numlabs)
+        plt.xticks(newlabpos,newlabstrs)
     plt.show()
     '''
     plt.axis([xmin, xmax, ymin, ymax])
