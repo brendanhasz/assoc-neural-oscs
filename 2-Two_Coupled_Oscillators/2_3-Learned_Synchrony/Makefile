@@ -11,6 +11,7 @@
 #           ../../utils/sig_proc/l2peaks.c
 #   ../../utils/neuro/get_last_period/get_last_period.c
 #   ../../utils/neuro/plasticPingRateN_recW/plasticPingRateN_recW.c
+#       ../../utils/neuro/plasticRateN_recW/plasticRateN_recW.c
 #   ../../utils/fileIO/fileIO.c
 
 CFLAGS = -g -c
@@ -29,7 +30,9 @@ objects =	Learned_Synchrony.o \
 		get_last_period.o \
 		l2peaks.o \
 		phdiff2.o \
-                fileIO.o
+                fileIO.o \
+                plasticPingRateN_recW.o \
+                plasticRateN_recW.o
 		#.o
 		#.o
 		#.o
@@ -67,7 +70,11 @@ phdiff2.o: $(uts)/sig_proc/phdiff2.c
 fileIO.o: $(uts)/fileIO/fileIO.c
 	gcc $(CFLAGS) $(uts)/fileIO/fileIO.c
 
+plasticPingRateN_recW.o: $(nro)/plasticPingRateN_recW/plasticPingRateN_recW.c
+	gcc $(CFLAGS) $(nro)/plasticPingRateN_recW/plasticPingRateN_recW.c
 
+plasticRateN_recW.o: $(nro)/plasticRateN_recW/plasticRateN_recW.c
+	gcc $(CFLAGS) $(nro)/plasticRateN_recW/plasticRateN_recW.c
 
 
 clean:

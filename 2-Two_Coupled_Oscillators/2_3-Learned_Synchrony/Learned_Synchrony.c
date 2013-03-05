@@ -19,13 +19,43 @@
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
+    int n=100000, no=2; //timesteps and number of oscillators
+    int g=2*no; //number of groups
+    double dt = 0.0001;
+    int rw = 10;  //how often to record syn weights
+    int t,i,j;  //counters
+    double W_t[n/rw][g][g]; //Weight matrix over time
+    double Re[n][no], R_i[no][2];
+
     //Init weights
-    double W[4];
-        W[0] = 0.2;
+    double wW[2][2];    //Within-oscillator synaptic weights
+        wW[0][0]=2;         wW[0][1]=2.873; //EE    EI
+        wW[1][0]=-2.873;    wW[1][1]=-2;    //IE    II
+    double W[4];    //Cross-group
+        W[0]=0.2;   W[1]=0.3;   //xEE   xEI
+        W[2]=-0.5;  W[3]=0;     //xIE   xII
+    int xEE_c=1, xEI_c=0, xIE_c=0, xII_c=0; //Syn weights allowed to change?
+
+
+    //Find initial rate vector
+    int p=1000;
+    double lp_rates[p][2];
+    get_last_period(&p, lp_rates, wW);
+
+    double R_i_IN[2][2], R_i_OUT[2][2];
+    R_i_IN[0][0] = lp_rates[0][0];
+    R_i_IN[0][1] = lp_rates[0][1];
+    R_i_IN[1][0] = lp_rates[1][0];
+    R_i_IN[1][1] = lp_rates[1][1];
+
+    R_i_OUT[0][0] = lp_rates[0][0];
+    R_i_OUT[0][1] = lp_rates[0][1];
+    R_i_OUT[1][0] = lp_rates[p/2][0];
+    R_i_OUT[1][1] = lp_rates[p/2][1];
+
 
     //Multithreading stuff
     int pd_res = 100;
-    int i,j;
     double phdiffs[pd_res];
     pthread_t threads[NUM_THREADS];
     THREAD_DAT_1D t_args[NUM_THREADS];
@@ -59,17 +89,32 @@ int main(void){
 
 
     /*********** DO PLASTIC RUN STARTING *IN* PHASE ******************/
+    //Simulate
+    plasticPingRateN_recW(n,no,Re,R_i_IN,W[0],W[1],W[2],W[3],
+                            xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
 
+    printf("xEE weight after plastic run starting IN-phase: %f\n",W_t[n/rw-1][0][0]);
 
+    //Save data
+    char * fn_plasIN_r = "Learned_Synchrony_plas_IN_r.dat";
+    asave(n, no, Re, fn_plasIN_r);
+    printf("Plastic run, init-IN, rate data saved as %s\n", fn_plasIN_r);
 
+    //Convert weight matrix into storable one
+    double output_w_in[n/rw][g*g];
+    for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
+        output_w_in[t][g*i+j] = W_t[t][i][j];
+    }}}
+
+    //Save data
+    char * fn_plasIN_w = "Learned_Synchrony_plas_IN_w.dat";
+    asave(n/rw, g*g, output_w_in, fn_plasIN_w);
+    printf("Plastic run, init-IN, weight data saved as %s\n", fn_plasIN_w);
 
 
     /*********** DO PLASTIC RUN STARTING *OUT-OF* PHASE ******************/
 
  
-
-
-    /*********** AFTER PLASTICITY PD_INIT VS PD_SS PLOT  *************/
 
 
 
