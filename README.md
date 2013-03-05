@@ -3,14 +3,19 @@
 
 
 # Usage
+## Compiling
 The project is written in `C`, so `gcc` and `make` are required to compile the code.
 
+## Running the code
 Navigate into each of the main folders (numbered folders) and follow the directions of the README files in each.  Usually you can just navigate into a folder and execute the code by running the command `./run.sh`.
 
 There are also many math and neuroscience-related utilities in the `/utils` folder, which are used by the functions in the main folders, but which may be useful individually.
 
+## Plotting
 The routines output data into ascii text files, so you can use your preferred graphing utility.  Alternatively, you can use the provided python plotting tools in `/graphing`.  To use these tools you will need python installed, along witht the python packages [`numpy`](http://www.numpy.org/) and [`matlibplot`](http://matplotlib.org/)
 
+## Multithreading
+Some of the routines are multithreaded to take advantage of multiprocessor machines.  By default, the multithreaded routines run with 4 threads.  However, if you would like to optimize for your machine(s), you can change the number of threads by changing the value of NUM_THREADS in `/utils/multithreads/multithreads.h`.
 
 # Copyright
 Copyright (C) 2012 Brendan Hasz
