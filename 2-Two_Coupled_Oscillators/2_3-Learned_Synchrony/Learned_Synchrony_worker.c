@@ -36,8 +36,8 @@ void
 
     //Within-oscillator syn strengths
     double wW[2][2];
-        wW[0][0]=2;     wW[0][1]=2.873; //EE    EI
-        wW[1][0]=2.873; wW[1][1]=-2;    //IE    II
+        wW[0][0]=2;         wW[0][1]=2.873; //EE    EI
+        wW[1][0]=-2.873;    wW[1][1]=-2;    //IE    II
 
     //X-oscillator synaptic strengths
     double ei=0.3, ie=-0.5, ii=0; 
