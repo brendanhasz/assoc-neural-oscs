@@ -59,7 +59,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None):
     return fig
 
 
-def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=0):
+def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=None):
     '''
     Plots an image w/ a colormap
     http://matplotlib.org/users/image_tutorial.html
@@ -75,10 +75,25 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=0):
     plt.title(tit)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
-    if clims != 0:
+    if clims != None:
         imgplot.set_clim(clims[0],clims[1]) #set color limits
+    if xran!=None:
+        numlabs = 6
+        xres = data.shape[1]
+        newlabs = np.linspace(xran[0],xran[1],numlabs).tolist()
+        newlabstrs = [('%.2f' % e) for e in newlabs]
+        newlabpos = np.linspace(0,xres,numlabs)
+        plt.xticks(newlabpos,newlabstrs)
+    if yran!=None:
+        numlabs = 6
+        yres = data.shape[0]
+        newlabs = np.linspace(yran[0],yran[1],numlabs).tolist()
+        newlabstrs = [('%.2f' % e) for e in newlabs]
+        newlabpos = np.linspace(0,yres,numlabs)
+        plt.yticks(newlabpos,newlabstrs)
     #plt.colorbar()
     plt.show()
+
 
 def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' '):
 	'''

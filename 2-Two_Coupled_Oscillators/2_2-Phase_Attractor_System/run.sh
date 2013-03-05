@@ -2,4 +2,5 @@
 make clean
 make
 ./EE_Attractor
-./plotter.sh
+python plotter.py &
+
