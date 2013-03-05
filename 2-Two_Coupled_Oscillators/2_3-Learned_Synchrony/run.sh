@@ -1,7 +1,7 @@
 #!/bin/bash
 make clean
 make
-./EE_Attractor
+./Learned_Synchrony
 python plotter.py &
 
 

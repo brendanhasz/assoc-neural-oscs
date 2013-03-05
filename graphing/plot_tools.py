@@ -8,14 +8,32 @@ def open_array(filename):
     a = [[e if e==e else 0 for e in r] for r in l] #check for nans
     f.close()
     return a
+    
+
+def smooth(x,wlen=10):
+	'''
+	Smooth a function x with window length wlen
+	'''
+	if x.ndim !=1:
+		print "ERROR in smooth: x not a vector"
+		return x
+	if len(x)<wlen:
+		print "ERROR in smooth: wlen bigger than x"
+		return x
+	s = np.r_[x[wlen-1:0:-1],x,x[-1:-wlen:-1]]
+	w = eval('np.hanning(wlen)')
+	y = np.convolve(w/w.sum(),s,mode='valid')
+	return y
 
 
-def linep(filename, tit=' ', xlab=' ', ylab=' ', xran=None):
+def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None):
     '''
     Plots a line or set of lines
     http://matplotlib.org/users/pyplot_tutorial.html
     '''
     data = np.loadtxt(filename)
+    if smooth_w>0:
+		data = smooth(data,smooth_w)
     fig = plt.figure()
     lines=plt.plot(data)
     plt.setp(lines, linewidth=2.0)

@@ -53,6 +53,10 @@ void
     double R_i[no][2];
     double pds[no][no];
 
+    //Multiple trials
+    int numtrials = 100;
+    double thesum;
+
 
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
     for (i=in->a; i<in->b; i++){
@@ -62,14 +66,24 @@ void
         R_i[1][0] = lp_rates[i*p/res][0];
         R_i[1][1] = lp_rates[i*p/res][1];
 
-        //Simulate
-        pingRateN(n,no,Re,R_i,ee,ei,ie,ii,wW,dt);
+        thesum = 0;
 
-        //Find steady state phase diff
-        phdiff2(n, no, Re, pds);
+        //find avg phdiff over some trials
+        for (j=0; j<numtrials; j++){
+            
+            //Simulate
+            pingRateN(n,no,Re,R_i,ee,ei,ie,ii,wW,dt);
+
+            //Find steady state phase diff
+            phdiff2(n, no, Re, pds);
+
+            //add this phdiff to sum
+            thesum += pds[0][1];
+
+        }
 
         //Assign SS phase diff to output data array
-        in->DATA[i] = pds[0][1];
+        in->DATA[i] = thesum/numtrials;
 
     }
 
