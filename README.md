@@ -33,7 +33,7 @@ $ python plotter.py
 ```
 
 ## Compiling, running, and plotting all at once
-Navigate into each of the main folders (numbered folders) and follow the directions of the README files in each.  Usually you can just navigate into a folder and execute the code by running the command
+To compile, run, and plot all at once, you can just navigate into a main numbered leaf directory and run the command
 
 ```bash
 $ ./run.sh
