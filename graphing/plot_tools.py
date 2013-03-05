@@ -59,7 +59,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None):
     return fig
 
 
-def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=None):
+def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=None, yran=None):
     '''
     Plots an image w/ a colormap
     http://matplotlib.org/users/image_tutorial.html
@@ -69,7 +69,8 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=No
     imgplot = plt.imshow(data)
     #plt.pcolor(data, cmap='spectral')
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
-    plt.colorbar()
+    cbar = plt.colorbar()
+    cbar.set_label(clab)
     imgplot.set_interpolation('nearest') #pixelated
     #imgplot.set_interpolation('bicubic') #blurry but smooth
     plt.title(tit)
@@ -94,7 +95,7 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=No
     plt.show()
 
 
-def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=None):
+def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=None, yran=None):
     '''
     Plots an image w/ a colormap, and adjusts the dynamic range such
     that the upper and lower 5% of data are cropped out
@@ -113,7 +114,8 @@ def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, 
     imgplot = plt.imshow(data)
     #plt.pcolor(data, cmap='spectral')
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
-    plt.colorbar()
+    cbar = plt.colorbar()
+    cbar.set_label(clab)
     imgplot.set_interpolation('nearest') #pixelated
     #imgplot.set_interpolation('bicubic') #blurry but smooth
     plt.title(tit)
