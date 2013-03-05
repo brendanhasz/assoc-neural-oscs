@@ -91,30 +91,50 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=No
         newlabstrs = [('%.2f' % e) for e in newlabs]
         newlabpos = np.linspace(0,yres,numlabs)
         plt.yticks(newlabpos,newlabstrs)
-    #plt.colorbar()
     plt.show()
 
 
-def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' '):
-	'''
-	Plots an image w/ a colormap, and adjusts the dynamic range such
-	that the upper and lower 5% of data are cropped out
-	'''
+def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clims=None, xran=None, yran=None):
+    '''
+    Plots an image w/ a colormap, and adjusts the dynamic range such
+    that the upper and lower 5% of data are cropped out
+    '''
+    # Load data
+    data = np.loadtxt(filename)
+    # Scale data
+    themean = np.mean(data)
+    thestd = np.std(data)
+    stds = 3
+    maxel = themean+stds*thestd
+    minel = themean-stds*thestd
+    data = [[minel if e<minel else maxel if e>maxel else e for e in r] for r in data]
+    #Plotting stuff
+    plt.figure()
+    imgplot = plt.imshow(data)
+    #plt.pcolor(data, cmap='spectral')
+    imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
+    plt.colorbar()
+    imgplot.set_interpolation('nearest') #pixelated
+    #imgplot.set_interpolation('bicubic') #blurry but smooth
+    plt.title(tit)
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    if clims != None:
+        imgplot.set_clim(clims[0],clims[1]) #set color limits
+    if xran!=None:
+        numlabs = 6
+        xres = data.shape[1]
+        newlabs = np.linspace(xran[0],xran[1],numlabs).tolist()
+        newlabstrs = [('%.2f' % e) for e in newlabs]
+        newlabpos = np.linspace(0,xres,numlabs)
+        plt.xticks(newlabpos,newlabstrs)
+    if yran!=None:
+        numlabs = 6
+        yres = data.shape[0]
+        newlabs = np.linspace(yran[0],yran[1],numlabs).tolist()
+        newlabstrs = [('%.2f' % e) for e in newlabs]
+        newlabpos = np.linspace(0,yres,numlabs)
+        plt.yticks(newlabpos,newlabstrs)
+    plt.show()
+    return imgplot
 
-	data = np.loadtxt(filename)
-	themean = np.mean(data)
-	thestd = np.std(data)
-	stds = 3
-	maxel = themean+stds*thestd
-	minel = themean-stds*thestd
-	data = [[minel if e<minel else maxel if e>maxel else e for e in r] for r in data]
-	plt.figure()
-	imgplot = plt.imshow(data)
-	imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
-	plt.colorbar()
-	imgplot.set_interpolation('nearest') #pixelated
-	#imgplot.set_interpolation('bicubic') #blurry but smooth
-	plt.title(tit)
-	plt.xlabel(xlab)
-	plt.ylabel(ylab)
-	plt.show()
