@@ -56,3 +56,13 @@ tit = 'Synaptic Weight over time, during plasticity run - Started out-of-phase'
 xlab = eval("r'Time (100 $\mu$s)'")
 ylab = 'Synaptic weight'
 plot_tools.linep(fname, tit, xlab, ylab)
+
+# After OUT plasticity
+fname = 'Learned_Synchrony_postOUT_pdvpd.dat'
+tit = 'Steady-state Phase Difference as a function of Initial Phase Difference\n after plasticity, init OUT-of-phase, X-Oxc EI=0.3, IE= -0.5, II=0'
+xlab = eval("r'$\Psi_0 $ (Initial Phase diff)'")
+ylab = eval("r'$\langle \Psi_{SS} \\rangle$ (Avg. Steady-state Phase diff)'")
+xran = [0, 2*math.pi]
+smooth = 10
+plot_tools.linep(fname, tit, xlab, ylab, smooth, xran)
+
