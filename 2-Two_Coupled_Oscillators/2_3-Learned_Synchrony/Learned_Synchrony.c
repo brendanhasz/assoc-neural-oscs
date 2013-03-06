@@ -93,7 +93,7 @@ int main(void){
     plasticPingRateN_recW(n,no,Re,R_i_IN,W[0],W[1],W[2],W[3],
                             xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
 
-    printf("xEE weight after plastic run starting IN-phase: %f\n",W_t[n/rw-1][0][0]);
+    printf("xEE weight after plastic run starting IN-phase: %f\n",W_t[n/rw-1][0][2]);
 
     //Save data
     char * fn_plasIN_r = "Learned_Synchrony_plas_IN_r.dat";
@@ -106,19 +106,82 @@ int main(void){
         output_w_in[t][g*i+j] = W_t[t][i][j];
     }}}
 
+    //And save the final xEE weights for later
+    double W_ppIN_SS = W_t[n/rw-1][0][2];
+
     //Save data
     char * fn_plasIN_w = "Learned_Synchrony_plas_IN_w.dat";
     asave(n/rw, g*g, output_w_in, fn_plasIN_w);
     printf("Plastic run, init-IN, weight data saved as %s\n", fn_plasIN_w);
 
 
+
     /*********** DO PLASTIC RUN STARTING *OUT-OF* PHASE ******************/
+    //Simulate
+    plasticPingRateN_recW(n,no,Re,R_i_OUT,W[0],W[1],W[2],W[3],
+                            xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
+
+    printf("xEE weight after plastic run starting OUT-of-phase: %f\n",W_t[n/rw-1][0][0]);
+
+    //Save data
+    char * fn_plasOUT_r = "Learned_Synchrony_plas_OUT_r.dat";
+    asave(n, no, Re, fn_plasOUT_r);
+    printf("Plastic run, init-OUT, rate data saved as %s\n", fn_plasOUT_r);
+
+    //Convert weight matrix into storable one
+    double output_w_out[n/rw][g*g];
+    for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
+        output_w_out[t][g*i+j] = W_t[t][i][j];
+    }}}
+
+    //And save the final xEE weights for later
+    double W_ppOUT_SS = W_t[n/rw-1][0][2];
+
+    //Save data
+    char * fn_plasOUT_w = "Learned_Synchrony_plas_OUT_w.dat";
+    asave(n/rw, g*g, output_w_out, fn_plasOUT_w);
+    printf("Plastic run, init-OUT, weight data saved as %s\n", fn_plasOUT_w);
 
  
 
+    /*********** AFTER IN-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
+    //Set xEE weight
+    W[0] = W_ppIN_SS;
 
+    //Run threads
+    for (i=0;i<NUM_THREADS;i++){
+        pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
+    }
+
+    //Wait for threads to finish
+    waitfor_threads(NUM_THREADS, threads);
+
+    //Write data to file
+    char * fn_postIN_pdvpd = "Learned_Synchrony_postIN_pdvpd.dat";
+    vsave(pd_res, phdiffs, fn_postIN_pdvpd);
+    printf("Done with POST-IN - data saved as %s\n", fn_postIN_pdvpd);
+
+
+
+    /*********** AFTER OUT-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
+    //Set xEE weight
+    W[0] = W_ppOUT_SS;
+
+    //Run threads
+    for (i=0;i<NUM_THREADS;i++){
+        pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
+    }
+
+    //Wait for threads to finish
+    waitfor_threads(NUM_THREADS, threads);
+
+    //Write data to file
+    char * fn_postOUT_pdvpd = "Learned_Synchrony_postOUT_pdvpd.dat";
+    vsave(pd_res, phdiffs, fn_postOUT_pdvpd);
+    printf("Done with POST-OUT - data saved as %s\n", fn_postOUT_pdvpd);
 
 
     return 0;
 
 }
+
