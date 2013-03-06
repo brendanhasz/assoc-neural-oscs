@@ -20,14 +20,27 @@ plot_tools.linep(fname, tit, xlab, ylab, smooth, xran)
 # Plasticity, started IN-phase
 # Rate
 fname = 'Learned_Synchrony_plas_IN_r.dat'
-tit = 'Rates, during plasticity run'
+tit = 'Rates, during plasticity run - started IN phase'
 xlab = eval("r'Time (100 $\mu$s)'")
 ylab = 'Rate (Hz)'
 plot_tools.linep(fname, tit, xlab, ylab)
 # Weight
 fname = 'Learned_Synchrony_plas_IN_w.dat'
-tit = 'Synaptic Weight over time, during plasticity run'
+tit = 'Synaptic Weight over time, during plasticity run - started IN phase'
 xlab = eval("r'Time (100 $\mu$s)'")
 ylab = 'Synaptic weight'
 plot_tools.linep(fname, tit, xlab, ylab)
 
+# Plasticity, started OUT-of-phase
+# Rate
+fname = 'Learned_Synchrony_plas_OUT_r.dat'
+tit = 'Rates, during plasticity run - Started out-of-phase'
+xlab = eval("r'Time (100 $\mu$s)'")
+ylab = 'Rate (Hz)'
+plot_tools.linep(fname, tit, xlab, ylab)
+# Weight
+fname = 'Learned_Synchrony_plas_OUT_w.dat'
+tit = 'Synaptic Weight over time, during plasticity run - Started out-of-phase'
+xlab = eval("r'Time (100 $\mu$s)'")
+ylab = 'Synaptic weight'
+plot_tools.linep(fname, tit, xlab, ylab)
