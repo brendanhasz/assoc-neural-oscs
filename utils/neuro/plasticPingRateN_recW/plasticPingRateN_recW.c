@@ -87,7 +87,7 @@ plasticPingRateN_recW(int n, int no, double Re[n][no], double R_i[no][2],
                 for (k=0;k<2;k++){ for (l=0;l<2;l++){ W[i+k][i+l]=wW[k][l]; }}
             }
             else {  //Cross-group weights
-                W_b[i][j] = 0.2;    //SET xEE WEIGHT BOUND
+                W_b[i][j] = 0.3;    //SET xEE WEIGHT BOUND
                 th[i][j] = 20;      //set thresh for depression for xEE as 20hz
                 //Allow synapses to change?
                 W_c[i][j] = xEE_c;      //xEE

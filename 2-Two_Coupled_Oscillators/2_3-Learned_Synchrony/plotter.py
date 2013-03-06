@@ -18,6 +18,13 @@ smooth = 10
 plot_tools.linep(fname, tit, xlab, ylab, smooth, xran)
 
 # Plasticity, started IN-phase
+# Rate
+fname = 'Learned_Synchrony_plas_IN_r.dat'
+tit = 'Rates, during plasticity run'
+xlab = eval("r'Time (100 $\mu$s)'")
+ylab = 'Rate (Hz)'
+plot_tools.linep(fname, tit, xlab, ylab)
+# Weight
 fname = 'Learned_Synchrony_plas_IN_w.dat'
 tit = 'Synaptic Weight over time, during plasticity run'
 xlab = eval("r'Time (100 $\mu$s)'")

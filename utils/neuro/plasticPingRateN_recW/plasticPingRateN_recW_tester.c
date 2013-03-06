@@ -22,7 +22,7 @@ int main(void){
     int t,i,j; //counters
     double W_t[n/rw][2*no][2*no]; //Weight matrix over time (filled in by plasticPingRateN)
     double Re[n][no], R_i[no][2];
-    double xEE=0, xEI=0, xIE=0, xII=0;	//init x-group syn weights
+    double xEE=0.2, xEI=0.3, xIE=-0.5, xII=0;	//init x-group syn weights
     int xEE_c=1, xEI_c=0, xIE_c=0, xII_c=0; //allow synapses to change?
     double wW[2][2];     //within-oscillator synaptic weights
         wW[0][0]=2;         wW[0][1]=2.873; //EE    EI
