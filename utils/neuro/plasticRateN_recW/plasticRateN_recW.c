@@ -58,18 +58,23 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
     double s;       //sum of weights
     int uw=10;      //update syn weights each uw timesteps
     int rw=10;     //record syn weights each rw timesteps
-    double t_wl=2500;   //"leak" of weight (higher=relaxes to 0 faster)
+    double t_wl=2000;   //"leak" of weight (higher=relaxes to 0 faster)
     double w_pre = uw*dt/t_w;   //pre-calculate constant part of dw/dt
     double th_pre = uw*dt/t_th; //pre-calculate constant part of dtheta/dt
     //Initial rates
+    printf("Init rates:\n");
     for (i=0; i<g; i++){
 	R[0][i] = R_i[i];
+        printf("%f\t",R[0][i]);
     }
     //Initial weights
+    printf("\nWeights:\n");
     for (i=0; i<g; i++){
         for (j=0; j<g; j++){
             W_t[0][i][j] = W[i][j];
+            printf("%f\t",W_t[0][i][j]);
         }
+        printf("\n");
     }
 	
     //Simulate

@@ -34,9 +34,6 @@ objects =	Learned_Synchrony.o \
                 fileIO.o \
                 plasticPingRateN_recW.o \
                 plasticRateN_recW.o
-		#.o
-		#.o
-		#.o
 
 $(name): $(objects)
 	gcc $(OFLAGS) -o $(name) $(objects) -lm -lpthread

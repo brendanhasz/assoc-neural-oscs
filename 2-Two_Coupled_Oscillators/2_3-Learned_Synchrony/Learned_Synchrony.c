@@ -45,8 +45,8 @@ int main(void){
     double R_i_IN[2][2], R_i_OUT[2][2];
     R_i_IN[0][0] = lp_rates[0][0];
     R_i_IN[0][1] = lp_rates[0][1];
-    R_i_IN[1][0] = lp_rates[1][0];
-    R_i_IN[1][1] = lp_rates[1][1];
+    R_i_IN[1][0] = lp_rates[0][0];
+    R_i_IN[1][1] = lp_rates[0][1];
 
     R_i_OUT[0][0] = lp_rates[0][0];
     R_i_OUT[0][1] = lp_rates[0][1];
@@ -121,7 +121,7 @@ int main(void){
     plasticPingRateN_recW(n,no,Re,R_i_OUT,W[0],W[1],W[2],W[3],
                             xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
 
-    printf("xEE weight after plastic run starting OUT-of-phase: %f\n",W_t[n/rw-1][0][0]);
+    printf("xEE weight after plastic run starting OUT-of-phase: %f\n",W_t[n/rw-1][0][2]);
 
     //Save data
     char * fn_plasOUT_r = "Learned_Synchrony_plas_OUT_r.dat";
