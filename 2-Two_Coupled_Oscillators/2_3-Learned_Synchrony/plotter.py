@@ -8,6 +8,8 @@ if path not in sys.path:
 import plot_tools
 import math
 
+
+
 # Before plasticity
 fname = 'Learned_Synchrony_pre_pdvpd.dat'
 tit = 'Steady-state Phase Difference as a function of Initial Phase Difference\n before plasticity, X-Oxc EE=0.2, EI=0.3, IE= -0.5, II=0'
@@ -15,7 +17,10 @@ xlab = eval("r'$\Psi_0 $ (Initial Phase diff)'")
 ylab = eval("r'$\langle \Psi_{SS} \\rangle$ (Avg. Steady-state Phase diff)'")
 xran = [0, 2*math.pi]
 smooth = 10
-plot_tools.linep(fname, tit, xlab, ylab, smooth, xran)
+yran = None
+xlims = None
+ylims = [-0.1, math.pi+0.1]
+plot_tools.linep(fname, tit, xlab, ylab, smooth, xran, yran, xlims, ylims)
 
 # Plasticity, started IN-phase
 # Rate
@@ -37,9 +42,11 @@ tit = 'Steady-state Phase Difference as a function of Initial Phase Difference\n
 xlab = eval("r'$\Psi_0 $ (Initial Phase diff)'")
 ylab = eval("r'$\langle \Psi_{SS} \\rangle$ (Avg. Steady-state Phase diff)'")
 xran = [0, 2*math.pi]
-smooth = 10
-plot_tools.linep(fname, tit, xlab, ylab, smooth, xran)
-
+yran = None
+xlims = None
+ylims = [-0.1, math.pi+0.1]
+smooth_w = 10
+plot_tools.linep(fname, tit, xlab, ylab, smooth, xran, yran, xlims, ylims)
 
 
 
@@ -62,7 +69,5 @@ fname = 'Learned_Synchrony_postOUT_pdvpd.dat'
 tit = 'Steady-state Phase Difference as a function of Initial Phase Difference\n after plasticity, init OUT-of-phase, X-Oxc EI=0.3, IE= -0.5, II=0'
 xlab = eval("r'$\Psi_0 $ (Initial Phase diff)'")
 ylab = eval("r'$\langle \Psi_{SS} \\rangle$ (Avg. Steady-state Phase diff)'")
-xran = [0, 2*math.pi]
-smooth = 10
-plot_tools.linep(fname, tit, xlab, ylab, smooth, xran)
+plot_tools.linep(fname, tit, xlab, ylab, smooth, xran, yran, xlims, ylims)
 

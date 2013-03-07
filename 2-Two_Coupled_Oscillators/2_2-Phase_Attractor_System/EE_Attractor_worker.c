@@ -39,7 +39,7 @@ void *EE_Attractor_worker(void *arg)
 	double ii=0;
 
 	//X-osc EE strength
-	double ee_a=0;
+	double ee_a=0.1;
 	double ee_b=0.3;
 	int ee_res=in->res;
 	double ee_vec[ee_res];

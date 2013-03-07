@@ -26,7 +26,7 @@ def smooth(x,wlen=10):
 	return y
 
 
-def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None):
+def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None, yran=None, xlims=None, ylims=None):
     '''
     Plots a line or set of lines
     http://matplotlib.org/users/pyplot_tutorial.html
@@ -40,6 +40,10 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None):
     plt.title(tit)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
+    if xlims!=None:
+        plt.xlim((xlims[0], xlims[1]))
+    if ylims!=None:
+        plt.ylim((ylims[0], ylims[1]))
     if xran!=None:
         numlabs = 6
         newlabs = np.linspace(xran[0],xran[1],numlabs).tolist()

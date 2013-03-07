@@ -54,7 +54,7 @@ void
     double pds[no][no];
 
     //Multiple trials
-    int numtrials = 100;
+    int numtrials = 10;
     double thesum;
 
 
