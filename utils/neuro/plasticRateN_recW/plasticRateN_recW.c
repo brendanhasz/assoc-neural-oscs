@@ -58,6 +58,7 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
     double s;       //sum of weights
     int uw=10;      //update syn weights each uw timesteps
     int rw=10;     //record syn weights each rw timesteps
+    double t_wl=2500;   //"leak" of weight (higher=relaxes to 0 faster)
     double w_pre = uw*dt/t_w;   //pre-calculate constant part of dw/dt
     double th_pre = uw*dt/t_th; //pre-calculate constant part of dtheta/dt
     //Initial rates
@@ -87,13 +88,7 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
                 for (j=0; j<g; j++){
                     if (W_c[i][j]>0){ //only update if this syn is updatable
                     th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
-                    a=th[i][j];
-                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-1000*W[i][j]);
-                    b = R[t][j]*R[t][i];
-                    ba = R[t][j];
-                    bb = R[t][i];
-                    c = R[t][j] - th[i][j];
-                    d = W[i][j];
+                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-t_wl*W[i][j]);
                     W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
                     W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
                     }
