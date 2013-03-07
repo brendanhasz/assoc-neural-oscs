@@ -14,8 +14,9 @@
 #       ../../utils/neuro/plasticRateN_recW/plasticRateN_recW.c
 #   ../../utils/fileIO/fileIO.c
 
-CFLAGS = -g -c
-OFLAGS = -g
+DFLAGS = -g
+CFLAGS = $(DFLAGS) -c
+OFLAGS = $(DFLAGS)
 
 uts = ../../utils
 nro = $(uts)/neuro
@@ -48,9 +49,6 @@ multithreads.o: $(uts)/multithreads/multithreads.c
 		
 Learned_Synchrony_worker.o: Learned_Synchrony_worker.c
 	gcc $(CFLAGS) Learned_Synchrony_worker.c
-		
-pingRateN.o: $(nro)/pingRateN/pingRateN.c
-	gcc $(CFLAGS) $(nro)/pingRateN/pingRateN.c
 		
 pingRateN.o: $(nro)/pingRateN/pingRateN.c
 	gcc $(CFLAGS) $(nro)/pingRateN/pingRateN.c

@@ -74,7 +74,6 @@ int main(void){
 
 
     /*********** BEFORE PLASTICITY PD_INIT VS PD_SS PLOT  *************/
-/*
     //Run threads
     for (i=0;i<NUM_THREADS;i++){
         pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
@@ -87,7 +86,8 @@ int main(void){
     char * fn_pre_pdvpd = "Learned_Synchrony_pre_pdvpd.dat";
     vsave(pd_res, phdiffs, fn_pre_pdvpd);
     printf("Done with PRE - data saved as %s\n", fn_pre_pdvpd);
-*/
+
+
 
     /*********** DO PLASTIC RUN STARTING *IN* PHASE ******************/
     //Simulate
@@ -114,7 +114,6 @@ int main(void){
     char * fn_plasIN_w = "Learned_Synchrony_plas_IN_w.dat";
     asave(n/rw, g*g, output_w_in, fn_plasIN_w);
     printf("Plastic run, init-IN, weight data saved as %s\n", fn_plasIN_w);
-
 
 
     /*********** DO PLASTIC RUN STARTING *OUT-OF* PHASE ******************/

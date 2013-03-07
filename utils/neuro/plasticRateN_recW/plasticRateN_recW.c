@@ -54,6 +54,7 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
 
     //Variables
     int t,i,j,l;    //counters
+    double a,b,ba,bb,c,d; //value holders TODO: debugging
     double s;       //sum of weights
     int uw=10;      //update syn weights each uw timesteps
     int rw=10;     //record syn weights each rw timesteps
@@ -86,7 +87,13 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
                 for (j=0; j<g; j++){
                     if (W_c[i][j]>0){ //only update if this syn is updatable
                     th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
-                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j]));
+                    a=th[i][j];
+                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-1000*W[i][j]);
+                    b = R[t][j]*R[t][i];
+                    ba = R[t][j];
+                    bb = R[t][i];
+                    c = R[t][j] - th[i][j];
+                    d = W[i][j];
                     W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
                     W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
                     }
