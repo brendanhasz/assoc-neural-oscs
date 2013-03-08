@@ -7,6 +7,7 @@ if path not in sys.path:
     sys.path.insert(1,path)
 import plot_tools
 import math
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -40,7 +41,7 @@ plt.figure()
 ax1=plt.subplot(2,1,1) #Rates over init-IN plasticity run
 plot_tools.linep(fnameINr, titINr, xlabINr, ylabINr)
 ax2=plt.subplot(2,1,2) #Weights over init-IN plasticity run
-plot_tools.linep(fnameINw, ' ', xlabINw, ylabINw)
+plot_tools.linep(fnameINw, ' ', xlabINw, ylabINw, 0, None, None, None, [0.19, 0.31])
 
 # After IN plasticity
 fnameINa = 'Learned_Synchrony_postIN_pdvpd.dat'
@@ -72,7 +73,7 @@ plt.figure()
 plt.subplot(2,1,1) #Rates over init-OUT plasticity run
 plot_tools.linep(fnameOUTr, titOUTr, xlabOUTr, ylabOUTr)
 plt.subplot(2,1,2) #Weights over init_IN plasticity run
-plot_tools.linep(fnameOUTw, titOUTw, xlabOUTw, ylabOUTw)
+plot_tools.linep(fnameOUTw, titOUTw, xlabOUTw, ylabOUTw, 0, None, None, None, [0,0.3])
 
 # After OUT plasticity
 fname = 'Learned_Synchrony_postOUT_pdvpd.dat'
