@@ -1,4 +1,6 @@
 #!/bin/bash
+make clean
 make
 ./single_PING_group
-./plotter.sh
+python plotter.py
+

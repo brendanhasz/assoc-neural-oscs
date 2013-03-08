@@ -69,7 +69,7 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=Non
     http://matplotlib.org/users/image_tutorial.html
     '''
     data = np.loadtxt(filename)
-    plt.figure()
+    #plt.figure()
     imgplot = plt.imshow(data)
     #plt.pcolor(data, cmap='spectral')
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
@@ -96,7 +96,7 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=Non
         newlabstrs = [('%.2f' % e) for e in newlabs]
         newlabpos = np.linspace(0,yres,numlabs)
         plt.yticks(newlabpos,newlabstrs)
-    plt.show()
+    #plt.show()
 
 
 def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=None, yran=None):
@@ -114,7 +114,7 @@ def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, x
     minel = themean-stds*thestd
     data = [[minel if e<minel else maxel if e>maxel else e for e in r] for r in data]
     #Plotting stuff
-    plt.figure()
+    #plt.figure()
     imgplot = plt.imshow(data)
     #plt.pcolor(data, cmap='spectral')
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
@@ -141,6 +141,6 @@ def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, x
         newlabstrs = [('%.2f' % e) for e in newlabs]
         newlabpos = np.linspace(0,yres,numlabs)
         plt.yticks(newlabpos,newlabstrs)
-    plt.show()
-    return imgplot
+    #plt.show()
+    #return imgplot
 

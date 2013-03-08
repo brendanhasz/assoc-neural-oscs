@@ -7,7 +7,6 @@ if path not in sys.path:
     sys.path.insert(1,path)
 import plot_tools
 import math
-import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -83,4 +82,5 @@ ylab = eval("r'$\langle \Psi_{SS} \\rangle$ (Avg. Steady-state Phase diff)'")
 plt.figure()
 plot_tools.linep(fname, tit, xlab, ylab, smooth, xran, yran, xlims, ylims)
 
+#SHOW ALL THE PLOTS
 plt.show()
