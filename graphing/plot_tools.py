@@ -34,7 +34,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None, yran=Non
     data = np.loadtxt(filename)
     if smooth_w>0:
 		data = smooth(data,smooth_w)
-    fig = plt.figure()
+    #fig = plt.figure()
     lines=plt.plot(data)
     plt.setp(lines, linewidth=2.0)
     plt.title(tit)
@@ -50,7 +50,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None, yran=Non
         newlabstrs = [('%.3f' % e) for e in newlabs]
         newlabpos = np.linspace(0,len(data),numlabs)
         plt.xticks(newlabpos,newlabstrs)
-    plt.show()
+    #plt.show()
     '''
     plt.axis([xmin, xmax, ymin, ymax])
     plt.grid(False)
@@ -60,7 +60,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None, yran=Non
     plt.subplot(212)
     plt.plot(~)
     '''
-    return fig
+    #return fig
 
 
 def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=None, yran=None):
