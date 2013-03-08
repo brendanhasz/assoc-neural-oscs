@@ -46,6 +46,20 @@
 #endif
 
 void
+apply_plas_rule(int g, double R[][g], double W[g][g], double W_b[g][g], int W_c[g][g], int i, int j,
+                double th[g][g], double uw, double dt, double t_w, double t_th, int t)
+//apply_plas_rule(W,W_b,W_c,i,j,th,uw,dt,t_w,t_th);
+{
+    double w_pre = uw*dt/t_w;
+    double th_pre = uw*dt/t_th;
+    double t_wl = 2000;
+    th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
+    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-t_wl*W[i][j]);
+    W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
+    W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
+}
+
+void
 plasticRateN_recW(int g, int n, double R[n][g], double R_i[], 
     double W_t[n/100][g][g], int W_c[g][g], double W[g][g], double W_b[g][g], 
     double t_w, double th[g][g], double t_th,
@@ -59,22 +73,23 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
     int uw=10;      //update syn weights each uw timesteps
     int rw=10;     //record syn weights each rw timesteps
     double t_wl=2000;   //"leak" of weight (higher=relaxes to 0 faster)
+    double rProd, t_rP=0.1; //for decay -> max bound
     double w_pre = uw*dt/t_w;   //pre-calculate constant part of dw/dt
     double th_pre = uw*dt/t_th; //pre-calculate constant part of dtheta/dt
     //Initial rates
-    printf("Init rates:\n");
+    //printf("Init rates:\n");
     for (i=0; i<g; i++){
 	R[0][i] = R_i[i];
-        printf("%f\t",R[0][i]);
+        //printf("%f\t",R[0][i]);
     }
     //Initial weights
-    printf("\nWeights:\n");
+    //printf("\nWeights:\n");
     for (i=0; i<g; i++){
         for (j=0; j<g; j++){
             W_t[0][i][j] = W[i][j];
-            printf("%f\t",W_t[0][i][j]);
+            //printf("%f\t",W_t[0][i][j]);
         }
-        printf("\n");
+        //printf("\n");
     }
 	
     //Simulate
@@ -92,10 +107,11 @@ plasticRateN_recW(int g, int n, double R[n][g], double R_i[],
             for (i=0; i<g; i++){
                 for (j=0; j<g; j++){
                     if (W_c[i][j]>0){ //only update if this syn is updatable
-                    th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
-                    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-t_wl*W[i][j]);
-                    W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
-                    W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
+                    apply_plas_rule(g,R,W,W_b,W_c,i,j,th,uw,dt,t_w,t_th, t);
+                    //th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
+                    //W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-t_wl*W[i][j]);
+                    //W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
+                    //W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
                     }
                 }
             }
