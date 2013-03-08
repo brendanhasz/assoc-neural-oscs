@@ -50,11 +50,13 @@ apply_plas_rule(int g, double R[][g], double W[g][g], double W_b[g][g], int W_c[
                 double th[g][g], double uw, double dt, double t_w, double t_th, int t)
 //apply_plas_rule(W,W_b,W_c,i,j,th,uw,dt,t_w,t_th);
 {
-    double w_pre = uw*dt/t_w;
+    double w_pre = uw*dt/t_w*2;
     double th_pre = uw*dt/t_th;
     double t_wl = 2000;
+    double thresh = 5;
     th[i][j]=th[i][j]+th_pre*(R[t][j]*R[t][j]-th[i][j]);
-    W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-t_wl*W[i][j]);
+    //W[i][j]=W[i][j]+w_pre*(R[t][j]*R[t][i]*(R[t][j]-th[i][j])-t_wl*W[i][j]);
+    W[i][j] = W[i][j]+w_pre*((R[t][j]-thresh)*(R[t][i]-thresh));
     W[i][j]=W_c[i][j]*MAX(W_c[i][j]*W[i][j],0); //E stays E, I stays I
     W[i][j]=W_c[i][j]*MIN(W_c[i][j]*W[i][j],W_c[i][j]*W_b[i][j]);  //stay within bounds
 }

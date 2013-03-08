@@ -51,9 +51,9 @@ plasticPingRateN_recW(int n, int no, double Re[n][no], double R_i[no][2],
 {
 
     int g = 2*no, i, j, k, l; //Num groups, counters
-    double ts = 2;       //t_scl=1 or 2 works just great! :)
-    double t_w = ts*10000;    //time constant for syn weight change
-    double t_th = ts*500;     //time constant for sliding threshold
+    //double ts = 0.8;       //t_scl=1 or 2 works just great! :)
+    double t_w = 5000;    //time constant for syn weight change
+    double t_th = 500;     //time constant for sliding threshold
 
     double R[n][g];     //Rate vectors for each group
 
