@@ -16,7 +16,7 @@ fname = 'Phdiff_init_IN.dat'
 tit = 'Phase Difference, Init-IN, X-Osc syn str param space'
 xlab = 'II (IE) Synaptic Strength'
 ylab = 'EE (EI) Synaptic Strength'
-clab = eval("r'$\Psi_{SS}$'")
+clab = eval("r'$\Delta\Phi_{SS}$'")
 clims = [0, math.pi]
 xran = None
 yran = None 
@@ -34,7 +34,7 @@ plot_tools.colorp_scaled(fname, tit, xlab, ylab, clab, clims, xran, yran)
 print "Plotting graph 3 of 9..."
 fname = 'Phdiff_DIFF.dat'
 tit = 'Phase Difference, DIFFERENCE, X-Osc syn str param space'
-clab = eval("r'$\Psi_{SS, \Psi_0=0}-\Psi_{SS, \Psi_0=\pi}$'")
+clab = eval("r'$\Delta\Phi_{SS, \Delta\Phi_0=0}-\Delta\Phi_{SS, \Delta\Phi_0=\pi}$'")
 clims = [-math.pi, math.pi]
 plt.figure()
 plot_tools.colorp_scaled(fname, tit, xlab, ylab, clab, clims, xran, yran)
