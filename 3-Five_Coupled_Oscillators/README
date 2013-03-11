@@ -1,0 +1,10 @@
+1) show init pd vs SS pd line plot for the groups initially for Assembly 1 vs assembly 2
+    *where Assembly1 = oscs 1,2,3, and assembly 2 = oscs 3,4,5
+    *and the phdiff is decided by taking the avg for the group
+        *so phdiff_ass_i_vs_j = avg phdiff between each el of i and each el of j that's not in i
+
+2) alternately stimulate A1 together, rest out, and A2 together, rest out for, um, a while
+
+3) Do init pd vs SS pd for assemblies
+
+
