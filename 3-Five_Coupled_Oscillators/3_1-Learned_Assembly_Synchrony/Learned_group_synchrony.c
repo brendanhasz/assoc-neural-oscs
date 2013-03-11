@@ -19,8 +19,8 @@
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
-    int n=100000; //timesteps
-    int no=2; //number of oscillators
+    int n=10000; //timesteps per plastic trial
+    int no=5; //number of oscillators
     int g=2*no; //number of groups
     double dt = 0.0001;
     int rw = 100;  //how often to record syn weights
@@ -43,13 +43,20 @@ int main(void){
     double lp_rates[p][2];
     get_last_period(&p, lp_rates, wW);
 
-    double R_i_IN[2], R_i_OUT[2];
-    R_i_IN[0] = lp_rates[0][0];
-    R_i_IN[1] = lp_rates[0][1];
-    R_i_OUT[0] = lp_rates[p/2][0];
-    R_i_OUT[1] = lp_rates[p/2][1];
-
-    double (*R_i_s[no])[2]; //Pointers to init rates for each oscillator
+    //Init rates for A1 and A2
+    double R_i_A1[no][2], R_i_A2[no][2];
+    for (i=0; i<3; i++){ //In-group start at peak
+        R_i_A1[i][0] = lp_rates[0][0];
+        R_i_A1[i][1] = lp_rates[0][1];
+        R_i_A2[i+2][0] = lp_rates[0][0];
+        R_i_A2[i+2][1] = lp_rates[0][1];
+    }
+    for (i=0; i<2; i++){ //Out-group start at trough
+        R_i_A1[i+3][0] = lp_rates[p/2][0];
+        R_i_A1[i+3][1] = lp_rates[p/2][1];
+        R_i_A2[i][0] = lp_rates[p/2][0];
+        R_i_A2[i][1] = lp_rates[p/2][1];
+    }
 
 
     //Multithreading stuff
@@ -74,7 +81,7 @@ int main(void){
     /*********** BEFORE PLASTICITY PD_INIT VS PD_SS PLOT  *************/
     //Run threads
     for (i=0;i<NUM_THREADS;i++){
-        pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
+        pthread_create(&threads[i],NULL,Learned_group_synchrony_worker,(void*)&t_args[i]);
     }
 
     //Wait for threads to finish
@@ -87,20 +94,31 @@ int main(void){
 
 
 
-    /*********** DO PLASTIC RUN STARTING *IN* PHASE ******************/
-    //Simulate
-    plasticPingRateN_recW(n,no,Re,R_i_IN,W[0],W[1],W[2],W[3],
-                            xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
-
-    printf("xEE weight after plastic run starting IN-phase: %f\n",W_t[n/rw-1][0][2]);
-
-    //Save data
+    /*********** DO ALTERNATING A1 / A2 PLASTIC RUNS ******************/
+    //TODO: create new file
     char * fn_plasIN_r = "Learned_Synchrony_plas_IN_r.dat";
-    asave(n, no, Re, fn_plasIN_r);
-    printf("Plastic run, init-IN, rate data saved as %s\n", fn_plasIN_r);
+    double output_w_in[n/rw][g*g];
+
+    //Simulate
+    for (i=0; i<plasticTrials; i++){ //alternate A1, A2
+        //ASSEMBLY 1
+        plasticPingRateN_recW(n,no,Re,R_i_A1,W[0],W[1],W[2],W[3],
+                            xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
+        W[0] = (W_t[n/rw-1][0][2]+W_t[n/rw-1][0][2])/2; //set new xEE weight for next run
+        printf("xEE weight after plastic run %d (A1): %f\n",i,W_t[n/rw-1][0][2]);
+        //TODO: append to file
+
+        //ASSEMBLY 2
+        plasticPingRateN_recW(n,no,Re,R_i_A1,W[0],W[1],W[2],W[3],
+                            xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
+        W[0] = (W_t[n/rw-1][0][2]+W_t[n/rw-1][0][2])/2; //set new xEE weight for next run
+        printf("xEE weight after plastic run %d (A1): %f\n",i,W_t[n/rw-1][0][2]);
+        //TODO: append to file
+    }
+
+
 
     //Convert weight matrix into storable one
-    double output_w_in[n/rw][g*g];
     for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
         output_w_in[t][g*i+j] = W_t[t][i][j];
     }}}
@@ -114,33 +132,6 @@ int main(void){
     printf("Plastic run, init-IN, weight data saved as %s\n", fn_plasIN_w);
 
 
-    /*********** DO PLASTIC RUN STARTING *OUT-OF* PHASE ******************/
-    //Simulate
-    plasticPingRateN_recW(n,no,Re,R_i_OUT,W[0],W[1],W[2],W[3],
-                            xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
-
-    printf("xEE weight after plastic run starting OUT-of-phase: %f\n",W_t[n/rw-1][0][2]);
-
-    //Save data
-    char * fn_plasOUT_r = "Learned_Synchrony_plas_OUT_r.dat";
-    asave(n, no, Re, fn_plasOUT_r);
-    printf("Plastic run, init-OUT, rate data saved as %s\n", fn_plasOUT_r);
-
-    //Convert weight matrix into storable one
-    double output_w_out[n/rw][g*g];
-    for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
-        output_w_out[t][g*i+j] = W_t[t][i][j];
-    }}}
-
-    //And save the final xEE weights for later
-    double W_ppOUT_SS = W_t[n/rw-1][0][2];
-
-    //Save data
-    char * fn_plasOUT_w = "Learned_Synchrony_plas_OUT_w.dat";
-    asave(n/rw, g*g, output_w_out, fn_plasOUT_w);
-    printf("Plastic run, init-OUT, weight data saved as %s\n", fn_plasOUT_w);
-
- 
 
     /*********** AFTER IN-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
     //Set xEE weight
@@ -159,23 +150,6 @@ int main(void){
     vsave(pd_res, phdiffs, fn_postIN_pdvpd);
     printf("Done with POST-IN - data saved as %s\n", fn_postIN_pdvpd);
 
-
-    /*********** AFTER OUT-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
-    //Set xEE weight
-    W[0] = W_ppOUT_SS;
-
-    //Run threads
-    for (i=0;i<NUM_THREADS;i++){
-        pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
-    }
-
-    //Wait for threads to finish
-    waitfor_threads(NUM_THREADS, threads);
-
-    //Write data to file
-    char * fn_postOUT_pdvpd = "Learned_Synchrony_postOUT_pdvpd.dat";
-    vsave(pd_res, phdiffs, fn_postOUT_pdvpd);
-    printf("Done with POST-OUT - data saved as %s\n", fn_postOUT_pdvpd);
 
 
     return 0;

@@ -24,14 +24,14 @@
 #include "../../utils/sig_proc/phdiff2.h"
 
 void
-*Learned_Synchrony_worker(void *arg)
+*Learned_group_synchrony_worker(void *arg)
 {
     //Cast input args to data structure
     THREAD_DAT_1D * in = arg;
     printf("Starting thread %d...\n", in->id);
 
     //Simulation duration params
-    int n=9999;
+    int n=50000;
     int no=5;
     double dt=0.0001;
     int i,j; //counters
