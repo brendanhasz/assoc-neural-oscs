@@ -21,10 +21,11 @@ int main(void){
     /*********** INITIALIZE STUFF *************/
     int n=10000; //timesteps per plastic trial
     int no=5; //number of oscillators
+    int plasticTrials = 10;
     int g=2*no; //number of groups
     double dt = 0.0001;
     int rw = 100;  //how often to record syn weights
-    int t,i,j;  //counters
+    int t,i,j,k,l;  //counters
     double W_t[n/rw][g][g]; //Weight matrix over time
     double Re[n][no], R_i[no][2]; //Excitatory rate vector and initial rate vec
 
@@ -95,41 +96,54 @@ int main(void){
 
 
     /*********** DO ALTERNATING A1 / A2 PLASTIC RUNS ******************/
-    //TODO: create new file
-    char * fn_plasIN_r = "Learned_Synchrony_plas_IN_r.dat";
-    double output_w_in[n/rw][g*g];
+    //Create new file to store weights
+    char * fn_plas_w = "Learned_group_synchrony_plas_w.dat";
+    FILE * pFile_wn = fopen(fn_plas_w,"w"); fprintf(pFile_wn, "\n"); fclose(pFile_wn);
+    FILE * pFile_w = fopen(fn_plas_w,"a"); //now open it for appending
+
+    //Create new file to store weights
+    char * fn_plas_r = "Learned_group_synchrony_plas_r.dat";
+    FILE * pFile_rn = fopen(fn_plas_r,"w"); fprintf(pFile_rn, "\n"); fclose(pFile_rn);
+    FILE * pFile_r = fopen(fn_plas_r,"a"); //now open it for appending
 
     //Simulate
-    for (i=0; i<plasticTrials; i++){ //alternate A1, A2
+    for (l=0; l<plasticTrials; l++){ //alternate A1, A2
         //ASSEMBLY 1
         plasticPingRateN_recW(n,no,Re,R_i_A1,W[0],W[1],W[2],W[3],
                             xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
         W[0] = (W_t[n/rw-1][0][2]+W_t[n/rw-1][0][2])/2; //set new xEE weight for next run
         printf("xEE weight after plastic run %d (A1): %f\n",i,W_t[n/rw-1][0][2]);
-        //TODO: append to file
+        //Append to file for weights
+        for (t=0;t<n/rw;t++){
+            for (i=0;i<g;i++){ for (j=0;j<g;j++){
+                if (i%2==0 && j%2==0 && i!=j){ //if we're @ an xEE weight,
+                    fprintf(pFile_w, "%f\t", W_t[t][i][j]);
+                }
+            }}
+            fprintf(pFile_w, "\n"); //new timestep
+        }
+        //TODO: append to file for rates
+
 
         //ASSEMBLY 2
         plasticPingRateN_recW(n,no,Re,R_i_A1,W[0],W[1],W[2],W[3],
                             xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
         W[0] = (W_t[n/rw-1][0][2]+W_t[n/rw-1][0][2])/2; //set new xEE weight for next run
         printf("xEE weight after plastic run %d (A1): %f\n",i,W_t[n/rw-1][0][2]);
-        //TODO: append to file
+        //Append to file for weights
+        for (t=0;t<n/rw;t++){
+            for (i=0;i<g;i++){ for (j=0;j<g;j++){
+                if (i%2==0 && j%2==0 && i!=j){ //if we're @ an xEE weight,
+                    fprintf(pFile_w, "%f\t", W_t[t][i][j]);
+                }
+            }}
+            fprintf(pFile_w, "\n"); //new timestep
+        }
+        //TODO: append to file for rates
     }
 
-
-
-    //Convert weight matrix into storable one
-    for (t=0;t<n/rw;t++){ for (i=0;i<g;i++){ for (j=0;j<g;j++){
-        output_w_in[t][g*i+j] = W_t[t][i][j];
-    }}}
-
-    //And save the final xEE weights for later
-    double W_ppIN_SS = W_t[n/rw-1][0][2];
-
-    //Save data
-    char * fn_plasIN_w = "Learned_Synchrony_plas_IN_w.dat";
-    asave(n/rw, g*g, output_w_in, fn_plasIN_w);
-    printf("Plastic run, init-IN, weight data saved as %s\n", fn_plasIN_w);
+    fclose(pFile_w);
+    fclose(pFile_r);
 
 
 
