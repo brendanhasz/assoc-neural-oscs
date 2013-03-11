@@ -16,9 +16,10 @@
 //phdiff2
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include "../../utils/multithreads/multithreads.h"
 #include "../../utils/basic_math/basic_math.h"
-#include <math.h>
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/sig_proc/phdiff2.h"
@@ -34,7 +35,7 @@ void
     int n=50000;
     int no=5;
     double dt=0.0001;
-    int i,j; //counters
+    int i,j,k,l; //counters
     int res = in->res; //resolution
 
     //Within-oscillator syn strengths

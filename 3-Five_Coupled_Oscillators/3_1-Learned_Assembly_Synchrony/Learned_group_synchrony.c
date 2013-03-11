@@ -88,9 +88,9 @@ int main(void){
     waitfor_threads(NUM_THREADS, threads);
 
     //Write data to file
-    char * fn_pre_pdvpd = "Learned_Synchrony_pre_pdvpd.dat";
-    vsave(pd_res, phdiffs, fn_pre_pdvpd);
-    printf("Done with PRE - data saved as %s\n", fn_pre_pdvpd);
+    char * fn_pre = "Learned_group_synchrony_PREplas.dat";
+    vsave(pd_res, phdiffs, fn_pre);
+    printf("Done with PRE-PLASTICITY - data saved as %s\n", fn_pre);
 
 
 
@@ -134,21 +134,18 @@ int main(void){
 
 
     /*********** AFTER IN-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
-    //Set xEE weight
-    W[0] = W_ppIN_SS;
-
     //Run threads
     for (i=0;i<NUM_THREADS;i++){
-        pthread_create(&threads[i],NULL,Learned_Synchrony_worker,(void*)&t_args[i]);
+        pthread_create(&threads[i],NULL,Learned_group_synchrony_worker,(void*)&t_args[i]);
     }
 
     //Wait for threads to finish
     waitfor_threads(NUM_THREADS, threads);
 
     //Write data to file
-    char * fn_postIN_pdvpd = "Learned_Synchrony_postIN_pdvpd.dat";
-    vsave(pd_res, phdiffs, fn_postIN_pdvpd);
-    printf("Done with POST-IN - data saved as %s\n", fn_postIN_pdvpd);
+    char * fn_post = "Learned_group_synchrony_POSTplas.dat";
+    vsave(pd_res, phdiffs, fn_post);
+    printf("Done with POST-PLASTICITY - data saved as %s\n", fn_post);
 
 
 
