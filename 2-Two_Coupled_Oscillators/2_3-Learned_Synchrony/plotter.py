@@ -18,7 +18,7 @@ tit = 'Steady-state Phase Difference as a function of Initial Phase Difference\n
 xlab = eval("r'$\Delta\Phi_0 $ (Initial Phase diff)'")
 ylab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$ (Avg. Steady-state Phase diff)'")
 xran = [0, 2*math.pi]
-smooth = 10
+smooth = 0
 yran = None
 xlims = None
 ylims = [-0.1, math.pi+0.1]
@@ -54,8 +54,11 @@ xranINa = [0, 2*math.pi]
 yranINa = None
 xlimsINa = None
 ylimsINa = [-0.1, math.pi+0.1]
-smooth_w = 10
+smooth_w = 0
 #fig = plt.figure()
+data=np.loadtxt(fnameINa)
+data=np.absolute(data)
+np.savetxt(fnameINa,data)
 ax3=plt.subplot(1,2,2) #Weights over init-IN plasticity run
 plot_tools.linep(fnameINa, titINa, xlabINa, ylabINa, smooth, xranINa, yranINa, xlimsINa, ylimsINa)
 
