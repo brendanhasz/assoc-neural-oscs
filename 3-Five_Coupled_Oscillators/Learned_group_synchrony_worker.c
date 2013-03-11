@@ -96,11 +96,20 @@ void
             phdiff2(n, no, Re, pds);
 
             //add this phdiff to sum
-            //TODO: calculate ASSEMBLY phase diff
+            for (k=0;k<no;k++){ for (l=k;l<no;l++){
+                //Biased towards A1
+                if ((k==1 | k==2 | k==3) && (l==4 | l==5)){
+                    thesum += pds[k][l];
+                }
+                //Biased towards A2
+                if ((l==3 | l==4 | l==5) && (k==1 | k==2)){
+                    thesum += pds[k][l];
+                }
+            }}
         }
 
         //Assign SS phase diff to output data array
-        in->DATA[i] = thesum/numtrials;
+        in->DATA[i] = thesum/numtrials/12; //avg trials and Assembly sums
 
     }
 
