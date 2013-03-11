@@ -17,6 +17,8 @@
 
 #include <stdio.h>
 #include "../../utils/multithreads/multithreads.h"
+#include "../../utils/basic_math/basic_math.h"
+#include <math.h>
 #include "../../utils/neuro/pingRateN/pingRateN.h"
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/sig_proc/phdiff2.h"
@@ -29,7 +31,8 @@ void
     printf("Starting thread %d...\n", in->id);
 
     //Simulation duration params
-    int n=9999, no=2;
+    int n=9999;
+    int no=5;
     double dt=0.0001;
     int i,j; //counters
     int res = in->res; //resolution
@@ -54,17 +57,32 @@ void
     double pds[no][no];
 
     //Multiple trials
-    int numtrials = 300;
+    int numtrials = 100;
     double thesum;
 
 
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
     for (i=in->a; i<in->b; i++){
         //find init rates for this init phasediff
+        //Assembly 1
         R_i[0][0] = lp_rates[0][0];
         R_i[0][1] = lp_rates[0][1];
-        R_i[1][0] = lp_rates[i*p/res][0];
-        R_i[1][1] = lp_rates[i*p/res][1];
+        R_i[1][0] = lp_rates[0][0];
+        R_i[1][1] = lp_rates[0][1];
+        //Assembly 2
+        R_i[3][0] = lp_rates[i*p/res][0];
+        R_i[3][1] = lp_rates[i*p/res][1];
+        R_i[4][0] = R_i[3][0];
+        R_i[4][1] = R_i[3][1];
+        //Osc3 is in both A1 and A2?
+        if (gen_rand()>0.5){ //Randomly assign O3 to A1,
+            R_i[2][0] = R_i[0][0];
+            R_i[2][1] = R_i[0][1];
+        }
+        else { //or A2
+            R_i[2][0] = R_i[3][0];
+            R_i[2][1] = R_i[3][1];
+        }
 
         thesum = 0;
 
@@ -78,8 +96,7 @@ void
             phdiff2(n, no, Re, pds);
 
             //add this phdiff to sum
-            thesum += pds[0][1];
-
+            //TODO: calculate ASSEMBLY phase diff
         }
 
         //Assign SS phase diff to output data array

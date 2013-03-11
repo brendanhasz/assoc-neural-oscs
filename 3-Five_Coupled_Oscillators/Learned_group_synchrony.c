@@ -19,13 +19,14 @@
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
-    int n=100000, no=2; //timesteps and number of oscillators
+    int n=100000; //timesteps
+    int no=2; //number of oscillators
     int g=2*no; //number of groups
     double dt = 0.0001;
-    int rw = 10;  //how often to record syn weights
+    int rw = 100;  //how often to record syn weights
     int t,i,j;  //counters
     double W_t[n/rw][g][g]; //Weight matrix over time
-    double Re[n][no], R_i[no][2];
+    double Re[n][no], R_i[no][2]; //Excitatory rate vector and initial rate vec
 
     //Init weights
     double wW[2][2];    //Within-oscillator synaptic weights
@@ -42,16 +43,13 @@ int main(void){
     double lp_rates[p][2];
     get_last_period(&p, lp_rates, wW);
 
-    double R_i_IN[2][2], R_i_OUT[2][2];
-    R_i_IN[0][0] = lp_rates[0][0];
-    R_i_IN[0][1] = lp_rates[0][1];
-    R_i_IN[1][0] = lp_rates[0][0];
-    R_i_IN[1][1] = lp_rates[0][1];
+    double R_i_IN[2], R_i_OUT[2];
+    R_i_IN[0] = lp_rates[0][0];
+    R_i_IN[1] = lp_rates[0][1];
+    R_i_OUT[0] = lp_rates[p/2][0];
+    R_i_OUT[1] = lp_rates[p/2][1];
 
-    R_i_OUT[0][0] = lp_rates[0][0];
-    R_i_OUT[0][1] = lp_rates[0][1];
-    R_i_OUT[1][0] = lp_rates[p/2][0];
-    R_i_OUT[1][1] = lp_rates[p/2][1];
+    double (*R_i_s[no])[2]; //Pointers to init rates for each oscillator
 
 
     //Multithreading stuff
