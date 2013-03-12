@@ -10,6 +10,8 @@
 */
 
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/plasticPingRateN_recW/plasticPingRateN_recW.h"
 #include "../../utils/fileIO/fileIO.h"
@@ -19,6 +21,10 @@
 int main(void){
 
     /*********** INITIALIZE STUFF *************/
+    /* Initialize random seed */
+    time_t randseed = time(NULL);
+    srand(randseed);
+
     int n=10000; //timesteps per plastic trial
     int no=5; //number of oscillators
     int plasticTrials = 10;
@@ -68,7 +74,8 @@ int main(void){
     int t_divs[NUM_THREADS+1];
     segment_threads(NUM_THREADS, 0, pd_res, t_divs);
 
-    double thesum, avgphdiff;
+    double thesum_o2, thesum_o3, thesum_o4, thesum_o5;
+    double avgphdiff_o2, avgphdiff_o3, avgphdiff_o4, avgphdiff_o5;
     
     //put data in thread args
     for (i=0;i<NUM_THREADS;i++){
@@ -81,10 +88,20 @@ int main(void){
     }
 
 
-    /*********** TESTER RUN OF PINGRATEN W/ 5 GROUPS ***********/
+    /*********** TESTER RUN OF 5 GROUPS w/ RANDOM START ***********/
     double Rees[n][no];
-    n = 20000;
-    pingRateN(n,no,Rees,R_i_A1,W[0]*2/5,W[1]*2/5,W[2]*2/5,W[3]*2/5,wW,dt);
+    int nn = 20000, phaseInd;
+    double R_i_rand[no][2];
+            R_i_rand[0][0] = lp_rates[0][0];
+            R_i_rand[0][1] = lp_rates[0][1];
+            R_i_rand[1][0] = lp_rates[0][0];
+            R_i_rand[1][1] = lp_rates[0][1];
+        for (i=2;i<no;i++){
+            phaseInd = rand() % p;
+            R_i_rand[i][0] = lp_rates[phaseInd][0];
+            R_i_rand[i][1] = lp_rates[phaseInd][1];
+        }
+    pingRateN(nn,no,Rees,R_i_rand,W[0]*2/5,W[1]*2/5,W[2]*2/5,W[3]*2/5,wW,dt);
     char * fn_prnt = "Learned_group_synchrony_5grouptester.dat";
     asave(n, no, Rees, fn_prnt);
     printf("Done with pingRateN 5-group tester - data saved as %s\n", fn_prnt);
@@ -121,14 +138,11 @@ int main(void){
     printf("Avg phase difference between O1 and O4: %f\n",avgphdiff_o4);
     printf("Avg phase difference between O1 and O5: %f\n",avgphdiff_o5);
 
-    //Write data to file
-    char * fn_pre = "Learned_group_synchrony_PREplas.dat";
-    vsave(pd_res, phdiffs, fn_pre);
-    printf("Done with PRE-PLASTICITY - data saved as %s\n", fn_pre);
 
 
 
     /*********** DO ALTERNATING A1 / A2 PLASTIC RUNS ******************/
+/*
     //Create new file to store weights
     char * fn_plas_w = "Learned_group_synchrony_plas_w.dat";
     FILE * pFile_wn = fopen(fn_plas_w,"w"); fprintf(pFile_wn, "\n"); fclose(pFile_wn);
@@ -190,9 +204,10 @@ int main(void){
     fclose(pFile_w);
     fclose(pFile_r);
 
-
+*/
 
     /*********** AFTER IN-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
+/*
     //Run threads
     for (i=0;i<NUM_THREADS;i++){
         pthread_create(&threads[i],NULL,Learned_group_synchrony_worker,(void*)&t_args[i]);
@@ -205,7 +220,7 @@ int main(void){
     char * fn_post = "Learned_group_synchrony_POSTplas.dat";
     vsave(pd_res, phdiffs, fn_post);
     printf("Done with POST-PLASTICITY - data saved as %s\n", fn_post);
-
+*/
 
 
     return 0;

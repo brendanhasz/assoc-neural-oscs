@@ -85,6 +85,7 @@ void
         R_i[4][1] = lp_rates[rp5][1];
 
             
+        //TODO: you're gonna have to use rateN... so you can get different xEE strs
         //Simulate
         pingRateN(n,no,Re,R_i,ee,ei,ie,ii,wW,dt);
 
