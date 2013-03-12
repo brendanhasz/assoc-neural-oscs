@@ -92,7 +92,7 @@ void
         //Find steady state phase diffs
         phdiff2(n, no, Re, pds);
         //printf("init phdiff index: %d\n",i);
-        //printpds(no, pds);
+        printpds(no, pds);
 
         //Assign SS phase diff to output data array
         in->DATA[i] = pds[0][1]; //phdiff between o1 and o2
