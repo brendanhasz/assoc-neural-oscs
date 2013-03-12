@@ -14,7 +14,7 @@
 #include "../../utils/neuro/plasticPingRateN_recW/plasticPingRateN_recW.h"
 #include "../../utils/fileIO/fileIO.h"
 #include "../../utils/multithreads/multithreads.h"
-#include "Learned_Synchrony_worker.h"
+#include "Learned_group_synchrony_worker.h"
 
 int main(void){
 
@@ -132,7 +132,7 @@ int main(void){
 
 
         //ASSEMBLY 2
-        plasticPingRateN_recW(n,no,Re,R_i_A1,W[0],W[1],W[2],W[3],
+        plasticPingRateN_recW(n,no,Re,R_i_A2,W[0],W[1],W[2],W[3],
                             xEE_c,xEI_c,xIE_c,xII_c,wW,dt,W_t);    
         W[0] = (W_t[n/rw-1][0][2]+W_t[n/rw-1][0][2])/2; //set new xEE weight for next run
         printf("xEE weight after plastic run %d (A1): %f\n",i,W_t[n/rw-1][0][2]);
