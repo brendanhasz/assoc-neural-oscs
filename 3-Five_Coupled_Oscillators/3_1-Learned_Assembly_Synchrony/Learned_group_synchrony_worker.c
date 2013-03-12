@@ -59,13 +59,14 @@ void
     double pds[no][no];
 
     //Multiple trials
-    int numtrials = 10;
+    int numtrials = 30;
     double thesum;
     int O3A;
 
 
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
     for (i=in->a; i<in->b; i++){
+        printf("T%d: %f percent done\n", in->id, 100*(((double)i-in->a)/((double)in->b-in->a)));
         //find init rates for this init phasediff
         //Assembly 1
         R_i[0][0] = lp_rates[0][0];
