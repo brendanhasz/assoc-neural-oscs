@@ -1,6 +1,6 @@
-# Learned_Synchrony.c
+# Learned_group_synchrony.c
 #   ../../utils/multithreads/multithreads.c
-#   Learned_Synchrony_worker.c
+#   Learned_group_synchrony_worker.c
 #       ../../utils/multithreads/multithreads.c
 #       ../../utils/neuro/pingRateN/pingRateN.c
 #           ../../utils/neuro/rateN/rateN.c
@@ -21,11 +21,11 @@ OFLAGS = $(DFLAGS)
 uts = ../../utils
 nro = $(uts)/neuro
 
-name = Learned_Synchrony
+name = Learned_group_synchrony
 
-objects =	Learned_Synchrony.o \
+objects =	Learned_group_synchrony.o \
                 multithreads.o \
-		Learned_Synchrony_worker.o \
+		Learned_group_synchrony_worker.o \
 		pingRateN.o \
 		rateN.o \
 		get_last_period.o \
@@ -38,14 +38,14 @@ objects =	Learned_Synchrony.o \
 $(name): $(objects)
 	gcc $(OFLAGS) -o $(name) $(objects) -lm -lpthread
 
-Learned_Synchrony.o: Learned_Synchrony.c
-	gcc $(CFLAGS) Learned_Synchrony.c
+Learned_group_synchrony.o: Learned_group_synchrony.c
+	gcc $(CFLAGS) Learned_group_synchrony.c
 		
 multithreads.o: $(uts)/multithreads/multithreads.c
 	gcc $(CFLAGS) $(uts)/multithreads/multithreads.c
 		
-Learned_Synchrony_worker.o: Learned_Synchrony_worker.c
-	gcc $(CFLAGS) Learned_Synchrony_worker.c
+Learned_group_synchrony_worker.o: Learned_group_synchrony_worker.c
+	gcc $(CFLAGS) Learned_group_synchrony_worker.c
 		
 pingRateN.o: $(nro)/pingRateN/pingRateN.c
 	gcc $(CFLAGS) $(nro)/pingRateN/pingRateN.c

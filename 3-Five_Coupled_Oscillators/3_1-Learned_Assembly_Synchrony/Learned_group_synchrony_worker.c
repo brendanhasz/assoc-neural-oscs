@@ -44,8 +44,9 @@ void
         wW[1][0]=-2.873;    wW[1][1]=-2;    //IE    II
 
     //X-oscillator synaptic strengths
-    double ei=0.3, ie=-0.5, ii=0; 
-    double ee=in->DATA_IN[0];
+    double scl = 2/no;
+    double ei=0.3*scl, ie=-0.5*scl, ii=0*scl; 
+    double ee=in->DATA_IN[0]*scl;
 
     //Find rates for one period
     int p=1000;
@@ -58,7 +59,7 @@ void
     double pds[no][no];
 
     //Multiple trials
-    int numtrials = 100;
+    int numtrials = 1;
     double thesum;
 
 
