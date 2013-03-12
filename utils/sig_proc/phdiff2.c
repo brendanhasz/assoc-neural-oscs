@@ -28,6 +28,7 @@
 */
 
 #include <math.h>
+#include <stdio.h>
 #include "l2peaks.h"
 
 void
@@ -69,3 +70,24 @@ phdiff2(int n, int ng, double A[][ng], double pds[ng][ng])
 	}
 	
 }
+
+void printpds(int ng, double pds[ng][ng]){
+    int i,j;
+    for (i=0; i<ng; i++){
+        printf("----%d---\t",i);
+    }
+    printf("\n");
+    for (i=0;i<ng;i++){
+        for (j=0;j<ng;j++){
+            if(j>=i){
+                printf("%f\t", pds[i][j]);
+            } else {
+                printf("--------\t");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+}
+

@@ -79,6 +79,16 @@ int main(void){
     }
 
 
+    /*********** TESTER RUN OF PINGRATEN W/ 5 GROUPS ***********/
+    double Rees[n][no];
+    n = 20000;
+    pingRateN(n,no,Rees,R_i_A1,W[0]*2/5,W[1]*2/5,W[2]*2/5,W[3]*2/5,wW,dt);
+    char * fn_prnt = "Learned_group_synchrony_5grouptester.dat";
+    asave(n, no, Rees, fn_prnt);
+    printf("Done with pingRateN 5-group tester - data saved as %s\n", fn_prnt);
+    
+
+
     /*********** BEFORE PLASTICITY PD_INIT VS PD_SS PLOT  *************/
     //Run threads
     for (i=0;i<NUM_THREADS;i++){

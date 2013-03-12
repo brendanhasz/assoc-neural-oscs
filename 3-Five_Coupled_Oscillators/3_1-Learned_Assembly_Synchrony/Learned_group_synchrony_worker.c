@@ -61,6 +61,7 @@ void
     //Multiple trials
     int numtrials = 1;
     double thesum;
+    int O3A;
 
 
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
@@ -76,42 +77,46 @@ void
         R_i[3][1] = lp_rates[i*p/res][1];
         R_i[4][0] = R_i[3][0];
         R_i[4][1] = R_i[3][1];
-        //Osc3 is in both A1 and A2?
-        if (gen_rand()>0.5){ //Randomly assign O3 to A1,
-            R_i[2][0] = R_i[0][0];
-            R_i[2][1] = R_i[0][1];
-        }
-        else { //or A2
-            R_i[2][0] = R_i[3][0];
-            R_i[2][1] = R_i[3][1];
-        }
 
         thesum = 0;
 
         //find avg phdiff over some trials
         for (j=0; j<numtrials; j++){
+
+            //Osc3 is in both A1 and A2?
+            O3A = (gen_rand()>0.5 ? 0 : 1);
+            if (O3A>0){ //Randomly assign O3 to A1,
+                R_i[2][0] = R_i[0][0];
+                R_i[2][1] = R_i[0][1];
+            } else { //or A2
+                R_i[2][0] = R_i[3][0];
+                R_i[2][1] = R_i[3][1];
+            }
             
             //Simulate
             pingRateN(n,no,Re,R_i,ee,ei,ie,ii,wW,dt);
 
             //Find steady state phase diff
             phdiff2(n, no, Re, pds);
+            printf("init phdiff index: %d\n",i);
+            printpds(no, pds);
 
             //add this phdiff to sum
             for (k=0;k<no;k++){ for (l=k;l<no;l++){
-                //Biased towards A1
-                if ((k==1 | k==2 | k==3) && (l==4 | l==5)){
-                    thesum += pds[k][l];
-                }
-                //Biased towards A2
-                if ((l==3 | l==4 | l==5) && (k==1 | k==2)){
-                    thesum += pds[k][l];
+                if (O3A>0){ //O3 is in A1
+                    if ((k==0 | k==1 | k==2) && (l==3 | l==4)){
+                        thesum += pds[k][l]; //phdiffs between A1 and A2
+                    }
+                } else { //O3 is in A2
+                    if ((l==2 | l==3 | l==4) && (k==0 | k==1)){
+                        thesum += pds[k][l]; //phdiffs between A1 and A2
+                    }
                 }
             }}
         }
 
         //Assign SS phase diff to output data array
-        in->DATA[i] = thesum/numtrials/12; //avg trials and Assembly sums
+        in->DATA[i] = thesum/numtrials/6; //avg trials and Assembly sums
 
     }
 

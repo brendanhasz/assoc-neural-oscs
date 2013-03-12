@@ -28,3 +28,5 @@
 */
 
 void phdiff2(int n, int ng, double A[][ng], double pds[ng][ng]);
+void printpds(int ng, double pds[ng][ng]);
+
