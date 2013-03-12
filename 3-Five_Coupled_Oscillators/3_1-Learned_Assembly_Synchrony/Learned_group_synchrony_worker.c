@@ -59,7 +59,7 @@ void
     double pds[no][no];
 
     //Multiple trials
-    int numtrials = 1;
+    int numtrials = 10;
     double thesum;
     int O3A;
 
@@ -98,8 +98,8 @@ void
 
             //Find steady state phase diff
             phdiff2(n, no, Re, pds);
-            printf("init phdiff index: %d\n",i);
-            printpds(no, pds);
+            //printf("init phdiff index: %d\n",i);
+            //printpds(no, pds);
 
             //add this phdiff to sum
             for (k=0;k<no;k++){ for (l=k;l<no;l++){
