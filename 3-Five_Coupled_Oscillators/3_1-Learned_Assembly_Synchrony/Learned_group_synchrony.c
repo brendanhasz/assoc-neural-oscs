@@ -62,11 +62,13 @@ int main(void){
 
     //Multithreading stuff
     int pd_res = 100;
-    double phdiffs[pd_res];
+    double phdiffs[4*pd_res];
     pthread_t threads[NUM_THREADS];
     THREAD_DAT_1D t_args[NUM_THREADS];
     int t_divs[NUM_THREADS+1];
     segment_threads(NUM_THREADS, 0, pd_res, t_divs);
+
+    double thesum, avgphdiff;
     
     //put data in thread args
     for (i=0;i<NUM_THREADS;i++){
@@ -88,8 +90,9 @@ int main(void){
     printf("Done with pingRateN 5-group tester - data saved as %s\n", fn_prnt);
     
 
+    //TODO: LOOP MULTIPLE TIMES AND CREATE LINE PLOT OF AVG PHDIFFS AFTER REPEATED PLASTICITY RUNS
 
-    /*********** BEFORE PLASTICITY PD_INIT VS PD_SS PLOT  *************/
+    /*********** BEFORE PLASTICITY AVG PHDIFFS *************/
     //Run threads
     for (i=0;i<NUM_THREADS;i++){
         pthread_create(&threads[i],NULL,Learned_group_synchrony_worker,(void*)&t_args[i]);
@@ -97,6 +100,26 @@ int main(void){
 
     //Wait for threads to finish
     waitfor_threads(NUM_THREADS, threads);
+
+    //Find avg phdiffs
+    thesum_o2 = 0;
+    thesum_o3 = 0;
+    thesum_o4 = 0;
+    thesum_o5 = 0;
+    for (i=0;i<pd_res;i++){
+        thesum_o2 += phdiffs[i];
+        thesum_o3 += phdiffs[i+1];
+        thesum_o4 += phdiffs[i+2];
+        thesum_o5 += phdiffs[i+3];
+    }
+    avgphdiff_o2 = thesum_o2/pd_res;
+    avgphdiff_o3 = thesum_o3/pd_res;
+    avgphdiff_o4 = thesum_o4/pd_res;
+    avgphdiff_o5 = thesum_o5/pd_res;
+    printf("Avg phase difference between O1 and O2: %f\n",avgphdiff_o2);
+    printf("Avg phase difference between O1 and O3: %f\n",avgphdiff_o3);
+    printf("Avg phase difference between O1 and O4: %f\n",avgphdiff_o4);
+    printf("Avg phase difference between O1 and O5: %f\n",avgphdiff_o5);
 
     //Write data to file
     char * fn_pre = "Learned_group_synchrony_PREplas.dat";

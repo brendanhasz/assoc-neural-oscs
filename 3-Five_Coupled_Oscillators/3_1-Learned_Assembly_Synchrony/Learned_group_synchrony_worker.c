@@ -61,63 +61,43 @@ void
     //Multiple trials
     int numtrials = 30;
     double thesum;
-    int O3A;
+    int rp3, rp4, rp5;
 
 
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
     for (i=in->a; i<in->b; i++){
         printf("T%d: %f percent done\n", in->id, 100*(((double)i-in->a)/((double)in->b-in->a)));
         //find init rates for this init phasediff
-        //Assembly 1
+        //O1, O2 in-phase
         R_i[0][0] = lp_rates[0][0];
         R_i[0][1] = lp_rates[0][1];
         R_i[1][0] = lp_rates[0][0];
         R_i[1][1] = lp_rates[0][1];
-        //Assembly 2
-        R_i[3][0] = lp_rates[i*p/res][0];
-        R_i[3][1] = lp_rates[i*p/res][1];
-        R_i[4][0] = R_i[3][0];
-        R_i[4][1] = R_i[3][1];
+        //rest @ random phases
+        rp3 = rand() % p;
+        rp4 = rand() % p;
+        rp5 = rand() % p;
+        R_i[2][0] = lp_rates[rp3][0];
+        R_i[2][1] = lp_rates[rp3][1];
+        R_i[3][0] = lp_rates[rp4][0];
+        R_i[3][1] = lp_rates[rp4][1];
+        R_i[4][0] = lp_rates[rp5][0];
+        R_i[4][1] = lp_rates[rp5][1];
 
-        thesum = 0;
-
-        //find avg phdiff over some trials
-        for (j=0; j<numtrials; j++){
-
-            //Osc3 is in both A1 and A2?
-            O3A = (gen_rand()>0.5 ? 0 : 1);
-            if (O3A>0){ //Randomly assign O3 to A1,
-                R_i[2][0] = R_i[0][0];
-                R_i[2][1] = R_i[0][1];
-            } else { //or A2
-                R_i[2][0] = R_i[3][0];
-                R_i[2][1] = R_i[3][1];
-            }
             
-            //Simulate
-            pingRateN(n,no,Re,R_i,ee,ei,ie,ii,wW,dt);
+        //Simulate
+        pingRateN(n,no,Re,R_i,ee,ei,ie,ii,wW,dt);
 
-            //Find steady state phase diff
-            phdiff2(n, no, Re, pds);
-            //printf("init phdiff index: %d\n",i);
-            //printpds(no, pds);
-
-            //add this phdiff to sum
-            for (k=0;k<no;k++){ for (l=k;l<no;l++){
-                if (O3A>0){ //O3 is in A1
-                    if ((k==0 | k==1 | k==2) && (l==3 | l==4)){
-                        thesum += pds[k][l]; //phdiffs between A1 and A2
-                    }
-                } else { //O3 is in A2
-                    if ((l==2 | l==3 | l==4) && (k==0 | k==1)){
-                        thesum += pds[k][l]; //phdiffs between A1 and A2
-                    }
-                }
-            }}
-        }
+        //Find steady state phase diffs
+        phdiff2(n, no, Re, pds);
+        //printf("init phdiff index: %d\n",i);
+        //printpds(no, pds);
 
         //Assign SS phase diff to output data array
-        in->DATA[i] = thesum/numtrials/6; //avg trials and Assembly sums
+        in->DATA[i] = pds[0][1]; //phdiff between o1 and o2
+        in->DATA[i+1] = pds[0][2]; //phdiff between o1 and o3
+        in->DATA[i+2] = pds[0][3]; //phdiff between o1 and o4
+        in->DATA[i+3] = pds[0][4]; //phdiff between o1 and o5
 
     }
 
