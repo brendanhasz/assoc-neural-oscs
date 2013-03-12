@@ -122,7 +122,13 @@ int main(void){
             }}
             fprintf(pFile_w, "\n"); //new timestep
         }
-        //TODO: append to file for rates
+        //Append to file for rates
+        for (t=0; t<n; t++){ 
+            for (i=0;i<no;i++){
+                fprintf(pFile_r, "%f\t", Re[t][i]);
+            }
+            fprintf(pFile_r, "\n");
+        }
 
 
         //ASSEMBLY 2
@@ -139,7 +145,13 @@ int main(void){
             }}
             fprintf(pFile_w, "\n"); //new timestep
         }
-        //TODO: append to file for rates
+        //Append to file for rates
+        for (t=0; t<n; t++){ 
+            for (i=0;i<no;i++){
+                fprintf(pFile_r, "%f\t", Re[t][i]);
+            }
+            fprintf(pFile_r, "\n");
+        }
     }
 
     fclose(pFile_w);
