@@ -44,7 +44,7 @@ int main(void){
     double wW[2][2];    //Within-oscillator synaptic weights
         wW[0][0]=2;         wW[0][1]=2.873; //EE    EI
         wW[1][0]=-2.873;    wW[1][1]=-2;    //IE    II
-    double scl = 2/no;
+    double scl = 2/((double)no);
     double xW[2][2];    //Initial x-group synaptic strengths
         xW[0][0]=0.2*scl;   xW[0][1]=0.3*scl;   //xEE   xEI
         xW[1][0]=-0.5*scl;  xW[1][1]=0*scl;     //xIE   xII
