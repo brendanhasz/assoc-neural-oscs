@@ -64,6 +64,14 @@ int main(void){
             W_1D[g*i+j] = W[i][j];
         }
     }
+    //TODO: debugger
+    for (i=0;i<g;i++){
+        for (j=0;j<g;j++){
+            printf("%f\t", W[i][j]);
+        }
+        printf("\n");
+    }
+    
 
     //Weights alowed to change?
     int W_c[g][g];
@@ -127,19 +135,21 @@ int main(void){
             R_i_A1[4][0] = lp_rates[p/2][0]+gen_rand();
             R_i_A1[4][1] = lp_rates[p/2][1]+gen_rand();
 
+    //Plastic runs
+    int pd_res = 1000; //How many phase diff trials to do per plastic run
+    int pl_res = 2; //How many plastic runs to do
+    double o2_vec[pd_res], o3_vec[pd_res], o4_vec[pd_res], o5_vec[pd_res]; 
+    double avgphdiffs[pl_res][4];
+    double stdphdiffs[pl_res][4];
 
     //Multithreading stuff
-    int pd_res = 1000;
     double phdiffs[4*pd_res];
     pthread_t threads[NUM_THREADS];
     THREAD_DAT_1D t_args[NUM_THREADS];
     int t_divs[NUM_THREADS+1];
     segment_threads(NUM_THREADS, 0, pd_res, t_divs);
 
-    double o2_vec[pd_res], o3_vec[pd_res], o4_vec[pd_res], o5_vec[pd_res]; 
-    int pl_res = 1; //How many plastic runs to do
-    double avgphdiffs[pl_res][4];
-    double stdphdiffs[pl_res][4];
+
     
     //put data in thread args
     for (i=0;i<NUM_THREADS;i++){
@@ -244,9 +254,11 @@ for (pr=0; pr<pl_res;pr++){
         for (i=0;i<g;i++){ for (j=0;j<g;j++){
             if (i%2==0 && j%2==0 && i!=j){ //if we're @ an xEE weight,
                 fprintf(pFile_w, "%f\t", W_t[t][i][j]);
+                //printf("%f\t", W_t[t][i][j]);
             }
         }}
         fprintf(pFile_w, "\n"); //new timestep
+        //printf("\n"); //new timestep
     }
     //Append to file for rates
     for (t=0; t<n; t++){ 
