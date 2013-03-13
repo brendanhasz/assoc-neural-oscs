@@ -56,17 +56,6 @@ int main(void){
             W[i][j]=xW[i%2][j%2];
         }
     }}
-/*
-    for (i=0;i<g;i+=2){ for (j=0;j<g;j+=2){
-        for (k=0;k<2;k++){ for (l=0;l<2;l++){
-            if (i==j){ //within group block
-                W[i+k][j+l] = wW[k][l];
-            } else { //x-group
-                W[i+k][j+l] = xW[k][l];
-            }
-        }}
-    }}
-*/
     double W_1D[g*g];
     for (i=0;i<g;i++){
         for (j=0;j<g;j++){
