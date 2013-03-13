@@ -81,7 +81,7 @@ int main(void){
 
     double thesum_o2, thesum_o3, thesum_o4, thesum_o5;
     double o2_vec[pd_res], o3_vec[pd_res], o4_vec[pd_res], o5_vec[pd_res]; 
-    int pl_res = 5; //How many plastic runs to do
+    int pl_res = 1; //How many plastic runs to do
     double avgphdiffs[pl_res][4];
     double stdphdiffs[pl_res][4];
     
@@ -117,6 +117,8 @@ int main(void){
  */   
 
     //TODO: LOOP MULTIPLE TIMES AND CREATE LINE PLOT OF AVG PHDIFFS AFTER REPEATED PLASTICITY RUNS
+    int pr; //plastic loops
+    for (pr=0; pr<pl_res;pr++){
 
     /*********** BEFORE PLASTICITY AVG PHDIFFS *************/
     //Run threads
@@ -134,20 +136,20 @@ int main(void){
         o4_vec[i] = phdiffs[i*4+2];
         o5_vec[i] = phdiffs[i*4+3];
     }
-    avgphdiffs[0][0] = mean(pd_res, o2_vec);    
-    avgphdiffs[0][1] = mean(pd_res, o3_vec);    
-    avgphdiffs[0][2] = mean(pd_res, o4_vec);    
-    avgphdiffs[0][3] = mean(pd_res, o5_vec);    
+    avgphdiffs[pr][0] = mean(pd_res, o2_vec);    
+    avgphdiffs[pr][1] = mean(pd_res, o3_vec);    
+    avgphdiffs[pr][2] = mean(pd_res, o4_vec);    
+    avgphdiffs[pr][3] = mean(pd_res, o5_vec);    
 
-    stdphdiffs[0][0] = std(pd_res, o2_vec);    
-    stdphdiffs[0][1] = std(pd_res, o3_vec);    
-    stdphdiffs[0][2] = std(pd_res, o4_vec);    
-    stdphdiffs[0][3] = std(pd_res, o5_vec);    
+    stdphdiffs[pr][0] = std(pd_res, o2_vec);    
+    stdphdiffs[pr][1] = std(pd_res, o3_vec);    
+    stdphdiffs[pr][2] = std(pd_res, o4_vec);    
+    stdphdiffs[pr][3] = std(pd_res, o5_vec);    
 
-    printf("Avg phase difference between O1 and O2: %f +/- %f\n",avgphdiffs[0][0],stdphdiffs[0][0]);
-    printf("Avg phase difference between O1 and O3: %f +/- %f\n",avgphdiffs[0][1],stdphdiffs[0][1]);
-    printf("Avg phase difference between O1 and O4: %f +/- %f\n",avgphdiffs[0][2],stdphdiffs[0][2]);
-    printf("Avg phase difference between O1 and O5: %f +/- %f\n",avgphdiffs[0][3],stdphdiffs[0][3]);
+    printf("%d: Avg ph diff between O1 and O2: %f +/- %f\n", pr, avgphdiffs[pr][0], stdphdiffs[pr][0]);
+    printf("%d: Avg ph diff between O1 and O3: %f +/- %f\n", pr, avgphdiffs[pr][1], stdphdiffs[pr][1]);
+    printf("%d: Avg ph diff between O1 and O4: %f +/- %f\n", pr, avgphdiffs[pr][2], stdphdiffs[pr][2]);
+    printf("%d: Avg ph diff between O1 and O5: %f +/- %f\n", pr, avgphdiffs[pr][3], stdphdiffs[pr][3]);
 
 
 
@@ -216,22 +218,7 @@ int main(void){
     fclose(pFile_r);
 
 */
-
-    /*********** AFTER IN-PLASTICITY PD_INIT VS PD_SS PLOT  *************/
-/*
-    //Run threads
-    for (i=0;i<NUM_THREADS;i++){
-        pthread_create(&threads[i],NULL,Learned_group_synchrony_worker,(void*)&t_args[i]);
     }
-
-    //Wait for threads to finish
-    waitfor_threads(NUM_THREADS, threads);
-
-    //Write data to file
-    char * fn_post = "Learned_group_synchrony_POSTplas.dat";
-    vsave(pd_res, phdiffs, fn_post);
-    printf("Done with POST-PLASTICITY - data saved as %s\n", fn_post);
-*/
 
 
     return 0;

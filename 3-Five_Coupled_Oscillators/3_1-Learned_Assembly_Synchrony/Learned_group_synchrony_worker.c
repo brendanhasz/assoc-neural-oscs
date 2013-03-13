@@ -78,7 +78,7 @@ void
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
     for (i=in->a; i<in->b; i++){
         //print percent done message
-        if (i%10==0){
+        if (i%100==0){
             printf("T%d: %f percent done\n", in->id, 100*(((double)i-in->a)/((double)in->b-in->a)));
         }
 
