@@ -24,6 +24,7 @@ int main(void){
     /* Initialize random seed */
     time_t randseed = time(NULL);
     srand(randseed);
+    printf("Seeded with %lld\n", (long long) randseed);
 
     int n=10000; //timesteps per plastic trial
     int no=5; //number of oscillators
@@ -39,9 +40,26 @@ int main(void){
     double wW[2][2];    //Within-oscillator synaptic weights
         wW[0][0]=2;         wW[0][1]=2.873; //EE    EI
         wW[1][0]=-2.873;    wW[1][1]=-2;    //IE    II
-    double W[4];    //Cross-group
-        W[0]=0.2;   W[1]=0.3;   //xEE   xEI
-        W[2]=-0.5;  W[3]=0;     //xIE   xII
+    double scl = 2/no;
+    double xW[2][2];    //Initial x-group synaptic strengths
+        xW[0][0]=0.2*scl;   xW[0][1]=0.3*scl;   //xEE   xEI
+        xW[1][0]=-0.5*scl;  xW[1][1]=0*scl;     //xIE   xII
+    double W[g][g];    //All weights
+    for (i=0;i<g;i+=2){ for (j=0;j<g;j+=2){
+        for (k=0;k<2;k++){ for (l=0;l<2;l++){
+            if (i==j){ //within group block
+                W[i+k][j+l] = wW[k][l];
+            } else { //x-group
+                W[i+k][j+l] = xW[k][l];
+            }
+        }}
+    }}
+    double W_1D[g*g];
+    for (i=0;i<g;i++){
+        for (j=0;j<g;j++){
+            W_1D[g*i+j] = W[i][j];
+        }
+    }
     int xEE_c=1, xEI_c=0, xIE_c=0, xII_c=0; //Syn weights allowed to change?
 
 
@@ -49,21 +67,6 @@ int main(void){
     int p=1000;
     double lp_rates[p][2];
     get_last_period(&p, lp_rates, wW);
-
-    //Init rates for A1 and A2
-    double R_i_A1[no][2], R_i_A2[no][2];
-    for (i=0; i<3; i++){ //In-group start at peak
-        R_i_A1[i][0] = lp_rates[0][0];
-        R_i_A1[i][1] = lp_rates[0][1];
-        R_i_A2[i+2][0] = lp_rates[0][0];
-        R_i_A2[i+2][1] = lp_rates[0][1];
-    }
-    for (i=0; i<2; i++){ //Out-group start at trough
-        R_i_A1[i+3][0] = lp_rates[p/2][0];
-        R_i_A1[i+3][1] = lp_rates[p/2][1];
-        R_i_A2[i][0] = lp_rates[p/2][0];
-        R_i_A2[i][1] = lp_rates[p/2][1];
-    }
 
 
     //Multithreading stuff
@@ -84,11 +87,12 @@ int main(void){
         t_args[i].b = t_divs[i+1];
         t_args[i].res = pd_res;
         t_args[i].DATA = (double *)&phdiffs;
-        t_args[i].DATA_IN = (double *)&W;
+        t_args[i].DATA_IN = (double *)&W_1D;
     }
 
 
     /*********** TESTER RUN OF 5 GROUPS w/ RANDOM START ***********/
+/*
     double Rees[n][no];
     int nn = 20000, phaseInd;
     double R_i_rand[no][2];
@@ -105,7 +109,7 @@ int main(void){
     char * fn_prnt = "Learned_group_synchrony_5grouptester.dat";
     asave(n, no, Rees, fn_prnt);
     printf("Done with pingRateN 5-group tester - data saved as %s\n", fn_prnt);
-    
+ */   
 
     //TODO: LOOP MULTIPLE TIMES AND CREATE LINE PLOT OF AVG PHDIFFS AFTER REPEATED PLASTICITY RUNS
 
@@ -123,7 +127,7 @@ int main(void){
     thesum_o3 = 0;
     thesum_o4 = 0;
     thesum_o5 = 0;
-    for (i=0;i<pd_res;i++){
+    for (i=0;i<pd_res;i+=4){
         thesum_o2 += phdiffs[i];
         thesum_o3 += phdiffs[i+1];
         thesum_o4 += phdiffs[i+2];
