@@ -77,7 +77,11 @@ void
 
     /********* LOOP THROUGH INIT PHDIFFS ASSIGNED TO THIS THREAD***********/
     for (i=in->a; i<in->b; i++){
-        printf("T%d: %f percent done\n", in->id, 100*(((double)i-in->a)/((double)in->b-in->a)));
+        //print percent done message
+        if (i%10==0){
+            printf("T%d: %f percent done\n", in->id, 100*(((double)i-in->a)/((double)in->b-in->a)));
+        }
+
         //find init rates for this init phasediff
         //O1, O2 in-phase
         R_i[0][0] = lp_rates[0][0]+gen_rand();

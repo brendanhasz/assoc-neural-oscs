@@ -66,3 +66,4 @@
 		double thestd	The standard deviation of the vector
 */
 #include "std.c"
+

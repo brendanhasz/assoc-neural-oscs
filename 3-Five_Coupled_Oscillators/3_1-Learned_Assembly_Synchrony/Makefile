@@ -1,5 +1,6 @@
 # Learned_group_synchrony.c
 #   ../../utils/multithreads/multithreads.c
+#   ../../utils/stats/stats.c
 #   Learned_group_synchrony_worker.c
 #       ../../utils/multithreads/multithreads.c
 #       ../../utils/neuro/pingRateN/pingRateN.c
@@ -25,6 +26,7 @@ name = Learned_group_synchrony
 
 objects =	Learned_group_synchrony.o \
                 multithreads.o \
+                stats.o \
 		Learned_group_synchrony_worker.o \
 		pingRateN.o \
 		rateN.o \
@@ -43,6 +45,9 @@ Learned_group_synchrony.o: Learned_group_synchrony.c
 		
 multithreads.o: $(uts)/multithreads/multithreads.c
 	gcc $(CFLAGS) $(uts)/multithreads/multithreads.c
+
+stats.o: $(uts)/stats/stats.c
+	gcc $(CFLAGS) $(uts)/stats/stats.c
 		
 Learned_group_synchrony_worker.o: Learned_group_synchrony_worker.c
 	gcc $(CFLAGS) Learned_group_synchrony_worker.c

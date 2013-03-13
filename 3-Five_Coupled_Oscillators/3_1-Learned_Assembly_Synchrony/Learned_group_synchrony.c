@@ -12,11 +12,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 #include "../../utils/neuro/get_last_period/get_last_period.h"
 #include "../../utils/neuro/plasticPingRateN_recW/plasticPingRateN_recW.h"
 #include "../../utils/fileIO/fileIO.h"
 #include "../../utils/multithreads/multithreads.h"
 #include "Learned_group_synchrony_worker.h"
+#include "../../utils/stats/stats.h"
 
 int main(void){
 
@@ -70,7 +72,7 @@ int main(void){
 
 
     //Multithreading stuff
-    int pd_res = 100;
+    int pd_res = 1000;
     double phdiffs[4*pd_res];
     pthread_t threads[NUM_THREADS];
     THREAD_DAT_1D t_args[NUM_THREADS];
@@ -78,7 +80,10 @@ int main(void){
     segment_threads(NUM_THREADS, 0, pd_res, t_divs);
 
     double thesum_o2, thesum_o3, thesum_o4, thesum_o5;
-    double avgphdiff_o2, avgphdiff_o3, avgphdiff_o4, avgphdiff_o5;
+    double o2_vec[pd_res], o3_vec[pd_res], o4_vec[pd_res], o5_vec[pd_res]; 
+    int pl_res = 5; //How many plastic runs to do
+    double avgphdiffs[pl_res][4];
+    double stdphdiffs[pl_res][4];
     
     //put data in thread args
     for (i=0;i<NUM_THREADS;i++){
@@ -123,24 +128,26 @@ int main(void){
     waitfor_threads(NUM_THREADS, threads);
 
     //Find avg phdiffs
-    thesum_o2 = 0;
-    thesum_o3 = 0;
-    thesum_o4 = 0;
-    thesum_o5 = 0;
-    for (i=0;i<pd_res;i+=4){
-        thesum_o2 += phdiffs[i];
-        thesum_o3 += phdiffs[i+1];
-        thesum_o4 += phdiffs[i+2];
-        thesum_o5 += phdiffs[i+3];
+    for (i=0;i<pd_res;i++){
+        o2_vec[i] = phdiffs[i*4];
+        o3_vec[i] = phdiffs[i*4+1];
+        o4_vec[i] = phdiffs[i*4+2];
+        o5_vec[i] = phdiffs[i*4+3];
     }
-    avgphdiff_o2 = thesum_o2/pd_res;
-    avgphdiff_o3 = thesum_o3/pd_res;
-    avgphdiff_o4 = thesum_o4/pd_res;
-    avgphdiff_o5 = thesum_o5/pd_res;
-    printf("Avg phase difference between O1 and O2: %f\n",avgphdiff_o2);
-    printf("Avg phase difference between O1 and O3: %f\n",avgphdiff_o3);
-    printf("Avg phase difference between O1 and O4: %f\n",avgphdiff_o4);
-    printf("Avg phase difference between O1 and O5: %f\n",avgphdiff_o5);
+    avgphdiffs[0][0] = mean(pd_res, o2_vec);    
+    avgphdiffs[0][1] = mean(pd_res, o3_vec);    
+    avgphdiffs[0][2] = mean(pd_res, o4_vec);    
+    avgphdiffs[0][3] = mean(pd_res, o5_vec);    
+
+    stdphdiffs[0][0] = std(pd_res, o2_vec);    
+    stdphdiffs[0][1] = std(pd_res, o3_vec);    
+    stdphdiffs[0][2] = std(pd_res, o4_vec);    
+    stdphdiffs[0][3] = std(pd_res, o5_vec);    
+
+    printf("Avg phase difference between O1 and O2: %f +/- %f\n",avgphdiffs[0][0],stdphdiffs[0][0]);
+    printf("Avg phase difference between O1 and O3: %f +/- %f\n",avgphdiffs[0][1],stdphdiffs[0][1]);
+    printf("Avg phase difference between O1 and O4: %f +/- %f\n",avgphdiffs[0][2],stdphdiffs[0][2]);
+    printf("Avg phase difference between O1 and O5: %f +/- %f\n",avgphdiffs[0][3],stdphdiffs[0][3]);
 
 
 
