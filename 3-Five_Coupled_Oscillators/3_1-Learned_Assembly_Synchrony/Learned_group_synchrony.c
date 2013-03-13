@@ -49,6 +49,14 @@ int main(void){
         xW[0][0]=0.2*scl;   xW[0][1]=0.3*scl;   //xEE   xEI
         xW[1][0]=-0.5*scl;  xW[1][1]=0*scl;     //xIE   xII
     double W[g][g];    //All weights
+    for (i=0;i<g;i++){ for (j=0;j<g;j++){
+        if (i/2==j/2){ //within-group block
+            W[i][j]=wW[i%2][j%2];
+        } else { //cross-group
+            W[i][j]=xW[i%2][j%2];
+        }
+    }}
+/*
     for (i=0;i<g;i+=2){ for (j=0;j<g;j+=2){
         for (k=0;k<2;k++){ for (l=0;l<2;l++){
             if (i==j){ //within group block
@@ -58,6 +66,7 @@ int main(void){
             }
         }}
     }}
+*/
     double W_1D[g*g];
     for (i=0;i<g;i++){
         for (j=0;j<g;j++){
