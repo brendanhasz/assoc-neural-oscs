@@ -60,3 +60,29 @@ void rateN(int g, int n, double R[n][g], double R_i[], double W[g][g], double ga
 		}
 	}
 }
+
+
+void
+assignPingW(int no, double W[2*no][2*no], 
+            int wee, int wei, int wie, int wii,
+            int xee, int xei, int xie, int xii)
+{
+    int i,j,g=2*no;
+    double wW[2][2];  //Within-oscillator weights
+        wW[0][0]=wee;   wW[0][1]=wei;   //EE    EI
+        wW[1][0]=wie;   wW[1][1]=wii;   //EE    EI
+    double xW[2][2];  //Cross-oscillator weights
+        xW[0][0]=xee;   xW[0][1]=xei;   //EE    EI
+        xW[1][0]=xie;   xW[1][1]=xii;   //EE    EI
+
+    for (i=0; i<g; i++){
+        for (j=0; j<g; j++){
+            if ( i/2 == j/2 ){
+                W[i][j] = wW[i%2][j%2];
+            } else {
+                W[i][j] = xW[i%2][j%2];
+            }
+        }
+    }
+}
+

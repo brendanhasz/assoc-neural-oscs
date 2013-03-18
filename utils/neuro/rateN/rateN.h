@@ -32,3 +32,6 @@
 
 
 void rateN(int g, int n, double R[n][g], double R_i[], double W[g][g], double gamma[], double tau[], double dt);
+
+void assignPingW(int no, double W[2*no][2*no], int wee, int wi, int wie, int wii, int xee, int xei, int xie, int xii);
+
