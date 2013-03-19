@@ -41,11 +41,14 @@ rateSTDP(int n, int g, double dt, double R[n][g],
         }
     }
 
-    for (t=wid; t<n-wid; t+=step){ //integrate over all t
-        i = (t-wid)/step; //this timestep for dw
-        l = (0 < i-1) ? i-1 : 0; //last timestep
-        for (ga=0; ga<g; ga++){ for (gb=0; gb<g; gb++){ //for all cnxns
-        if ( W[ga][gb] ){ //only alter changeable connections
+    for (t=step; t<n; t+=step){ //integrate over all t
+      i = t/step; //this timestep for dw
+      l = i-1; //last timestep
+      for (ga=0; ga<g; ga++){ for (gb=0; gb<g; gb++){ //for all cnxns
+        if ( t-wid < 0 || t+wid >= n ){ //check bounds!
+          W[i][ga][gb] = W[l][ga][gb]; //set to last known value @ bounds
+        } else { //no boundary troubles
+          if ( W[ga][gb] ){ //only alter changeable connections
             sum = 0;
             for (tau=-wid; tau<=0; tau++){ //int post b pre
                 sum += A_n*exp(tau/tau_n)*R[t][ga]*R[t+tau][gb]*dt;
@@ -54,7 +57,11 @@ rateSTDP(int n, int g, double dt, double R[n][g],
                 sum += A_p*exp(-tau/tau_p)*R[t][gb]*R[t-tau][ga]*dt;
             }
             W[i][ga][gb] = W[l][ga][gb] + sum*dt/tau_w; //calc weight diff eq
-        }}}
+          } else { //set non-changeable cnxns to constant value
+            W[i][ga][gb] = W[l][ga][gb];
+          }
+        }
+      }}
     }
 
     //Save STDP kernel
