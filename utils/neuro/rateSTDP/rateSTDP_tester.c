@@ -98,6 +98,23 @@ int main(void){
 
 
     /******************* SIMULATE INIT OUT-PHASE ********************/
+    //Get init out-phase rates
+    R_i[2] = rates[p/2][0] + gen_rand();
+    R_i[3] = rates[p/2][1] + gen_rand();
+
+    //Simulate
+    rateN(g, n, R, R_i, W_0, gamma, tau, dt);
+    asave(n, g, R, fname_rO);
+
+    //Find weight change over time
+    rateSTDP(n, g, dt, R, W_t, W_0, W_c);
+    
+    //convert weights -> 2d matrix + save
+    for (i=0; i<n/step; i++){
+        Wt_2d[i][0] = W_t[i][0][2];
+        Wt_2d[i][1] = W_t[i][2][0];
+    }
+    asave(n/step, no, Wt_2d, fname_wO);
 
 
     return 0;

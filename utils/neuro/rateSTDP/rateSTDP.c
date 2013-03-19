@@ -33,7 +33,7 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     //STDP rule parameters
     double A_n = -.51;
     double A_p = 1.03;
-    double tau_n = 0.020;
+    double tau_n = 0.034;
     //double tau_n = 0.034;
     double tau_p = 0.014;
 
