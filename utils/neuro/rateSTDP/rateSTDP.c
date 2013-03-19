@@ -20,13 +20,14 @@ rateSTDP(int n, int g, double dt, double R[n][g],
             double W[][g][g], double W_0[g][g], int W_c[g][g])
 {
 
-    int t, tau, ga, gb;  //indexes: time, tau, presyn group ind, postsyn g ind
+    int t,i,l;
+    int tau, ga, gb;  //indexes: tau, presyn group ind, postsyn g ind
     double sum;  //integration sum
     
     //Weight calculation paramters
-    int width = 100e-3/dt; //go out to 100ms on either side
+    int wid = 100e-3/dt; //go out to 100ms on either side
     int step = 1; //how often to apply plasticity rule
-    double tau_w = 
+    double tau_w = 10;
 
     //STDP rule parameters
     double A_n = -.51;
@@ -65,7 +66,7 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     }
 
     //Save STDP kernel
-    fname = "rateSTDP_STDPkernel.dat";
+    char * fname = "rateSTDP_STDPkernel.dat";
     double kernel[2*wid+1];
     for (tau=0; tau<=wid; tau++){ //int post b pre
         kernel[tau] = A_n*exp(tau/tau_n);
