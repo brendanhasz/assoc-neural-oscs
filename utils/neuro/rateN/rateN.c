@@ -64,8 +64,8 @@ void rateN(int g, int n, double R[n][g], double R_i[], double W[g][g], double ga
 
 void
 assignPingW(int no, double W[2*no][2*no], 
-            int wee, int wei, int wie, int wii,
-            int xee, int xei, int xie, int xii)
+            double wee, double wei, double wie, double wii,
+            double xee, double xei, double xie, double xii)
 {
     int i,j,g=2*no;
     double wW[2][2];  //Within-oscillator weights
