@@ -11,6 +11,7 @@
 */
 
 #include <stdlib.h>
+#include <time.h>
 #include <stdio.h>
 
 #include "../get_last_period/get_last_period.h"
@@ -20,6 +21,13 @@
 #include "rateSTDP.h"
 
 int main(void){
+    
+    /*
+    // Initialize random seed
+    time_t randseed = time(NULL);
+    srand( randseed );
+    printf("Seeded with %lld\n", (long long) randseed);
+    */
 
     //Simulation parameters
     int i,j;  //counters
@@ -44,11 +52,15 @@ int main(void){
         double wW[2][2];
         wW[0][0]=wee;   wW[0][1]=wei;   //EE    EI
         wW[1][0]=wie;   wW[1][1]=wii;   //IE    II
-    double xee=0, xei=0, xie=0, xii=0;  //SS in cross osc weights
-    //double ixee=0.15, ixei=0, ixie=0, ixii=0;  //SS in cross osc weights
-    //double oxee=0, oxei=1, oxie=0, oxii=0;  //SS in cross osc weights
     double W_0[g][g];
-    assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
+        double xee=0, xei=0, xie=0, xii=0;  //no ss
+        assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
+    double W_0i[g][g];
+        double ixee=0.15, ixei=0, ixie=0, ixii=0;  //SS in cross osc weights
+        assignPingW(no, W_0i, wee, wei, wie, wii, ixee, ixei, ixie, ixii);
+    double W_0o[g][g];
+        double oxee=0, oxei=1, oxie=0, oxii=0;  //SS in cross osc weights
+        assignPingW(no, W_0o, wee, wei, wie, wii, oxee, oxei, oxie, oxii);
     int step = 10;
     double W_t[n/step][g][g];
     int W_c[g][g]; //Which synapses have plasticity?
@@ -76,10 +88,14 @@ int main(void){
 
     //Simulate
     rateN(g, n, R, R_i, W_0, gamma, tau, dt);
+    //rateN(g, n, R, R_i, W_0i, gamma, tau, dt);
+    //rateN(g, n, R, R_i, W_0o, gamma, tau, dt);
     asave(n, g, R, fname_rI);
 
     //Find weight change over time
     rateSTDP(n, g, dt, R, W_t, W_0, W_c);
+    //rateSTDP(n, g, dt, R, W_t, W_0i, W_c);
+    //rateSTDP(n, g, dt, R, W_t, W_0o, W_c);
     
     //convert weights -> 2d matrix + save
     double Wt_2d[n/step][2];
@@ -98,10 +114,14 @@ int main(void){
 
     //Simulate
     rateN(g, n, R, R_i, W_0, gamma, tau, dt);
+    //rateN(g, n, R, R_i, W_0i, gamma, tau, dt);
+    //rateN(g, n, R, R_i, W_0o, gamma, tau, dt);
     asave(n, g, R, fname_rO);
 
     //Find weight change over time
     rateSTDP(n, g, dt, R, W_t, W_0, W_c);
+    //rateSTDP(n, g, dt, R, W_t, W_0i, W_c);
+    //rateSTDP(n, g, dt, R, W_t, W_0o, W_c);
     
     //convert weights -> 2d matrix + save
     for (i=0; i<n/step; i++){
