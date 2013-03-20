@@ -27,14 +27,13 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     
     //Weight calculation paramters
     int wid = 100e-3/dt; //go out to 100ms on either side
-    int step = 1; //how often to apply plasticity rule
+    int step = 10; //how often to apply plasticity rule
     double tau_w = 0.1; //Weight change time constant
 
     //STDP rule parameters
     double A_n = -.51;
-    double A_p = 1.03;
+    double A_p = 1.13; //1.03 in paper, had to use 1.13
     double tau_n = 0.034;
-    //double tau_n = 0.034;
     double tau_p = 0.014;
 
     //Create stdp kernel

@@ -49,13 +49,7 @@ int main(void){
     //double oxee=0, oxei=1, oxie=0, oxii=0;  //SS in cross osc weights
     double W_0[g][g];
     assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
-    for (i=0;i<g;i++){ 
-        for (j=0;j<g;j++){
-            printf("%f\t", W_0[i][j]);
-        }
-        printf("\n");
-    }
-    int step = 1;
+    int step = 10;
     double W_t[n/step][g][g];
     int W_c[g][g]; //Which synapses have plasticity?
         for (i=0; i<g; i++){ for (j=0; j<g; j++){  W_c[i][j] = 0; }}
