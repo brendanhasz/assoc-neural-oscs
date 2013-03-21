@@ -1,5 +1,7 @@
 # Plotter for 2_3
 
+print "plotting..."
+
 import sys
 import os
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../graphing/'))
@@ -11,6 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # STDP Kernel
+print "plotting fig 1 of 3..."
 fname_k = 'rateSTDP_STDPkernel.dat'
 tit_k = 'Spike-time Dependent Plasticity Kernel'
 xlab_k = 'Time (ms)'
@@ -22,6 +25,7 @@ pt.linep(fname_k, tit_k, xlab_k, ylab_k, smooth_w, xran_k)
 
 
 # Plasticity, started IN-phase
+print "plotting fig 2 of 3..."
 # Rate
 fname_rI = 'rateSTDP_tester_rI.dat'
 tit_rI = 'Plasticity run - started IN phase'
@@ -41,6 +45,7 @@ pt.linep(fname_wI, tit_wI, xlab_wI, ylab_wI)
 
 
 # Plasticity, started OUT-of-phase
+print "plotting fig 3 of 3..."
 # Rate
 fname_rO = 'rateSTDP_tester_rO.dat'
 tit_rO = 'Plasticity run - started OUT of phase'
