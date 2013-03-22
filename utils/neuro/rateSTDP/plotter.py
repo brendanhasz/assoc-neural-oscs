@@ -16,12 +16,21 @@ import matplotlib.pyplot as plt
 print "plotting fig 1 of 3..."
 fname_k = 'rateSTDP_STDPkernel.dat'
 tit_k = 'Spike-time Dependent Plasticity Kernel'
-xlab_k = 'Time (ms)'
+xlab_k = eval("r'$t_{post}-t_{pre}$ (ms)'")
 ylab_k = 'Synaptic change'
 smooth_w = 0
 xran_k = [-100, 100]
 plt.figure()
-pt.linep(fname_k, tit_k, xlab_k, ylab_k, smooth_w, xran_k)
+plt.title(tit_k)
+plt.xlabel(xlab_k)
+plt.ylabel(ylab_k)
+data = np.loadtxt(fname_k)
+x = np.linspace(-100,100,data.size)
+plt.plot(x, data, color='black', linewidth=2.0)
+ax = plt.gca()
+ax.fill_between(x, data, 0, where=data>0, facecolor='blue', interpolate=True)
+ax.fill_between(x, data, 0, where=data<0, facecolor='red', interpolate=True)
+plt.xlim(xran_k)
 
 
 # Plasticity, started IN-phase
