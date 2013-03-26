@@ -23,7 +23,7 @@ int main(void){
     printf("Seeded with %d\n", randseed);
 
     // Simulation Params
-    int i, j, k, l, t;  //counters
+    int tr, st, i, j, k, l, t;  //counters
     int n = 10000;  //timesteps
     double dt = 1e-4;   //timestep duration
     int no = 2; //number of oscillators
@@ -84,6 +84,12 @@ int main(void){
 
     //************************* SIMULATE!!! ****************************
     //STARTING IN-PHASE
+    //TODO: initialize per-thread params to start in-phase
+    for (i=0; i<NUM_THREADS; i++){
+        pthread_create(&threads[i], NULL, STDP...worker, (void*)&t_args[i]);
+    }
+    waitfor_threads(NUM_THREADS, threads);
+
     //for tr = 1: numtrials
         //for st = 1:numsteps
             //simulate for n timesteps using rateN (using updated weights from last step)
@@ -94,7 +100,12 @@ int main(void){
     //endfor
 
 
-    //STARTING IN-PHASE
+    //STARTING OUT-OF-PHASE
+    //TODO: initialize per-thread params to start out-of-phase 
+    for (i=0; i<NUM_THREADS; i++){
+        pthread_create(&threads[i], NULL, STDP...worker, (void*)&t_args[i]);
+    }
+    waitfor_threads(NUM_THREADS, threads);
 
 
 
