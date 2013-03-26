@@ -15,8 +15,9 @@ xlab = eval("r'Time ($100 \mu$s)'")
 ylab = 'Rate (Hz)'
 
 plt.figure()
-plot_tools.linep(fname,tit,xlab,ylab)
-ax = plt.gca()
+lines = plot_tools.linep(fname,tit,xlab,ylab)
+plt.setp(lines[0], color='g')
+plt.setp(lines[1], color='r')
 plt.legend(('Excitatory','Inhibitory'))
 plt.show()
 

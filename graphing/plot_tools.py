@@ -51,6 +51,7 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None, yran=Non
         newlabpos = np.linspace(0,len(data),numlabs)
         plt.xticks(newlabpos,newlabstrs)
     #plt.show()
+    return lines
     '''
     plt.axis([xmin, xmax, ymin, ymax])
     plt.grid(False)
