@@ -22,12 +22,10 @@
 
 int main(void){
     
-    /*
     // Initialize random seed
-    time_t randseed = time(NULL);
-    srand( randseed );
-    printf("Seeded with %lld\n", (long long) randseed);
-    */
+    int randseed_int = time(NULL);
+    srand( randseed_int );
+    printf("Seeded with %d\n", randseed_int);
 
     //Simulation parameters
     int i,j;  //counters
@@ -82,8 +80,8 @@ int main(void){
     /******************* SIMULATE INIT IN-PHASE ********************/
     //Get init in-phase rates
     for (i=0; i<g; i+=2){
-        R_i[i] = rates[0][0] + gen_rand();
-        R_i[i+1] = rates[0][1] + gen_rand();
+        R_i[i] = rates[0][0] + 0.1*gen_rand();
+        R_i[i+1] = rates[0][1] + 0.1*gen_rand();
     }
 
     //Simulate

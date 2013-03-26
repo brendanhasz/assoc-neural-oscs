@@ -4,5 +4,5 @@
 make clean
 make
 ./rateSTDP_tester
-python plotter.py &
+python plotter.py
 
