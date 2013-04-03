@@ -130,6 +130,13 @@ int main(void){
 
             //find phdiff vector w/ new weights
             //TODO
+            //for init_pd = 0:2*pi
+                //for pd_tr = 1:numpdtr
+                    //set init rates for this init phdiff w/ randomness
+                    //simulate
+                    //find steady state phdiff
+                    //add this phdiff to sum
+                //phdiffs = sum/numtrials
 
         }
     }
