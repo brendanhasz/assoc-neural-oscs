@@ -120,7 +120,7 @@ int main(void){
             //update weights
             for (i=0;i<g;i++){ 
                 for (j=0;j<g;j++){ 
-                    W_tr[i][j]=W_t[n_s/step-1][i][j]; 
+                    W_tr[i][j] = W_t[n_s/step-1][i][j]; 
                 }
             }
 
@@ -130,6 +130,24 @@ int main(void){
 
             //find phdiff vector w/ new weights
             //TODO
+            for (i=0; i<pd_res; i++){
+                for (j=0; j<numpdtr; j++){
+                    
+                    //set init rates for this init phdiff w/ randomness
+                    R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
+                    R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
+                    R_i[2] = rates[i/pd_res*p][0]+0.01*gen_rand();  //g2 E
+                    R_i[3] = rates[i/pd_res*p][1]+0.01*gen_rand();  //g2 I
+
+                    //simulate
+                    rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
+
+                    //find steady state phdiff
+                    
+                    //add this phdiff to sum
+                }
+            }
+
             //for init_pd = 0:2*pi
                 //for pd_tr = 1:numpdtr
                     //set init rates for this init phdiff w/ randomness
