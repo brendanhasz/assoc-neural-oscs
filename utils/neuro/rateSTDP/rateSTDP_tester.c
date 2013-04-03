@@ -24,7 +24,7 @@ int main(void){
     
     // Initialize random seed
     int randseed_int = time(NULL);
-    srand( randseed_int );
+    srand( randseed_int*7919 );
     printf("Seeded with %d\n", randseed_int);
 
     //Simulation parameters
