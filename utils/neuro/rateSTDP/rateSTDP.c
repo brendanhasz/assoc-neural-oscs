@@ -32,13 +32,19 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     //Weight calculation paramters
     int wid = 100e-3/dt; //go out to 100ms on either side
     int step = 10; //how often to apply plasticity rule
-    double tau_w = 0.1; //Weight change time constant
+    double tau_w = 10; //Weight change time constant
 
     //STDP rule parameters
     double A_n = -.51;
     double A_p = 1.13; //1.03 in paper, had to use 1.13
     double tau_n = 0.036;
     double tau_p = 0.014;
+    double tau_d = 5e-3; //nonexact kernel, as suggested by Knoblauch
+    double tau_pot = 0; //nonexact kernel in the potentiation direction
+    int ne_start = wid-tau_d/dt;
+    int ne_end = wid + tau_pot/dt;
+    int ne_diff = ne_end-ne_start;
+    printf("ne_start: %d, ne_end: %d\n", ne_start, ne_end);
 
     //Create stdp kernel
     double kernel[2*wid+1];
@@ -47,6 +53,9 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     }
     for (tau=wid; tau<=2*wid; tau++){ //int over tau for pre b post
         kernel[tau] = A_p*exp(-dt*(tau-wid)/tau_p);
+    }
+    for (tau=ne_start; tau<ne_end; tau++){
+        kernel[tau] = kernel[ne_start]+(kernel[ne_end]-kernel[ne_start])*(tau-ne_start)/ne_diff;
     }
 
     //Initialize W[0][g][g] to W_0[g][g]
