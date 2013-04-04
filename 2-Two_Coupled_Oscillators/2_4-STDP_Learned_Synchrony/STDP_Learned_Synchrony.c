@@ -103,7 +103,7 @@ int main(void){
 
     //************************* SIMULATE!!! ****************************
     //STARTING IN-PHASE
-    //TODO: initialize per-thread params to start in-phase
+    //initialize per-thread params to start in-phase
     //for (i=0; i<NUM_THREADS; i++){
     //    pthread_create(&threads[i], NULL, STDP...worker, (void*)&t_args[i]);
     //}
@@ -149,7 +149,6 @@ int main(void){
             printf("\tWxee = %f, %f\n", Wxee_tr[tr][0][st], Wxee_tr[tr][1][st]);
 
             //find phdiff vector w/ new weights
-            //TODO
             for (i=0; i<pd_res; i++){
                 pd_sum = 0;
                 for (j=0; j<numpdtr; j++){
@@ -191,6 +190,9 @@ int main(void){
             }
             fclose(cum_rate_file);
 
+            //Append phdiff vec
+            //TODO
+
         }
 
     }
@@ -199,7 +201,7 @@ int main(void){
 
 
     //STARTING OUT-OF-PHASE
-    //TODO: initialize per-thread params to start out-of-phase 
+    //TODO
 
 
 
