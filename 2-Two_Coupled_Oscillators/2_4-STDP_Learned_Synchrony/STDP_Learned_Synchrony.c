@@ -180,7 +180,7 @@ int main(void){
             //Append weight vectors
             cum_weight_file = fopen(cum_weight_fname,"a"); //file pointer for append
             for (i=0; i<n_s/step-1; i++){
-                fprintf(cum_weight_file, "%f\t%f\n", W_t[i][0][2], W_t[i][0][2]);
+                fprintf(cum_weight_file, "%f\t%f\n", W_t[i][0][2], W_t[i][2][0]);
             }
             fclose(cum_weight_file);
 
