@@ -26,7 +26,7 @@ int main(void){
 
     // Simulation Params
     int tr, st, i, j, k, l, t;  //counters
-    int n_s = 10000;  //timesteps in each step
+    int n_s = 5000;  //timesteps in each step
     int n_pd = 10000;  //timesteps in simulation for calculating SS phdiff
     double dt = 1e-4;   //timestep duration
     int no = 2; //number of oscillators
@@ -196,14 +196,6 @@ int main(void){
     }
 
 
-    //for tr = 1: numtrials
-        //for st = 1:numsteps
-            //simulate for n timesteps using rateN (using updated weights from last step)
-            //find weight change using rateSTDP
-            //update weights to what u found
-            //find phdiff vector w/ these new weights
-        //endfor
-    //endfor
 
 
     //STARTING OUT-OF-PHASE
