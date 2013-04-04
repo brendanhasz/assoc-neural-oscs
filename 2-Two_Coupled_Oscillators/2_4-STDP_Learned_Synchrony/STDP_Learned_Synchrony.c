@@ -134,6 +134,8 @@ int main(void){
             Wxee_tr[tr][0][st] = W_tr[0][2];
             Wxee_tr[tr][1][st] = W_tr[2][0];
 
+            printf("\tWxee = %f, %f\n", Wxee_tr[tr][0][st], Wxee_tr[tr][1][st]);
+
             //find phdiff vector w/ new weights
             //TODO
             for (i=0; i<pd_res; i++){
@@ -154,6 +156,8 @@ int main(void){
                 }
             }
 
+            //TODO: add this avg phdiffs to array
+
             //for init_pd = 0:2*pi
                 //for pd_tr = 1:numpdtr
                     //set init rates for this init phdiff w/ randomness
@@ -163,6 +167,7 @@ int main(void){
                 //phdiffs = sum/numtrials
 
         }
+
     }
 
 
