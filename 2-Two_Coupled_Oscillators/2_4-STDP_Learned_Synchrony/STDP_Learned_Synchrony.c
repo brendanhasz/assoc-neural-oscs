@@ -31,6 +31,7 @@ int main(void){
     int no = 2; //number of oscillators
     int g = 2*no;   //number of neuron groups
     double R_s[n_s][g]; //Rate vectors for step
+    double R_pd[n_pd][g]; //Rate vectors for finding phase diff
     double gamma[g];
         for ( i=0; i<g; i+=2 ){
             gamma[i] = 10;      //E cells
@@ -74,15 +75,18 @@ int main(void){
     //Trial parameters
     int numtr = 10;     //number of trials
     int numsteps = 10;  //number of stdp measurements within each trial
-    int pdres = 100;    //resolution of phdiff measurements per step
     double Wxee_tr[numtr][2][numsteps]; //xEE Weights over time for each trial
-    double pd_tr[numtr][pdres][numsteps]; //SS phase difference over time for each trial
     double W_tr[g][g]; //weights for a trial
+    //phasediff trial params
+    int pd_res = 100;    //resolution of phdiff measurements per step
+    int numpdtr = 10;   //number of trials per init phase diff
+    double pd_tr[numtr][pd_res][numsteps]; //SS phase difference over time for each trial
 
     //Multithreading
     //TODO
 
 
+    printf("Got to simulating!\n");
 
 
     //************************* SIMULATE!!! ****************************
@@ -94,7 +98,7 @@ int main(void){
     //waitfor_threads(NUM_THREADS, threads);
 
     for (tr=0; tr<numtr; tr++){
-
+        
         //set init weights with a *little* randomness
         for (i=0;i<g;i++){ 
             for (j=0;j<g;j++){ 
@@ -104,6 +108,8 @@ int main(void){
 
         //Simulate in steps
         for (st=0; st<numsteps; st++){
+
+            printf("Trial %d of %d, Step %d of %d\n", tr, numtr, st, numsteps);
 
             //Set init rates (in-phase) w/ randomness
             R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
