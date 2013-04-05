@@ -44,7 +44,6 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     int ne_start = wid-tau_d/dt;
     int ne_end = wid + tau_pot/dt;
     int ne_diff = ne_end-ne_start;
-    printf("ne_start: %d, ne_end: %d\n", ne_start, ne_end);
 
     //Create stdp kernel
     double kernel[2*wid+1];

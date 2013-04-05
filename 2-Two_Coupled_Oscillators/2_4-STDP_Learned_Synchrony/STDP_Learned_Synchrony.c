@@ -91,6 +91,11 @@ int main(void){
         FILE * cum_weight_file_n = fopen(cum_weight_fname, "w"); //New file
         fclose(cum_weight_file_n);
         FILE * cum_weight_file; //file pointer for append
+    char * cum_phdiffs_fname = "cum_phdiffs.dat";
+        FILE * cum_phdiffs_file_n = fopen(cum_phdiffs_fname, "w"); //New file
+        fclose(cum_phdiffs_file_n);
+        FILE * cum_phdiffs_file; //file pointer for append
+    
     char * weight_fname = "weight.dat";
     char * phdiffs_fname = "phdiffs.dat";
 
@@ -190,8 +195,13 @@ int main(void){
             }
             fclose(cum_rate_file);
 
-            //Append phdiff vec
-            //TODO
+            //Append phdiff vectors
+            cum_phdiffs_file = fopen(cum_phdiffs_fname,"a"); //file pointer for append
+            for (i=0; i<pd_res; i++){
+                fprintf(cum_phdiffs_file, "%f\t", pd_tr[tr][i][st]);
+            }
+            fprintf(cum_phdiffs_file, "\n");
+            fclose(cum_phdiffs_file);
 
         }
 
