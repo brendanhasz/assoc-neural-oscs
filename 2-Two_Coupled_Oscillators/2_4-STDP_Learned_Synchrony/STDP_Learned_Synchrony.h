@@ -5,7 +5,7 @@
 
 */
 
-#define NUMTR 10
+#define NUMTR 100
 #define NUMST 90
 #define PDRES 100
 
