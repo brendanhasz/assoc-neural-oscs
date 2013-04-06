@@ -78,12 +78,6 @@ int main(void){
     double pds[g][g];
 
     //Filenames
-    /*
-    char * cum_rate_fname = "cum_rate.dat";
-        FILE * cum_rate_file_n = fopen(cum_rate_fname, "w"); //Create new file
-        fclose(cum_rate_file_n);
-        FILE * cum_rate_file; //file pointer for append
-    */
     char * cum_weight_fname = "cum_weight.dat";
         FILE * cum_weight_file_n = fopen(cum_weight_fname, "w"); //New file
         fclose(cum_weight_file_n);
@@ -100,8 +94,7 @@ int main(void){
     //TODO
 
 
-    //************************* SIMULATE!!! ****************************
-    //STARTING IN-PHASE
+    //********************* SIMULATE STARTING IN-PHASE!!! ********************
     //initialize per-thread params to start in-phase
     //for (i=0; i<NUM_THREADS; i++){
     //    pthread_create(&threads[i], NULL, STDP...worker, (void*)&t_args[i]);
@@ -197,9 +190,44 @@ int main(void){
     }
 
 
+    //SAVE DATA FROM IN-PHASE
+
+    //Save average weights per step (between trials)
+    double W_sum1, W_sum2;
+    char * Wxee_avg_fname = "Wxee_avg.dat";
+    double Wxee_averaged[numsteps][2];
+    for (i=0; i<numsteps; i++){
+        W_sum1 = 0;
+        W_sum2 = 0;
+        for (j=0; j<numtr; j++){
+            W_sum1 += Wxee_tr[j][0][i];
+            W_sum2 += Wxee_tr[j][1][i];
+        }
+        Wxee_averaged[i][0] = W_sum1/numtr;
+        Wxee_averaged[i][1] = W_sum2/numtr;
+    }
+    asave(numsteps, 2, Wxee_averaged, Wxee_avg_fname); //Save 2d array
+
+    //Save stdev. of weights per step (between trials)
+    //TODO
+
+    //Save average phdiff (as a 2d array)
+    char * phdiff_avg_fname = "phdiff_avg.dat";
+    double pd_averaged[pd_res][numsteps];
+    for (i=0; i<pd_res; i++){
+        for (j=0; j<numsteps; j++){
+            pd_sum = 0;
+            for (k=0; k<numtr; k++){
+                pd_sum += pd_tr[k][i][j];
+            }
+            pd_averaged[i][j] = pd_sum/numtr;
+        }
+    }
+    asave(pd_res, numsteps, pd_averaged, phdiff_avg_fname); //Save 2d array
 
 
-    //STARTING OUT-OF-PHASE
+
+    //********************* SIMULATE STARTING IN-PHASE!!! ********************
     //TODO
 
 
