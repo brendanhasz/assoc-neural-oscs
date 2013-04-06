@@ -208,8 +208,36 @@ int main(void){
     }
     asave(numsteps, 2, Wxee_averaged, Wxee_avg_fname); //Save 2d array
 
+
     //Save stdev. of weights per step (between trials)
-    //TODO
+    char * Wxee_stderr_fname = "Wxee_stderr.dat";
+    double Wxee_stderr[numsteps][2];
+    double stderr_in[numtr][numsteps], stderr_out[numsteps];
+
+    //Find stderr of first Wxee
+    for (i=0; i<numtr; i++){  //put 1st wxee in stderr_in
+        for (j=0; j<numsteps; j++){
+            stderr_in[i][j] = Wxee_tr[i][0][j];
+        }
+    }
+    stderrvec(numtr, numsteps, stderr_in, stderr_out);
+    for (j=0; j<numsteps; j++){ //put result in array to save
+        Wxee_stderr[j][0] = stderr_out[j];
+    }
+    
+    //Find stderr of second Wxee
+    for (i=0; i<numtr; i++){  //put 2nd wxee in stderr_in
+        for (j=0; j<numsteps; j++){
+            stderr_in[i][j] = Wxee_tr[i][1][j];
+        }
+    }
+    stderrvec(numtr, numsteps, stderr_in, stderr_out);
+    for (j=0; j<numsteps; j++){ //put result in array to save
+        Wxee_stderr[j][1] = stderr_out[j];
+    }
+
+    asave(numsteps, 2, Wxee_stderr, Wxee_stderr_fname); //Save 2d array
+
 
     //Save average phdiff (as a 2d array)
     char * phdiff_avg_fname = "phdiff_avg.dat";
