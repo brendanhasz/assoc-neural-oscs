@@ -66,7 +66,7 @@ int main(void){
 
     //Trial parameters
     int numtr = 10;     //number of trials
-    int numsteps = 10;  //number of stdp measurements within each trial
+    int numsteps = 100;  //number of stdp measurements within each trial
     double Wxee_tr[numtr][2][numsteps]; //xEE Weights over time for each trial
     double W_tr[g][g]; //weights for a trial
     //phasediff trial params
@@ -78,10 +78,12 @@ int main(void){
     double pds[g][g];
 
     //Filenames
+    /*
     char * cum_rate_fname = "cum_rate.dat";
         FILE * cum_rate_file_n = fopen(cum_rate_fname, "w"); //Create new file
         fclose(cum_rate_file_n);
         FILE * cum_rate_file; //file pointer for append
+    */
     char * cum_weight_fname = "cum_weight.dat";
         FILE * cum_weight_file_n = fopen(cum_weight_fname, "w"); //New file
         fclose(cum_weight_file_n);
@@ -97,74 +99,6 @@ int main(void){
     //Multithreading
     //TODO
 
-    /******************* Test phdiff finder *****************************/
-    /*
-    // should look like in 2_3
-
-
-    printf("here?\n");
-
-    double pd_vec[pd_res];
-
-    //set init weights with a *little* randomness
-    for (i=0;i<g;i++){ 
-        for (j=0;j<g;j++){ 
-            W_tr[i][j]=W_0[i][j]+0.001*gen_randn(); 
-            printf("%f\t", W_tr[i][j]);
-        }
-        printf("\n");
-    }
-
-        //simulate
-        rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
-
-        asave(n_pd, g, R_pd, "rates.dat");
-
-        //find steady state phdiff
-        phdiff2(n_pd, g, R_pd, pds);
-
-
-
-    //find phdiff vector w/ new weights
-    for (i=0; i<pd_res; i++){
-        pd_sum = 0;
-        phdiff_ind = ((double) i/(double) pd_res)*p;
-            printf("Init phdiff = %d of %d\n", phdiff_ind, p);
-
-        for (j=0; j<numpdtr; j++){
-            printf("\tstarting trial=%d\n", j);
-                
-            //set init rates for this init phdiff w/ randomness
-            R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
-            R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
-            R_i[2] = rates[phdiff_ind][0]+0.01*gen_rand();  //g2 E
-            R_i[3] = rates[phdiff_ind][1]+0.01*gen_rand();  //g2 I
-            
-
-            //simulate
-            rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
-
-            asave(n_pd, g, R_pd, "rates.dat");
-
-            //find steady state phdiff
-            phdiff2(n_pd, g, R_pd, pds);
-            printf("\ttrial %d, phdiff=%f\n", j, pds[0][2]);
-            
-            //add this phdiff to sum
-            pd_sum += pds[0][2];
-
-        }
-
-        //Add this avg phdiff to array
-        pd_vec[i] = pd_sum/numpdtr;
-
-    }
-
-    char * pdvec_fname = "pdvec.dat";
-    vsave(pd_res, pd_vec, pdvec_fname);
-    
-    printf("here2?\n");
-    */
 
     //************************* SIMULATE!!! ****************************
     //STARTING IN-PHASE
@@ -216,13 +150,15 @@ int main(void){
             //find phdiff vector w/ new weights
             for (i=0; i<pd_res; i++){
                 pd_sum = 0;
+                phdiff_ind = ((double) i/(double) pd_res)*p;
+
                 for (j=0; j<numpdtr; j++){
                     
                     //set init rates for this init phdiff w/ randomness
                     R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
                     R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
-                    R_i[2] = rates[i/pd_res*p][0]+0.01*gen_rand();  //g2 E
-                    R_i[3] = rates[i/pd_res*p][1]+0.01*gen_rand();  //g2 I
+                    R_i[2] = rates[phdiff_ind][0]+0.01*gen_rand();  //g2 E
+                    R_i[3] = rates[phdiff_ind][1]+0.01*gen_rand();  //g2 I
 
                     //simulate
                     rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
@@ -240,20 +176,13 @@ int main(void){
 
             }
 
-            //Append to files
+            //Append to cumulative files (so you don't have to run whole sim to see results)
             //Append weight vectors
             cum_weight_file = fopen(cum_weight_fname,"a"); //file pointer for append
             for (i=0; i<n_s/step-1; i++){
                 fprintf(cum_weight_file, "%f\t%f\n", W_t[i][0][2], W_t[i][2][0]);
             }
             fclose(cum_weight_file);
-
-            //Append rate vectors
-            cum_rate_file = fopen(cum_rate_fname,"a"); //file pointer for append
-            for (i=0; i<n_s; i++){
-                fprintf(cum_rate_file, "%f\t%f\n", R_s[i][0], R_s[i][2]);
-            }
-            fclose(cum_rate_file);
 
             //Append phdiff vectors
             cum_phdiffs_file = fopen(cum_phdiffs_fname,"a"); //file pointer for append
