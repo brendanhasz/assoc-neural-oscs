@@ -28,7 +28,6 @@ int main(void){
     int pd_res = PDRES;
 
     //Multithreading
-    //TODO
     double Wxee_tr[NUMTR][2][NUMST]; //xEE Weights over time for each trial
         double Wxee_tr_vec[NUMTR*2*NUMST]; //Vector form for passing to thread
     double pd_tr[NUMTR][PDRES][NUMST]; //SS phase difference over time for each trial
@@ -142,8 +141,93 @@ int main(void){
 
 
 
+
+
+
     //********************* SIMULATE STARTING OUT-OF-PHASE!!! ********************
-    //TODO
+    //initialize per-thread params to start out-of-phase
+    for (i=0; i<NUM_THREADS; i++){
+        t_args[i].initphdiff = M_PI;
+    }
+
+    //run threads
+    for (i=0; i<NUM_THREADS; i++){
+        pthread_create(&threads[i], NULL, STDP_Learned_Synchrony_worker, (void*)&t_args[i]);
+    }
+    waitfor_threads(NUM_THREADS, threads);
+
+    //store passed vectors in 3d arrays
+    for (i=0;i<NUMTR; i++){
+        for (j=0; j<PDRES; j++){
+            for (k=0; k<NUMST; k++){
+                pd_tr[i][j][k] = pd_tr_vec[i*PDRES*NUMST+j*NUMST+k];
+            }
+        }
+    }
+    for (i=0;i<NUMTR; i++){
+        for (j=0; j<NUMST; j++){
+            Wxee_tr[i][0][j] = Wxee_tr_vec[i*2*NUMST+0*NUMST+j];
+            Wxee_tr[i][1][j] = Wxee_tr_vec[i*2*NUMST+1*NUMST+j];
+        }
+    }
+
+    //SAVE DATA FROM IN-PHASE
+
+    //Save average weights per step (between trials)
+    char * Wxee_avg_fname_out = "Wxee_avg_out.dat";
+    for (i=0; i<numsteps; i++){
+        W_sum1 = 0;
+        W_sum2 = 0;
+        for (j=0; j<numtr; j++){
+            W_sum1 += Wxee_tr[j][0][i];
+            W_sum2 += Wxee_tr[j][1][i];
+        }
+        Wxee_averaged[i][0] = W_sum1/numtr;
+        Wxee_averaged[i][1] = W_sum2/numtr;
+    }
+    asave(numsteps, 2, Wxee_averaged, Wxee_avg_fname_out); //Save 2d array
+
+
+    //Save stdev. of weights per step (between trials)
+    char * Wxee_stderr_fname_out = "Wxee_stderr_out.dat";
+
+    //Find stderr of first Wxee
+    for (i=0; i<numtr; i++){  //put 1st wxee in stderr_in
+        for (j=0; j<numsteps; j++){
+            stderr_in[i][j] = Wxee_tr[i][0][j];
+        }
+    }
+    stderrvec(numtr, numsteps, stderr_in, stderr_out);
+    for (j=0; j<numsteps; j++){ //put result in array to save
+        Wxee_stderr[j][0] = stderr_out[j];
+    }
+    
+    //Find stderr of second Wxee
+    for (i=0; i<numtr; i++){  //put 2nd wxee in stderr_in
+        for (j=0; j<numsteps; j++){
+            stderr_in[i][j] = Wxee_tr[i][1][j];
+        }
+    }
+    stderrvec(numtr, numsteps, stderr_in, stderr_out);
+    for (j=0; j<numsteps; j++){ //put result in array to save
+        Wxee_stderr[j][1] = stderr_out[j];
+    }
+
+    asave(numsteps, 2, Wxee_stderr, Wxee_stderr_fname_out); //Save 2d array
+
+
+    //Save average phdiff (as a 2d array)
+    char * phdiff_avg_fname_out = "phdiff_avg_out.dat";
+    for (i=0; i<pd_res; i++){
+        for (j=0; j<numsteps; j++){
+            pd_sum = 0;
+            for (k=0; k<numtr; k++){
+                pd_sum += pd_tr[k][i][j];
+            }
+            pd_averaged[i][j] = pd_sum/numtr;
+        }
+    }
+    asave(pd_res, numsteps, pd_averaged, phdiff_avg_fname_out); //Save 2d array
 
 
 
