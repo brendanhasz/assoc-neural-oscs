@@ -21,6 +21,8 @@ objects =	STDP_Learned_Synchrony.o \
                 l2peaks.o \
                 phdiff2.o \
                 stderrvec.o \
+                multithreads.o \
+                STDP_Learned_Synchrony_worker.o \
                 fileIO.o
 
 $(name): $(objects)
@@ -49,6 +51,12 @@ fileIO.o: $(uts)/fileIO/fileIO.c
 		
 stderrvec.o: $(uts)/stats/stderrvec.c
 	gcc $(CFLAGS) $(uts)/stats/stderrvec.c
+		
+multithreads.o: $(uts)/multithreads/multithreads.c
+	gcc $(CFLAGS) $(uts)/multithreads/multithreads.c
+		
+STDP_Learned_Synchrony_worker.o: STDP_Learned_Synchrony_worker.c
+	gcc $(CFLAGS) STDP_Learned_Synchrony_worker.c
 		
 
 clean:
