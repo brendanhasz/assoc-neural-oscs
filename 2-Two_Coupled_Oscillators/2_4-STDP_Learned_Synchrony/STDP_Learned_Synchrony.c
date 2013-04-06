@@ -65,8 +65,8 @@ int main(void){
     get_last_period(&p, rates, wW);
 
     //Trial parameters
-    int numtr = 2;     //number of trials
-    int numsteps = 50;  //number of stdp measurements within each trial
+    int numtr = 5;     //number of trials
+    int numsteps = 10;  //number of stdp measurements within each trial
     double Wxee_tr[numtr][2][numsteps]; //xEE Weights over time for each trial
     double W_tr[g][g]; //weights for a trial
     //phasediff trial params
