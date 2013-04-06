@@ -52,12 +52,6 @@ int main(void){
     double W_0[g][g];
         double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
         assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
-    double W_0i[g][g]; //Between-oscillator weights ss=in
-        double ixee=0.15, ixei=0, ixie=0, ixii=0;    
-        assignPingW(no, W_0, wee, wei, wie, wii, ixee, ixei, ixie, ixii);
-    double W_0o[g][g]; //Between-oscillator weights ss=out
-        double oxee=0, oxei=1, oxie=0, oxii=0;            
-        assignPingW(no, W_0o, wee, wei, wie, wii, oxee, oxei, oxie, oxii);
     int step = 10;
     double W_t[n_s/step][g][g];
     int W_c[g][g];  //Which synapses have plasticity?
@@ -80,6 +74,7 @@ int main(void){
     int numpdtr = 10;   //number of trials per init phase diff
     double pd_tr[numtr][pd_res][numsteps]; //SS phase difference over time for each trial
     double pd_sum;
+    int phdiff_ind;
     double pds[g][g];
 
     //Filenames
@@ -102,9 +97,74 @@ int main(void){
     //Multithreading
     //TODO
 
+    /******************* Test phdiff finder *****************************/
+    /*
+    // should look like in 2_3
 
-    printf("Got to simulating!\n");
 
+    printf("here?\n");
+
+    double pd_vec[pd_res];
+
+    //set init weights with a *little* randomness
+    for (i=0;i<g;i++){ 
+        for (j=0;j<g;j++){ 
+            W_tr[i][j]=W_0[i][j]+0.001*gen_randn(); 
+            printf("%f\t", W_tr[i][j]);
+        }
+        printf("\n");
+    }
+
+        //simulate
+        rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
+
+        asave(n_pd, g, R_pd, "rates.dat");
+
+        //find steady state phdiff
+        phdiff2(n_pd, g, R_pd, pds);
+
+
+
+    //find phdiff vector w/ new weights
+    for (i=0; i<pd_res; i++){
+        pd_sum = 0;
+        phdiff_ind = ((double) i/(double) pd_res)*p;
+            printf("Init phdiff = %d of %d\n", phdiff_ind, p);
+
+        for (j=0; j<numpdtr; j++){
+            printf("\tstarting trial=%d\n", j);
+                
+            //set init rates for this init phdiff w/ randomness
+            R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
+            R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
+            R_i[2] = rates[phdiff_ind][0]+0.01*gen_rand();  //g2 E
+            R_i[3] = rates[phdiff_ind][1]+0.01*gen_rand();  //g2 I
+            
+
+            //simulate
+            rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
+
+            asave(n_pd, g, R_pd, "rates.dat");
+
+            //find steady state phdiff
+            phdiff2(n_pd, g, R_pd, pds);
+            printf("\ttrial %d, phdiff=%f\n", j, pds[0][2]);
+            
+            //add this phdiff to sum
+            pd_sum += pds[0][2];
+
+        }
+
+        //Add this avg phdiff to array
+        pd_vec[i] = pd_sum/numpdtr;
+
+    }
+
+    char * pdvec_fname = "pdvec.dat";
+    vsave(pd_res, pd_vec, pdvec_fname);
+    
+    printf("here2?\n");
+    */
 
     //************************* SIMULATE!!! ****************************
     //STARTING IN-PHASE
