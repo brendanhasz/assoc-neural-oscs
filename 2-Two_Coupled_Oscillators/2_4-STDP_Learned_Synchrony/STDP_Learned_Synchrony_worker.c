@@ -124,10 +124,12 @@ void * STDP_Learned_Synchrony_worker(void * arg){
             }
 
             //record new weights
-            IN->Wxee_tr[tr][0][st] = W_tr[0][2];
-            IN->Wxee_tr[tr][1][st] = W_tr[2][0];
+            //IN->Wxee_tr[tr][0][st] = W_tr[0][2];
+            //IN->Wxee_tr[tr][1][st] = W_tr[2][0];
+            IN->Wxee_tr[tr*2*NUMST+0*NUMST+st] = W_tr[0][2];
+            IN->Wxee_tr[tr*2*NUMST+1*NUMST+st] = W_tr[2][0];
 
-            printf("\tWxee = %f, %f\n", Wxee_tr[tr][0][st], Wxee_tr[tr][1][st]);
+            //printf("\tWxee = %f, %f\n", Wxee_tr[tr][0][st], Wxee_tr[tr][1][st]);
 
             //find phdiff vector w/ new weights
             for (i=0; i<pd_res; i++){
@@ -154,7 +156,8 @@ void * STDP_Learned_Synchrony_worker(void * arg){
                 }
 
                 //Add this avg phdiff to array
-                IN->pd_tr[tr][i][st] = pd_sum/numpdtr;
+                //IN->pd_tr[tr][i][st] = pd_sum/numpdtr;
+                IN->pd_tr[tr*PDRES*NUMST+i*NUMST+st] = pd_sum/numpdtr;
 
             }
 

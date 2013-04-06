@@ -30,7 +30,9 @@ int main(void){
     //Multithreading
     //TODO
     double Wxee_tr[NUMTR][2][NUMST]; //xEE Weights over time for each trial
+        double Wxee_tr_vec[NUMTR*2*NUMST]; //Vector form for passing to thread
     double pd_tr[NUMTR][PDRES][NUMST]; //SS phase difference over time for each trial
+        double pd_tr_vec[NUMTR*PDRES*NUMST];
     THREAD_2_4_DAT t_args[NUM_THREADS];
     pthread_t threads[NUM_THREADS];
     int t_divs[NUM_THREADS+1];
@@ -42,8 +44,8 @@ int main(void){
         t_args[i].numtr = NUMTR;
         t_args[i].numsteps = NUMST;
         t_args[i].pdres = PDRES;
-        t_args[i].Wxee_tr = &Wxee_tr;
-        t_args[i].pd_tr = &pd_tr;
+        t_args[i].Wxee_tr = (double *)&Wxee_tr_vec;
+        t_args[i].pd_tr = (double *)&pd_tr_vec;
     }
         
 
@@ -60,6 +62,20 @@ int main(void){
     }
     waitfor_threads(NUM_THREADS, threads);
 
+    //store passed vectors in 3d arrays
+    for (i=0;i<NUMTR; i++){
+        for (j=0; j<PDRES; j++){
+            for (k=0; k<NUMST; k++){
+                pd_tr[i][j][k] = pd_tr_vec[i*PDRES*NUMST+j*NUMST+k];
+            }
+        }
+    }
+    for (i=0;i<NUMTR; i++){
+        for (j=0; j<NUMST; j++){
+            Wxee_tr[i][0][j] = Wxee_tr_vec[i*2*NUMST+0*NUMST+j];
+            Wxee_tr[i][1][j] = Wxee_tr_vec[i*2*NUMST+1*NUMST+j];
+        }
+    }
 
     //SAVE DATA FROM IN-PHASE
 
