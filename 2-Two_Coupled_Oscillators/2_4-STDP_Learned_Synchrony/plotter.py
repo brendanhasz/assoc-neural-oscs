@@ -28,7 +28,7 @@ ax.fill_between(x, data, 0, where=data>0, facecolor='blue', interpolate=True)
 ax.fill_between(x, data, 0, where=data<0, facecolor='red', interpolate=True)
 plt.xlim([-100, 100])
 
-
+'''
 # Plot cumulative weight
 print "plotting fig 2 of 3"
 fname = 'cum_weight.dat'
@@ -39,7 +39,6 @@ plt.figure()
 plot_tools.linep(fname, tit, xlab, ylab) 
 
 
-'''
 # Plot cumulative rate
 fname = 'cum_rate.dat'
 #tit = 'Rate over time\nTwo coupled oscillators'
@@ -48,7 +47,6 @@ xlab = 'Time (ms)'
 ylab = 'Rate (Hz)'
 ax2=plt.subplot(2,1,2)
 plot_tools.linep(fname, tit, xlab, ylab) 
-'''
 
 #plot cumulative phdiffs
 print "plotting fig 3 of 3"
@@ -62,7 +60,6 @@ plt.figure()
 plot_tools.colorp(fname, tit, xlab, ylab, clab, clims)
 
 
-'''
 # Plot init pdvec
 fname = 'pdvec.dat'
 tit = 'Initial phdiff vs SS phdiff w/ init weights'
@@ -73,13 +70,16 @@ plot_tools.linep(fname, tit, xlab, ylab)
 '''
 
 # Plot avg weights w/ errorbars
+print "plotting fig 2 of 3"
 fname_avg = 'Wxee_avg.dat'
 fname_stderr = 'Wxee_stderr.dat'
 tit = 'X-osc E->E weights over time'
-xlab = 'Time (step)'
+xlab = 'Time (10 500ms presentations)'
 ylab = 'X-osc E->E weight'
-data_avg = np.loadtxt(fname_avg)
-data_stderr= np.loadtxt(fname_stderr)
+data_avg_all = np.loadtxt(fname_avg)
+data_avg = data_avg_all[0::10]
+data_stderr_all = np.loadtxt(fname_stderr)
+data_stderr = data_stderr_all[0::10]
 x = np.linspace(0,data_avg.shape[0],data_avg.shape[0])
 y1 = data_avg[:,0]
 y2 = data_avg[:,1]
@@ -89,20 +89,22 @@ plt.figure()
 plt.title(tit)
 plt.xlabel(xlab)
 plt.ylabel(ylab)
-plt.errorbar(x, y1, yerr=yerr1, color='blue', linewidth=2.0)
-plt.errorbar(x, y2, yerr=yerr2, color='green', linewidth=2.0)
+plt.errorbar(x, y1, yerr=yerr1, color='blue')
+plt.errorbar(x, y2, yerr=yerr2, color='green')
 
 
 # Plot average phdiffs
-print "plotting fig "
+print "plotting fig 3 of 3"
 fname = 'phdiff_avg.dat'
 tit = 'Phase Differences over time'
-xlab = 'Time (step)'
-ylab = 'Init phdiff'
-clab = 'SS phdiff'
+xlab = 'Time (500ms steps)'
+ylab = eval("r'$\Delta\Phi_0$'")
+clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, 2*math.pi]
+xran = None
+yran = [0, 2*math.pi]
 plt.figure()
-plot_tools.colorp(fname, tit, xlab, ylab, clab, clims)
+plot_tools.colorp(fname, tit, xlab, ylab, clab, clims, xran, yran)
 
 
 #SHOW ALL THE PLOTS

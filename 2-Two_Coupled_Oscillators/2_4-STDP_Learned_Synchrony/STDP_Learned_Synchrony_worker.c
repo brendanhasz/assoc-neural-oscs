@@ -81,6 +81,9 @@ void * STDP_Learned_Synchrony_worker(void * arg){
     int phdiff_ind;
     double pds[g][g];
 
+    //Randomness/heterogeinity
+    double w_randness = 0.01;
+    double r_randness = 0.1;
 
     //********************* SIMULATE STARTING IN-PHASE!!! ********************
     //initialize per-thread params to start in-phase
@@ -94,7 +97,7 @@ void * STDP_Learned_Synchrony_worker(void * arg){
         //set init weights with a *little* randomness
         for (i=0;i<g;i++){ 
             for (j=0;j<g;j++){ 
-                W_tr[i][j]=W_0[i][j]+0.001*gen_randn(); 
+                W_tr[i][j]=W_0[i][j]+w_randness*gen_randn(); 
             }
         }
 
@@ -107,8 +110,8 @@ void * STDP_Learned_Synchrony_worker(void * arg){
             
             R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
             R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
-            R_i[2] = rates[ipd_ind][0]+0.01*gen_rand();  //g2 E
-            R_i[3] = rates[ipd_ind][1]+0.01*gen_rand();  //g2 I
+            R_i[2] = rates[ipd_ind][0]+r_randness*gen_rand();  //g2 E
+            R_i[3] = rates[ipd_ind][1]+r_randness*gen_rand();  //g2 I
 
             //Simulate w/ new weights for this step
             rateN(g, n_s, R_s, R_i, W_tr, gamma, tau, dt);
