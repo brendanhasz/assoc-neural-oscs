@@ -107,11 +107,17 @@ void * STDP_Learned_Synchrony_worker(void * arg){
             printf("Trial %d of %d, Step %d of %d\n", tr, numtr, st, numsteps);
 
             //Set init rates (in-phase) w/ randomness
-            
-            R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
-            R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
-            R_i[2] = rates[ipd_ind][0]+r_randness*gen_rand();  //g2 E
-            R_i[3] = rates[ipd_ind][1]+r_randness*gen_rand();  //g2 I
+            if (gen_rand()>0.5){
+                R_i[0] = rates[0][0]+r_randness*gen_rand();  //g1 E
+                R_i[1] = rates[0][1]+r_randness*gen_rand();  //g1 I
+                R_i[2] = rates[ipd_ind][0]+r_randness*gen_rand();  //g2 E
+                R_i[3] = rates[ipd_ind][1]+r_randness*gen_rand();  //g2 I
+            } else {
+                R_i[0] = rates[ipd_ind][0]+r_randness*gen_rand();  //g1 E
+                R_i[1] = rates[ipd_ind][1]+r_randness*gen_rand();  //g1 I
+                R_i[2] = rates[0][0]+r_randness*gen_rand();  //g2 E
+                R_i[3] = rates[0][1]+r_randness*gen_rand();  //g2 I
+            }
 
             //Simulate w/ new weights for this step
             rateN(g, n_s, R_s, R_i, W_tr, gamma, tau, dt);
