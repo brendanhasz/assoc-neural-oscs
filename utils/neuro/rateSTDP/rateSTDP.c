@@ -89,9 +89,11 @@ rateSTDP(int n, int g, double dt, double R[n][g],
       }}
     }
 
+    /*
     //Save STDP kernel
     char * fname = "rateSTDP_STDPkernel.dat";
     vsave(2*wid+1, kernel, fname);
+    */
 
 }
 

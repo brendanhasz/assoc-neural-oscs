@@ -31,7 +31,6 @@ ax.fill_between(x, data, 0, where=data>0, facecolor='blue', interpolate=True)
 ax.fill_between(x, data, 0, where=data<0, facecolor='red', interpolate=True)
 plt.xlim([-100, 100])
 
-'''
 # Plot avg weights w/ errorbars for in
 print "plotting fig 2 of 5"
 fname_avg = 'Wxee_avg.dat'
@@ -96,7 +95,7 @@ print "plotting fig 3 of 5"
 fname = 'phdiff_avg.dat'
 tit = 'Phase Differences over time'
 xlab = 'Time (500ms steps)'
-ylab = eval("r'$\Delta\Phi_0$'")
+ylab = eval("r'$\Delta\Phi_0$ (always IN)'")
 clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, math.pi]
 xran = None
@@ -110,14 +109,13 @@ print "plotting fig 5 of 5"
 fname = 'phdiff_avg_out.dat'
 tit = 'Phase Differences over time'
 xlab = 'Time (500ms steps)'
-ylab = eval("r'$\Delta\Phi_0$'")
+ylab = eval("r'$\Delta\Phi_0$ (always OUT)'")
 clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, math.pi]
 xran = None
 yran = [0, 2*math.pi]
 plt.figure()
 plot_tools.colorp(fname, tit, xlab, ylab, clab, clims, xran, yran)
-'''
 
 #SHOW ALL THE PLOTS
 plt.show()

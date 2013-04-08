@@ -5,8 +5,8 @@
 
 */
 
-#define NUMTR 32
-#define NUMST 150
+#define NUMTR 4
+#define NUMST 200
 #define PDRES 100
 
 typedef struct {
