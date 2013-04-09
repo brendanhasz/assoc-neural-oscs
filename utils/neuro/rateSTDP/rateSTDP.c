@@ -37,11 +37,11 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     //STDP rule parameters
     double A_n = -.51;
     double A_p = 1.13; //1.03 in paper, had to use 1.13
-    //double tau_n = 0.036;
-    double tau_n = 0.043335;
+    double tau_n = 0.036;
+    //double tau_n = 0.043335;
     double tau_p = 0.014;
-    double tau_d = 5e-3; //nonexact kernel, as suggested by Knoblauch
-    double tau_pot = 0; //nonexact kernel in the potentiation direction
+    double tau_d = 4e-3; //nonexact kernel, as suggested by Knoblauch
+    double tau_pot = 2.5e-3; //nonexact kernel in the potentiation direction
     int ne_start = wid-tau_d/dt;
     int ne_end = wid + tau_pot/dt;
     int ne_diff = ne_end-ne_start;
