@@ -7,7 +7,7 @@
 
 #define NUMTR 4
 #define NUMST 200
-#define PDRES 100
+#define PERCRES 100
 
 typedef struct {
     int id;
@@ -15,9 +15,7 @@ typedef struct {
     int b; 
     int numtr;
     int numsteps;
-    int pdres;
-    double initphdiff;
-    double * Wxee_tr;
-    double * pd_tr;
+    int percres;
+    double * perccorr; //percent correct for this trial+step
 } THREAD_3_2_DAT;
 

@@ -5,7 +5,7 @@
 
 */
 
-void * STDP_Learned_Synchrony_worker(void * arg);
+void * Pattern_Completion_worker(void * arg);
 
 
 

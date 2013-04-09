@@ -17,10 +17,10 @@
 #include "STDP_Learned_Synchrony.h"
 #include "../../utils/multithreads/multithreads.h"
 
-void * STDP_Learned_Synchrony_worker(void * arg){
+void * Pattern_Completion_worker(void * arg){
 
     //cast input args to data structure
-    THREAD_2_4_DAT * IN = arg;
+    THREAD_3_2_DAT * IN = arg;
 
     //********************** INITIALIZE PARAMS!!! *************************
 
@@ -32,12 +32,12 @@ void * STDP_Learned_Synchrony_worker(void * arg){
     // Simulation Params
     int tr, st, i, j, k, l, t;  //counters
     int n_s = 5000;  //timesteps in each step
-    int n_pd = 10000;  //timesteps in simulation for calculating SS phdiff
+    int n_perc = 10000;  //timesteps in simulation for calculating perc correct
     double dt = 1e-4;   //timestep duration
-    int no = 2; //number of oscillators
+    int no = 5; //number of oscillators
     int g = 2*no;   //number of neuron groups
     double R_s[n_s][g]; //Rate vectors for step
-    double R_pd[n_pd][g]; //Rate vectors for finding phase diff
+    double R_perc[n_perc][g]; //Rate vectors for finding perccorr
     double gamma[g];
         for ( i=0; i<g; i+=2 ){
             gamma[i] = 10;      //E cells
@@ -57,7 +57,7 @@ void * STDP_Learned_Synchrony_worker(void * arg){
     double W_0[g][g];
         double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
         assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
-    int step = 10;
+    int step = 10; //step for recording plasticity
     double W_t[n_s/step][g][g];
     int W_c[g][g];  //Which synapses have plasticity?
         for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
@@ -68,36 +68,52 @@ void * STDP_Learned_Synchrony_worker(void * arg){
     int p=1000;
     double rates[p][2];
     get_last_period(&p, rates, wW);
-    int ipd_ind = IN->initphdiff/(2*M_PI)*p;
 
     //Trial parameters
     int numtr = IN->numtr;     //number of trials
     int numsteps = IN->numsteps;  //number of stdp measurements within each trial
-    double W_tr[g][g]; //weights for a trial
+    double W_tr[g][g]; //weights for this trial
     //phasediff trial params
-    int pd_res = IN->pdres;    //resolution of phdiff measurements per step
-    int numpdtr = 10;   //number of trials per init phase diff
-    double pd_sum;
-    int phdiff_ind;
+    int percres = IN->percres;    //resolution of phdiff measurements per step
+    double perc_sum;
     double pds[g][g];
 
     //Randomness/heterogeinity
-    double w_randness = 0.01;
-    double r_randness = 0.1;
+    double w_ran = 0.01;
+    double r_ran = 0.01;
+    double r_noise = 0.001;
+
+    //Patterns
+    int numpats = 2;
+    int p_ind;
+    int pats[numpats][no];
+        //First pattern (1, 2, 3)
+        pats[0][0] = 0;
+        pats[0][1] = 0;
+        pats[0][2] = 0;
+        pats[0][3] = M_PI;
+        pats[0][4] = M_PI;
+        //Second pattern (3, 4, 5)
+        pats[1][0] = M_PI;
+        pats[1][1] = M_PI;
+        pats[1][2] = 0;
+        pats[1][3] = 0;
+        pats[1][4] = 0;
+    int t_pat[no];
+        t_pat[0] = 0; 
+        t_pat[1] = M_PI; 
+        t_pat[2] = 0; 
+        t_pat[3] = M_PI; 
+        t_pat[4] = M_PI; 
 
     //********************* SIMULATE STARTING IN-PHASE!!! ********************
-    //initialize per-thread params to start in-phase
-    //for (i=0; i<NUM_THREADS; i++){
-    //    pthread_create(&threads[i], NULL, STDP...worker, (void*)&t_args[i]);
-    //}
-    //waitfor_threads(NUM_THREADS, threads);
 
     for (tr=IN->a; tr<IN->b; tr++){
         
         //set init weights with a *little* randomness
         for (i=0;i<g;i++){ 
             for (j=0;j<g;j++){ 
-                W_tr[i][j]=W_0[i][j]+w_randness*gen_randn(); 
+                W_tr[i][j]=W_0[i][j]+w_ran*gen_randn(); 
             }
         }
 
@@ -106,69 +122,55 @@ void * STDP_Learned_Synchrony_worker(void * arg){
 
             printf("Trial %d of %d, Step %d of %d\n", tr, numtr, st, numsteps);
 
-            //Set init rates (in-phase) w/ randomness
-            if (gen_rand()>0.5){
-                R_i[0] = rates[0][0]+r_randness*gen_rand();  //g1 E
-                R_i[1] = rates[0][1]+r_randness*gen_rand();  //g1 I
-                R_i[2] = rates[ipd_ind][0]+r_randness*gen_rand();  //g2 E
-                R_i[3] = rates[ipd_ind][1]+r_randness*gen_rand();  //g2 I
-            } else {
-                R_i[0] = rates[ipd_ind][0]+r_randness*gen_rand();  //g1 E
-                R_i[1] = rates[ipd_ind][1]+r_randness*gen_rand();  //g1 I
-                R_i[2] = rates[0][0]+r_randness*gen_rand();  //g2 E
-                R_i[3] = rates[0][1]+r_randness*gen_rand();  //g2 I
-            }
-
-            //Simulate w/ new weights for this step
-            rateN(g, n_s, R_s, R_i, W_tr, gamma, tau, dt);
-
-            //Find weight change for this step
-            rateSTDP(n_s, g, dt, R_s, W_t, W_tr, W_c); 
-            
-            //update weights
-            for (i=0;i<g;i++){ 
-                for (j=0;j<g;j++){ 
-                    W_tr[i][j] = W_t[n_s/step-1][i][j]; 
-                }
-            }
-
-            //record new weights
-            //IN->Wxee_tr[tr][0][st] = W_tr[0][2];
-            //IN->Wxee_tr[tr][1][st] = W_tr[2][0];
-            IN->Wxee_tr[tr*2*NUMST+0*NUMST+st] = W_tr[0][2];
-            IN->Wxee_tr[tr*2*NUMST+1*NUMST+st] = W_tr[2][0];
-
-            //printf("\tWxee = %f, %f\n", Wxee_tr[tr][0][st], Wxee_tr[tr][1][st]);
-
-            //find phdiff vector w/ new weights
-            for (i=0; i<pd_res; i++){
-                pd_sum = 0;
-                phdiff_ind = ((double) i/(double) pd_res)*p;
-
-                for (j=0; j<numpdtr; j++){
-                    
-                    //set init rates for this init phdiff w/ randomness
-                    R_i[0] = rates[0][0]+0.01*gen_rand();  //g1 E
-                    R_i[1] = rates[0][1]+0.01*gen_rand();  //g1 I
-                    R_i[2] = rates[phdiff_ind][0]+0.01*gen_rand();  //g2 E
-                    R_i[3] = rates[phdiff_ind][1]+0.01*gen_rand();  //g2 I
-
-                    //simulate
-                    rateN(g, n_pd, R_pd, R_i, W_tr, gamma, tau, dt);
-
-                    //find steady state phdiff
-                    phdiff2(n_pd, g, R_pd, pds);
-                    
-                    //add this phdiff to sum
-                    pd_sum += pds[0][2];
-
+            //Present each pattern + update weights
+            for (pat=0; pat<numpats; pat++){
+                
+                //Set init rates
+                for (gr=0; gr<no; gr++){
+                    p_ind = (p + ((double) p * pats[pat][gr]/(2*M_PI)) + ((double) p * r_ran*gen_randn()/M_PI))%p;
+                    printf("p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
+                    R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
+                    R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
 
-                //Add this avg phdiff to array
-                //IN->pd_tr[tr][i][st] = pd_sum/numpdtr;
-                IN->pd_tr[tr*PDRES*NUMST+i*NUMST+st] = pd_sum/numpdtr;
+                //Simulate w/ pattern
+                rateN(g, n_s, R_s, R_i, W_tr, gamma, tau, dt);
+
+                //Apply STDP
+                rateSTDP(n_s, g, dt, R_s, W_t, W_tr, W_c); 
+
+                //Update weights
+                for (i=0;i<g;i++){ 
+                    for (j=0;j<g;j++){ 
+                        W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                    }
+                }
 
             }
+
+            //find perc correct over lots of trials on TEST PATTERN
+            perc_sum= 0;
+            for (i=0; i<percres; i++){
+                    
+                //set init rates for test pattern w/ randomness
+                for(gr=0; gr<no; gr++){
+                    //TODO
+                }
+
+                //simulate
+                rateN(g, n_perc, R_perc, R_i, W_tr, gamma, tau, dt);
+
+                //is the SS pattern correct? (use alpha-score?)
+                //TODO
+
+                //add this perc correct score to sum
+                perc_sum += //TODO
+
+            }
+
+            //Add this avg perc correct to array
+            //TODO
+            IN->perccorr[] = perc_sum/percres;
 
         }
 
