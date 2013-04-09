@@ -1,4 +1,4 @@
-# Plotter for 2_3
+# Plotter for 2_4
 
 import sys
 import os
@@ -35,7 +35,7 @@ plt.xlim([-100, 100])
 print "plotting fig 2 of 5"
 fname_avg = 'Wxee_avg.dat'
 fname_stderr = 'Wxee_stderr.dat'
-tit = 'X-osc E->E weights over time'
+tit = 'X-osc E->E weights as a function of training time'
 xlab = 'Time (10 500ms presentations)'
 ylab = eval("r'$W_{Xee}$ (always IN)'")
 data_avg_all = np.loadtxt(fname_avg)
@@ -66,7 +66,7 @@ print "plotting fig 4 of 5"
 fname_avg = 'Wxee_avg_out.dat'
 fname_stderr = 'Wxee_stderr_out.dat'
 tit = 'X-osc E->E weights over time'
-xlab = 'Time (10 500ms presentations)'
+xlab = 'Training time (10 500ms presentations)'
 ylab = eval("r'$W_{Xee}$ (always OUT)'")
 data_avg_all = np.loadtxt(fname_avg)
 data_avg = data_avg_all[0::10]
@@ -93,8 +93,8 @@ plt.errorbar(x, y, yerr=yerr, color='blue')
 # Plot average phdiffs for in
 print "plotting fig 3 of 5"
 fname = 'phdiff_avg.dat'
-tit = 'Phase Differences over time'
-xlab = 'Time (500ms steps)'
+tit = 'S.S. Phase Differences as a function of training time'
+xlab = 'Training Time (500ms presentations)'
 ylab = eval("r'$\Delta\Phi_0$ (always IN)'")
 clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, math.pi]
@@ -107,8 +107,8 @@ plot_tools.colorp(fname, tit, xlab, ylab, clab, clims, xran, yran)
 # Plot average phdiffs for out
 print "plotting fig 5 of 5"
 fname = 'phdiff_avg_out.dat'
-tit = 'Phase Differences over time'
-xlab = 'Time (500ms steps)'
+tit = 'S.S. Phase Differences as a function of training time'
+xlab = 'Training Time (500ms presentations)'
 ylab = eval("r'$\Delta\Phi_0$ (always OUT)'")
 clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, math.pi]
