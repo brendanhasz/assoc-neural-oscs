@@ -92,7 +92,7 @@ void * Pattern_Completion_worker(void * arg){
     //Patterns
     int numpats = 2;
     int p_ind;
-    int pats[numpats][no];
+    double pats[numpats][no];
         //First pattern (1, 2, 3)
         pats[0][0] = 0;
         pats[0][1] = 0;
@@ -105,7 +105,7 @@ void * Pattern_Completion_worker(void * arg){
         pats[1][2] = 0;
         pats[1][3] = 0;
         pats[1][4] = 0;
-    int t_pat[no];
+    double t_pat[no];
         t_pat[0] = 0; 
         t_pat[1] = M_PI; 
         t_pat[2] = 0; 
@@ -174,11 +174,11 @@ void * Pattern_Completion_worker(void * arg){
                 pat_score = 0;
                 for (gr=0; gr<no; gr++){
 //#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
-                    if (WI(t_pat[i]-t_pat[0],0,withresh) == WI()){
+                    if (WI(pats[0][i]-pats[0][0],0,withresh) == WI(pds[0][gr]-pds[0][0],0,withresh)){
                         pat_score++;
                     }
                 }
-                pat_score = score/no;
+                pat_score = pat_score/no;
 
                 //add this perc correct score to sum
                 perc_sum += pat_score;
