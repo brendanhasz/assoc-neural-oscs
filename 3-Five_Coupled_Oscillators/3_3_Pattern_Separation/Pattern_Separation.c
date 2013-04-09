@@ -16,8 +16,8 @@
 //#include "../../utils/sig_proc/phdiff2.h"
 
 #include "../../utils/multithreads/multithreads.h"
-#include "Pattern_Completion.h"
-#include "Pattern_Completion_worker.h"
+#include "Pattern_Separation.h"
+#include "Pattern_Separation_worker.h"
 
 int main(void){
 
@@ -27,9 +27,11 @@ int main(void){
     int percres = PERCRES;
 
     //Multithreading
-    double perccorr[NUMTR][NUMST]; //Percent correct over time and over trials
-        double perccorr_vec[NUMTR*NUMST];
-    THREAD_3_2_DAT t_args[NUM_THREADS];
+    double G1_perccorr[NUMTR][NUMST]; //Percent correct over time and over trials
+        double G1_perccorr_vec[NUMTR*NUMST];
+    double G2_perccorr[NUMTR][NUMST]; //Percent correct over time and over trials
+        double G2_perccorr_vec[NUMTR*NUMST];
+    THREAD_3_3_DAT t_args[NUM_THREADS];
     pthread_t threads[NUM_THREADS];
     int t_divs[NUM_THREADS+1];
     segment_threads(NUM_THREADS, 0, NUMTR, t_divs);
@@ -40,7 +42,8 @@ int main(void){
         t_args[i].numtr = NUMTR;
         t_args[i].numsteps = NUMST;
         t_args[i].percres = PERCRES;
-        t_args[i].perccorr = (double *)&perccorr_vec;
+        t_args[i].G1_perccorr = (double *)&G1_perccorr_vec;
+        t_args[i].G2_perccorr = (double *)&G2_perccorr_vec;
     }
         
 
@@ -49,41 +52,49 @@ int main(void){
 
     //run threads
     for (i=0; i<NUM_THREADS; i++){
-        pthread_create(&threads[i], NULL, Pattern_Completion_worker, (void*)&t_args[i]);
+        pthread_create(&threads[i], NULL, Pattern_Separation_worker, (void*)&t_args[i]);
     }
     waitfor_threads(NUM_THREADS, threads);
 
 
-    //store passed vector in 2d arrays
+    //store passed vectors in 2d arrays
     for (i=0;i<NUMTR; i++){
         for (j=0; j<NUMST; j++){
-            perccorr[i][j] = perccorr_vec[i*NUMST+j];
+            G1_perccorr[i][j] = G1_perccorr_vec[i*NUMST+j];
+            G2_perccorr[i][j] = G2_perccorr_vec[i*NUMST+j];
         }
     }
 
     //SAVE DATA 
+    //Save avg percorr for g1
     //Save average perccorr
-    double p_sum;
-    char * perccorr_avg_fname = "perccorr_avg.dat";
-    double perccorr_averaged[numsteps];
+    double p_sum1, p_sum2;
+    char * G1_perccorr_avg_fname = "G1_perccorr_avg.dat";
+    char * G2_perccorr_avg_fname = "G2_perccorr_avg.dat";
+    double G1_perccorr_averaged[numsteps], G2_perccorr_averaged[numsteps];
     for (i=0; i<NUMST; i++){
-        p_sum = 0;
+        p_sum1 = 0;
+        p_sum2 = 0;
         for (j=0; j<NUMTR; j++){
-            p_sum += perccorr[j][i];
+            p_sum1 += G1_perccorr[j][i];
+            p_sum2 += G2_perccorr[j][i];
         }
-        perccorr_averaged[i] = p_sum/NUMTR;
+        G1_perccorr_averaged[i] = p_sum1/NUMTR;
+        G2_perccorr_averaged[i] = p_sum2/NUMTR;
     }
-    vsave(NUMST, perccorr_averaged, perccorr_avg_fname); //Save vector
+    vsave(NUMST, G1_perccorr_averaged, G1_perccorr_avg_fname); //Save vector
+    vsave(NUMST, G2_perccorr_averaged, G2_perccorr_avg_fname); //Save vector
 
     //Save stderr of perccorr
-    char * perccorr_stderr_fname = "perccorr_stderr.dat";
-    double stderr_out[NUMST];
-    stderrvec(NUMTR, NUMST, perccorr, stderr_out);
-    vsave(NUMST, stderr_out, perccorr_stderr_fname); //Save vector
+    char * G1_perccorr_stderr_fname = "G1_perccorr_stderr.dat";
+    char * G2_perccorr_stderr_fname = "G2_perccorr_stderr.dat";
+    double G1_stderr_out[NUMST], G2_stderr_out[NUMST];
+    stderrvec(NUMTR, NUMST, G1_perccorr, G1_stderr_out);
+    stderrvec(NUMTR, NUMST, G2_perccorr, G2_stderr_out);
+    vsave(NUMST, G1_stderr_out, G1_perccorr_stderr_fname); //Save vector
+    vsave(NUMST, G2_stderr_out, G2_perccorr_stderr_fname); //Save vector
     
     
-
-
 
     return 0;
 

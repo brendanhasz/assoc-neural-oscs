@@ -16,6 +16,7 @@ typedef struct {
     int numtr;
     int numsteps;
     int percres;
-    double * perccorr; //percent correct for this trial+step
-} THREAD_3_2_DAT;
+    double * G2_perccorr; //percent correct for this trial+step
+    double * G1_perccorr; //percent correct for this trial+step
+} THREAD_3_3_DAT;
 
