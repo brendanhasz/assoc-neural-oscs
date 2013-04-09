@@ -16,7 +16,7 @@ numtrials = 32
 print "plotting fig 1 of 5"
 fname = 'rateSTDP_STDPkernel.dat'
 tit = 'STDP kernel'
-xlab = 'Tau'
+xlab = eval("r'$t_{post}-t_{pre}$ (ms)'")
 ylab = 'Synaptic weight change'
 plt.figure()
 plt.title(tit)
@@ -49,7 +49,7 @@ y = np.mean(data_avg, axis=1)
 yerr1 = data_stderr[:,0]
 yerr2 = data_stderr[:,1]
 yerr = np.mean(data_stderr, axis=1)
-yerr = yerr*np.sqrt(numtrials) #use STD, not stderr
+#yerr = yerr*np.sqrt(numtrials) #use STD, not stderr
 plt.figure()
 plt.subplot(2,1,1)
 plt.title(tit)
@@ -79,7 +79,7 @@ y = np.mean(data_avg, axis=1)
 yerr1 = data_stderr[:,0]
 yerr2 = data_stderr[:,1]
 yerr = np.mean(data_stderr, axis=1)
-yerr = yerr*np.sqrt(numtrials)
+#yerr = yerr*np.sqrt(numtrials)
 #plt.figure()
 plt.subplot(2,1,2)
 #plt.title(tit)

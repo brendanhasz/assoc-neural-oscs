@@ -13,9 +13,14 @@ fname = 'single_PING_group.dat'
 tit = 'Single PING Oscillator'
 xlab = eval("r'Time ($100 \mu$s)'")
 ylab = 'Rate (Hz)'
+s = 0
+xran = None
+yran = None
+xlims = [1000, 2000]
+
 
 plt.figure()
-lines = plot_tools.linep(fname,tit,xlab,ylab)
+lines = plot_tools.linep(fname,tit,xlab,ylab,s,xran,yran,xlims)
 plt.setp(lines[0], color='g')
 plt.setp(lines[1], color='r')
 plt.legend(('Excitatory','Inhibitory'))
