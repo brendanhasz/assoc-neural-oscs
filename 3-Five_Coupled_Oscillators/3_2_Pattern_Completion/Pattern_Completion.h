@@ -7,7 +7,7 @@
 
 #define NUMTR 4
 #define NUMST 200
-#define PERCRES 100
+#define PERCRES 50 //should theoretically be higher than 100...
 
 typedef struct {
     int id;

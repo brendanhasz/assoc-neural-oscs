@@ -10,7 +10,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-numtrials = 32
+numtrials = 24
 
 #Plot STDP kernel
 print "plotting fig 1 of 5"
@@ -37,7 +37,7 @@ fname_avg = 'Wxee_avg.dat'
 fname_stderr = 'Wxee_stderr.dat'
 tit = 'X-osc E->E weights as a function of training time'
 xlab = 'Time (10 500ms presentations)'
-ylab = eval("r'$W_{Xee}$ (always IN)'")
+ylab = eval("r'$W_{Xee}$ (synchronized)'")
 data_avg_all = np.loadtxt(fname_avg)
 data_avg = data_avg_all[0::10]
 data_stderr_all = np.loadtxt(fname_stderr)
@@ -49,7 +49,7 @@ y = np.mean(data_avg, axis=1)
 yerr1 = data_stderr[:,0]
 yerr2 = data_stderr[:,1]
 yerr = np.mean(data_stderr, axis=1)
-#yerr = yerr*np.sqrt(numtrials) #use STD, not stderr
+yerr = yerr*np.sqrt(numtrials) #use STD, not stderr
 plt.figure()
 plt.subplot(2,1,1)
 plt.title(tit)
@@ -67,7 +67,7 @@ fname_avg = 'Wxee_avg_out.dat'
 fname_stderr = 'Wxee_stderr_out.dat'
 tit = 'X-osc E->E weights over time'
 xlab = 'Training time (10 500ms presentations)'
-ylab = eval("r'$W_{Xee}$ (always OUT)'")
+ylab = eval("r'$W_{Xee}$ (DEsynchronized)'")
 data_avg_all = np.loadtxt(fname_avg)
 data_avg = data_avg_all[0::10]
 data_stderr_all = np.loadtxt(fname_stderr)
@@ -79,7 +79,7 @@ y = np.mean(data_avg, axis=1)
 yerr1 = data_stderr[:,0]
 yerr2 = data_stderr[:,1]
 yerr = np.mean(data_stderr, axis=1)
-#yerr = yerr*np.sqrt(numtrials)
+yerr = yerr*np.sqrt(numtrials)
 #plt.figure()
 plt.subplot(2,1,2)
 #plt.title(tit)
@@ -93,9 +93,9 @@ plt.errorbar(x, y, yerr=yerr, color='blue')
 # Plot average phdiffs for in
 print "plotting fig 3 of 5"
 fname = 'phdiff_avg.dat'
-tit = 'S.S. Phase Differences as a function of training time'
+tit = 'S.S. Phase Differences \n as a function of training time \n for synchronized and DE-synchronized oscillators'
 xlab = 'Training Time (500ms presentations)'
-ylab = eval("r'$\Delta\Phi_0$ (always IN)'")
+ylab = eval("r'$\Delta\Phi_0$ (synchronized)'")
 clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, math.pi]
 xran = None
@@ -107,9 +107,9 @@ plot_tools.colorp(fname, tit, xlab, ylab, clab, clims, xran, yran)
 # Plot average phdiffs for out
 print "plotting fig 5 of 5"
 fname = 'phdiff_avg_out.dat'
-tit = 'S.S. Phase Differences as a function of training time'
+tit = 'S.S. Phase Differences \n as a function of training time \n for synchronized and DE-synchronized oscillators'
 xlab = 'Training Time (500ms presentations)'
-ylab = eval("r'$\Delta\Phi_0$ (always OUT)'")
+ylab = eval("r'$\Delta\Phi_0$ (DEsynchronized)'")
 clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
 clims = [0, math.pi]
 xran = None

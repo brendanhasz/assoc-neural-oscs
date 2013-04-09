@@ -50,7 +50,7 @@ void *EE_Attractor_worker(void *arg)
 	int ipd_res = 200;
 
 	//Number of trials per param choice
-	int trials = 20;
+	int trials = 100;
 	
 	//Within-group synaptic strengths
 	double wW[2][2];
