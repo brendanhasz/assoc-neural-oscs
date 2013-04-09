@@ -8,6 +8,7 @@
 #define NUMTR 24
 #define NUMST 200
 #define PDRES 100
+//#define PDRES 100
 
 typedef struct {
     int id;

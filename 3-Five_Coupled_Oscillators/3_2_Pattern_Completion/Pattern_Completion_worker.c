@@ -165,6 +165,11 @@ void * Pattern_Completion_worker(void * arg){
 
                 //is the SS pattern correct? (use alpha-score?)
                 phdiff2(n_perc, g, R_perc, pds);
+                for (gr=0; gr<no; gr++){
+                    //does g1 vs this phdiff match pats?
+                    pds[2*gr]-pds[0] should be approx 0
+                    
+                }
                 //determine if pds matches t_pat
                 //TODO
                 //if correct, pat_score = 1, else 0
