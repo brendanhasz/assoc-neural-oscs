@@ -1,5 +1,5 @@
 /*
-    STDP_Learned_Synchrony.h
+    Pattern_Completion.h
 
     contains struct definitions for passing data to and from threads
 

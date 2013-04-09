@@ -36,7 +36,9 @@ void * Pattern_Completion_worker(void * arg){
     printf("Thread %d seeded with %d\n", IN->id, randseed);
 
     // Simulation Params
-    int tr, st, i, j, k, l, t;  //counters
+    int tr, st, i, j, k, l, t, pat, gr;  //counters
+    double pat_score;
+    double withresh = 0.5;
     int n_s = 5000;  //timesteps in each step
     int n_perc = 10000;  //timesteps in simulation for calculating perc correct
     double dt = 1e-4;   //timestep duration
@@ -133,7 +135,13 @@ void * Pattern_Completion_worker(void * arg){
                 
                 //Set init rates
                 for (gr=0; gr<no; gr++){
-                    p_ind = (p + ((double) p * pats[pat][gr]/(2*M_PI)) + ((double) p * r_ran*gen_randn()/M_PI))%p;
+                    p_ind = 
+                        (
+                            p + 
+                            ((double) p * pats[pat][gr]/(2*M_PI)) + 
+                            ((double) p * r_ran*gen_randn()/M_PI)
+                        )
+                        %p;
                     printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
