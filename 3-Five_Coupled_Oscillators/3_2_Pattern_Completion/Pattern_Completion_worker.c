@@ -128,7 +128,7 @@ void * Pattern_Completion_worker(void * arg){
                 //Set init rates
                 for (gr=0; gr<no; gr++){
                     p_ind = (p + ((double) p * pats[pat][gr]/(2*M_PI)) + ((double) p * r_ran*gen_randn()/M_PI))%p;
-                    printf("p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
+                    printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
@@ -153,24 +153,29 @@ void * Pattern_Completion_worker(void * arg){
             for (i=0; i<percres; i++){
                     
                 //set init rates for test pattern w/ randomness
-                for(gr=0; gr<no; gr++){
-                    //TODO
+                for (gr=0; gr<no; gr++){
+                    p_ind = (p + ((double) p * t_pat[gr]/(2*M_PI)) + ((double) p * r_ran*gen_randn()/M_PI))%p;
+                    printf("test: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
+                    R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
+                    R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
 
                 //simulate
                 rateN(g, n_perc, R_perc, R_i, W_tr, gamma, tau, dt);
 
                 //is the SS pattern correct? (use alpha-score?)
+                phdiff2(n_perc, g, R_perc, pds);
+                //determine if pds matches t_pat
                 //TODO
+                //if correct, pat_score = 1, else 0
 
                 //add this perc correct score to sum
-                perc_sum += //TODO
+                perc_sum += pat_score;
 
             }
 
             //Add this avg perc correct to array
-            //TODO
-            IN->perccorr[] = perc_sum/percres;
+            IN->perccorr[tr*numsteps+st] = perc_sum/percres;
 
         }
 
