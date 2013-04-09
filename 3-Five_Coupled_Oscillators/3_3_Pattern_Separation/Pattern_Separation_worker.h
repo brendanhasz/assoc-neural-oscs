@@ -5,7 +5,7 @@
 
 */
 
-void * Pattern_Completion_worker(void * arg);
+void * Pattern_Separation_worker(void * arg);
 
 
 
