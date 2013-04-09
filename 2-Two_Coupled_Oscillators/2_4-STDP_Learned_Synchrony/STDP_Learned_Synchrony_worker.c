@@ -25,7 +25,7 @@ void * STDP_Learned_Synchrony_worker(void * arg){
     //********************** INITIALIZE PARAMS!!! *************************
 
     // Initialize random seed
-    int randseed = time(NULL);
+    int randseed = time(NULL)+IN->id;
     srand( randseed );
     printf("Thread %d seeded with %d\n", IN->id, randseed);
 

@@ -17,6 +17,12 @@
 #include "Pattern_Completion.h"
 #include "../../utils/multithreads/multithreads.h"
 
+//Define "within" function
+//takes number, a value, and a threshold (number w/i thresh of value)
+#ifndef WI
+#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
+#endif
+
 void * Pattern_Completion_worker(void * arg){
 
     //cast input args to data structure
@@ -165,14 +171,14 @@ void * Pattern_Completion_worker(void * arg){
 
                 //is the SS pattern correct? (use alpha-score?)
                 phdiff2(n_perc, g, R_perc, pds);
+                pat_score = 0;
                 for (gr=0; gr<no; gr++){
-                    //does g1 vs this phdiff match pats?
-                    pds[2*gr]-pds[0] should be approx 0
-                    
+//#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
+                    if (WI(t_pat[i]-t_pat[0],0,withresh) == WI()){
+                        pat_score++;
+                    }
                 }
-                //determine if pds matches t_pat
-                //TODO
-                //if correct, pat_score = 1, else 0
+                pat_score = score/no;
 
                 //add this perc correct score to sum
                 perc_sum += pat_score;
