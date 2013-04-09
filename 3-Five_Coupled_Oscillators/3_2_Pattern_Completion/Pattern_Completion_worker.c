@@ -135,12 +135,11 @@ void * Pattern_Completion_worker(void * arg){
                 
                 //Set init rates
                 for (gr=0; gr<no; gr++){
-                    p_ind = 
-                        (
+                    p_ind = ( (int) (
                             p + 
-                            ((double) p * pats[pat][gr]/(2*M_PI)) + 
-                            ((double) p * r_ran*gen_randn()/M_PI)
-                        )
+                            (((double) p)*pats[pat][gr]/2/M_PI) + //plus pattern phase
+                            (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
+                        ))
                         %p;
                     printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
@@ -168,7 +167,12 @@ void * Pattern_Completion_worker(void * arg){
                     
                 //set init rates for test pattern w/ randomness
                 for (gr=0; gr<no; gr++){
-                    p_ind = (p + ((double) p * t_pat[gr]/(2*M_PI)) + ((double) p * r_ran*gen_randn()/M_PI))%p;
+                    p_ind = ( (int) (
+                            p + 
+                            (((double) p)*t_pat[gr]/2/M_PI) + //plus pattern phase
+                            (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
+                        ))
+                        %p;
                     printf("test: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
