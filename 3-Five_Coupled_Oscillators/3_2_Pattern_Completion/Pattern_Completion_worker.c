@@ -14,7 +14,7 @@
 #include "../../utils/neuro/rateN/rateN.h"
 #include "../../utils/neuro/rateSTDP/rateSTDP.h"
 #include "../../utils/sig_proc/phdiff2.h"
-#include "STDP_Learned_Synchrony.h"
+#include "Pattern_Completion.h"
 #include "../../utils/multithreads/multithreads.h"
 
 void * Pattern_Completion_worker(void * arg){

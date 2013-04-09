@@ -16,8 +16,8 @@
 //#include "../../utils/sig_proc/phdiff2.h"
 
 #include "../../utils/multithreads/multithreads.h"
-#include "STDP_Learned_Synchrony.h"
-#include "STDP_Learned_Synchrony_worker.h"
+#include "Pattern_Completion.h"
+#include "Pattern_Completion_worker.h"
 
 int main(void){
 

@@ -12,9 +12,10 @@ OFLAGS = $(DFLAGS)
 uts = ../../utils
 nro = $(uts)/neuro
 
-name = STDP_Learned_Synchrony
+name = Pattern_Completion
 
-objects =	STDP_Learned_Synchrony.o \
+objects =	Pattern_Completion.o \
+		Pattern_Completion_worker.o \
 		rateN.o \
 		rateSTDP.o \
 		get_last_period.o \
@@ -22,14 +23,16 @@ objects =	STDP_Learned_Synchrony.o \
                 phdiff2.o \
                 stderrvec.o \
                 multithreads.o \
-                STDP_Learned_Synchrony_worker.o \
                 fileIO.o
 
 $(name): $(objects)
 	gcc $(OFLAGS) -o $(name) $(objects) -lm -lpthread
 
-STDP_Learned_Synchrony.o: STDP_Learned_Synchrony.c
-	gcc $(CFLAGS) STDP_Learned_Synchrony.c
+Pattern_Completion.o: Pattern_Completion.c
+	gcc $(CFLAGS) Pattern_Completion.c
+		
+Pattern_Completion_worker.o: Pattern_Completion_worker.c
+	gcc $(CFLAGS) Pattern_Completion_worker.c
 		
 rateN.o: $(nro)/rateN/rateN.c
 	gcc $(CFLAGS) $(nro)/rateN/rateN.c
@@ -54,9 +57,6 @@ stderrvec.o: $(uts)/stats/stderrvec.c
 		
 multithreads.o: $(uts)/multithreads/multithreads.c
 	gcc $(CFLAGS) $(uts)/multithreads/multithreads.c
-		
-STDP_Learned_Synchrony_worker.o: STDP_Learned_Synchrony_worker.c
-	gcc $(CFLAGS) STDP_Learned_Synchrony_worker.c
 		
 
 clean:
