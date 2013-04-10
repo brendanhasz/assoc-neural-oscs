@@ -5,7 +5,7 @@
 
 */
 
-#define NUMTR 4
+#define NUMTR 1
 #define NUMST 20
 #define PERCRES 50 //should theoretically be higher than 100...
 

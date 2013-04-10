@@ -98,7 +98,7 @@ void * Pattern_Completion_worker(void * arg){
 
     //Randomness/heterogeinity
     //double w_ran = 0.001;
-    double w_ran = 0.0005;
+    double w_ran = 0.001;
     double r_ran = 0.02;
     double r_noise = 0.01;
 
@@ -112,7 +112,6 @@ void * Pattern_Completion_worker(void * arg){
         fclose(cum_r_file_n);
         FILE * cum_r_file;
     
-
     //Patterns
     int numpats = 2;
     int p_ind;
@@ -135,6 +134,9 @@ void * Pattern_Completion_worker(void * arg){
         t_pat[2] = 0; 
         t_pat[3] = M_PI; 
         t_pat[4] = M_PI; 
+
+    //declare array for storing weights
+    double weights[numsteps*numpats][no-1];
 
     //********************* SIMULATE STARTING IN-PHASE!!! ********************
 
@@ -183,6 +185,9 @@ void * Pattern_Completion_worker(void * arg){
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
                         W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                        if ( IN->id==0 && i==0 && j%2==0 && j!=0 ){ //save 1v? weights over time
+                            weights[st*2+pat][j/2] = W_tr[i][j];
+                        }
                     }
                 }
 
@@ -198,6 +203,7 @@ void * Pattern_Completion_worker(void * arg){
                         }
                         fprintf(cum_w_file, "\n");
                     }
+                    fclose(cum_w_file);
 
                     //append rates
                     cum_r_file = fopen(fname_cum_r,"a");
@@ -207,6 +213,7 @@ void * Pattern_Completion_worker(void * arg){
                         }
                         fprintf(cum_r_file, "\n");
                     }
+                    fclose(cum_r_file);
 
 
 
@@ -258,6 +265,8 @@ void * Pattern_Completion_worker(void * arg){
 
     }
 
+    //TODO: save weights
+    asave(numsteps*numpats, no-1, weights, "weights.dat");
 
 
 }

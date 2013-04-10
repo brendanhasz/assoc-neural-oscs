@@ -48,6 +48,11 @@ plt.subplot(2,1,2)
 plot_tools.linep(fname)
 plt.legend(('1v2', '1v3', '1v4', '1v5'))
 
+# Plot weights
+fname = "weights.dat"
+plt.figure()
+plot_tools.linep(fname)
+plt.legend(('1v2', '1v3', '1v4', '1v5'))
 
 #SHOW ALL THE PLOTS
 plt.show()
