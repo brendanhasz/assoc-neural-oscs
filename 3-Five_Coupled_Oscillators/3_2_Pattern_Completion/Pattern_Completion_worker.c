@@ -63,13 +63,23 @@ void * Pattern_Completion_worker(void * arg){
         wW[0][0]=wee;   wW[0][1]=wei;   //EE    EI
         wW[1][0]=wie;   wW[1][1]=wii;   //IE    II
     double W_0[g][g];
-        double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
+        //double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
+        double wf = 2/((double) no);
+        double xee=0.2*wf, xei=0.3*wf, xie=-0.5*wf, xii=0*wf;  //Init Between-osc weights
+        //double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
         assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
     int step = 10; //step for recording plasticity
     double W_t[n_s/step][g][g];
     int W_c[g][g];  //Which synapses have plasticity?
-        for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
-        W_c[0][2]=1;    W_c[2][0]=1;    //Only xee synapses change
+        for (i=0; i<g; i++){ 
+            for (j=0; j<g; j++){ 
+                if (i%2==0 && j%2==0){
+                    W_c[i][j]=1; //only xEE synapses change
+                } else {
+                    W_c[i][j]=0;
+                }
+            }
+        }
 
     //Get init rates
     double R_i[g];
@@ -87,9 +97,21 @@ void * Pattern_Completion_worker(void * arg){
     double pds[g][g];
 
     //Randomness/heterogeinity
-    double w_ran = 0.01;
-    double r_ran = 0.01;
-    double r_noise = 0.001;
+    //double w_ran = 0.001;
+    double w_ran = 0.0005;
+    double r_ran = 0.02;
+    double r_noise = 0.01;
+
+    //filenames
+    char * fname_cum_w = "cum_w.dat";
+        FILE * cum_w_file_n = fopen(fname_cum_w, "w");
+        fclose(cum_w_file_n);
+        FILE * cum_w_file;
+    char * fname_cum_r = "cum_r.dat";
+        FILE * cum_r_file_n = fopen(fname_cum_r, "w");
+        fclose(cum_r_file_n);
+        FILE * cum_r_file;
+    
 
     //Patterns
     int numpats = 2;
@@ -119,10 +141,15 @@ void * Pattern_Completion_worker(void * arg){
     for (tr=IN->a; tr<IN->b; tr++){
         
         //set init weights with a *little* randomness
+        printf("init weights:\n");
         for (i=0;i<g;i++){ 
             for (j=0;j<g;j++){ 
                 W_tr[i][j]=W_0[i][j]+w_ran*gen_randn(); 
+                if (i%2==0 && j%2==0){
+                    printf("%f\t", W_tr[i][j]);
+                }
             }
+            printf("\n");
         }
 
         //Simulate in steps
@@ -141,7 +168,7 @@ void * Pattern_Completion_worker(void * arg){
                             (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
                         ))
                         %p;
-                    printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
+                    //printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
@@ -159,6 +186,33 @@ void * Pattern_Completion_worker(void * arg){
                     }
                 }
 
+                //append to file for rates + weights
+                //TODO
+                if (IN->id==0){
+                    //append weights
+                    printf("Saving weights + rates...\n");
+                    cum_w_file = fopen(fname_cum_w,"a");
+                    for (i=0; i<n_s/step-1; i++){
+                        for (j=1; j<no; j++){
+                            fprintf(cum_w_file, "%f \t", W_t[i][0][j*2]);
+                        }
+                        fprintf(cum_w_file, "\n");
+                    }
+
+                    //append rates
+                    cum_r_file = fopen(fname_cum_r,"a");
+                    for (i=0; i<n_s-1; i++){
+                        for (j=0; j<no; j++){
+                            fprintf(cum_r_file, "%f \t", R_s[i][j*2]);
+                        }
+                        fprintf(cum_r_file, "\n");
+                    }
+
+
+
+                    printf("done...\n");
+                }
+
             }
 
             //find perc correct over lots of trials on TEST PATTERN
@@ -173,7 +227,7 @@ void * Pattern_Completion_worker(void * arg){
                             (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
                         ))
                         %p;
-                    printf("test: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
+                    //printf("test: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }

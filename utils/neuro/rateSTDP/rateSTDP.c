@@ -71,7 +71,8 @@ rateSTDP(int n, int g, double dt, double R[n][g],
         if ( t-wid < 0 || t+wid >= n ){ //check bounds!
           W[i][ga][gb] = W[l][ga][gb]; //set to last known value @ bounds
         } else { //no boundary troubles
-          if ( W[ga][gb] ){ //only alter changeable connections
+          if ( W_c[ga][gb] ){ //only alter changeable connections
+          //if ( W[ga][gb] ){ //only alter changeable connections
             sum = 0;
             for (tau=0; tau<=wid; tau++){ //int post b pre
                 sum += kernel[tau]*R[t][ga]*R[t+tau-wid][gb]*dt;
@@ -79,8 +80,8 @@ rateSTDP(int n, int g, double dt, double R[n][g],
             for (tau=0; tau<=wid; tau++){ //int over tau for pre b post
                 sum += kernel[tau+wid]*R[t][gb]*R[t-tau][ga]*dt;
             }
-            //W[i][ga][gb] = MAX(W[l][ga][gb] + sum*dt/tau_w, 0); //calc weight diff eq
-            W[i][ga][gb] = W[l][ga][gb] + sum*dt/tau_w; //calc weight diff eq
+            W[i][ga][gb] = MAX(0, W[l][ga][gb] + sum*dt/tau_w); //calc weight diff eq
+            //W[i][ga][gb] = W[l][ga][gb] + sum*dt/tau_w; //calc weight diff eq
           } else { //set non-changeable cnxns to constant value
             W[i][ga][gb] = W[l][ga][gb];
           }

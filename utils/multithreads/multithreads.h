@@ -8,7 +8,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define NUM_THREADS 4
+#define NUM_THREADS 1
 
 typedef struct {
     int id;		//Thread id number
