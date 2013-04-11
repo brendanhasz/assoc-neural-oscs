@@ -98,8 +98,9 @@ void * Pattern_Completion_worker(void * arg){
 
     //Randomness/heterogeinity
     //double w_ran = 0.001;
-    double w_ran = 0.001;
-    double r_ran = 0.02;
+    double w_ran = 0.005;
+    //double r_ran = 0.02;
+    double r_ran = 0.5;
     double r_noise = 0.01;
 
     //filenames
@@ -143,15 +144,10 @@ void * Pattern_Completion_worker(void * arg){
     for (tr=IN->a; tr<IN->b; tr++){
         
         //set init weights with a *little* randomness
-        printf("init weights:\n");
         for (i=0;i<g;i++){ 
             for (j=0;j<g;j++){ 
                 W_tr[i][j]=W_0[i][j]+w_ran*gen_randn(); 
-                if (i%2==0 && j%2==0){
-                    printf("%f\t", W_tr[i][j]);
-                }
             }
-            printf("\n");
         }
 
         //Simulate in steps
@@ -192,10 +188,10 @@ void * Pattern_Completion_worker(void * arg){
                 }
 
                 //append to file for rates + weights
-                //TODO
+                /*
                 if (IN->id==0){
                     //append weights
-                    printf("Saving weights + rates...\n");
+                    printf("Saving weights...\n");
                     cum_w_file = fopen(fname_cum_w,"a");
                     for (i=0; i<n_s/step-1; i++){
                         for (j=1; j<no; j++){
@@ -206,6 +202,7 @@ void * Pattern_Completion_worker(void * arg){
                     fclose(cum_w_file);
 
                     //append rates
+                    printf("Saving rates...\n");
                     cum_r_file = fopen(fname_cum_r,"a");
                     for (i=0; i<n_s-1; i++){
                         for (j=0; j<no; j++){
@@ -219,6 +216,7 @@ void * Pattern_Completion_worker(void * arg){
 
                     printf("done...\n");
                 }
+                */
 
             }
 
@@ -234,7 +232,6 @@ void * Pattern_Completion_worker(void * arg){
                             (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
                         ))
                         %p;
-                    //printf("test: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
@@ -245,21 +242,12 @@ void * Pattern_Completion_worker(void * arg){
                 //is the SS pattern correct? (use alpha-score?)
                 phdiff2(n_perc, g, R_perc, pds);
                 pat_score = 0;
-                printf("pds: %f\t%f\t%f\t%f\t%f\n", pds[0][0], pds[0][2], pds[0][4], pds[0][6], pds[0][8]);
                 for (gr=0; gr<no; gr++){
-                    /*
-                    printf("\tpats[0][0]-pats[0][gr]=%f\n",pds[0][0]-pds[0][2*gr]);
-                    printf("\tt_pat[0]-t_pat[gr]=%f\n",pats[0][0]-pats[0][gr]);
-                    printf("\tWI? %d\n", WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh));
-                    printf("\tDIFF: %f\n", (pds[0][0]-pds[0][2*gr])-(pats[0][0]-pats[0][gr]));
-                    */
                     if (WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh)){
-                        //printf("\tgr=%d, match!\n", gr);
                         pat_score++;
                     }
                 }
                 pat_score = pat_score/no;
-                printf("pat_score: %f\n", pat_score);
 
                 //add this perc correct score to sum
                 perc_sum += pat_score;
@@ -272,10 +260,6 @@ void * Pattern_Completion_worker(void * arg){
         }
 
     }
-
-    //TODO: save weights
-    asave(numsteps*numpats, no-1, weights, "weights.dat");
-
 
 }
 
