@@ -18,9 +18,9 @@
 #include "../../utils/multithreads/multithreads.h"
 
 //Define "within" function
-//takes number, a value, and a threshold (number w/i thresh of value)
-#ifndef WI
-#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
+//checks if x and v are within t of each other
+#ifndef WITHN
+#define WITHN(x,v,t) (( ((x)-(v))*((x)-(v)) < (t)*(t)  ) ? 1 : 0)
 #endif
 
 void * Pattern_Completion_worker(void * arg){
@@ -38,7 +38,7 @@ void * Pattern_Completion_worker(void * arg){
     // Simulation Params
     int tr, st, i, j, k, l, t, pat, gr;  //counters
     double pat_score;
-    double withresh = 0.5;
+    double withresh = 0.8;
     int n_s = 5000;  //timesteps in each step
     int n_perc = 10000;  //timesteps in simulation for calculating perc correct
     double dt = 1e-4;   //timestep duration
@@ -245,13 +245,21 @@ void * Pattern_Completion_worker(void * arg){
                 //is the SS pattern correct? (use alpha-score?)
                 phdiff2(n_perc, g, R_perc, pds);
                 pat_score = 0;
+                printf("pds: %f\t%f\t%f\t%f\t%f\n", pds[0][0], pds[0][2], pds[0][4], pds[0][6], pds[0][8]);
                 for (gr=0; gr<no; gr++){
-//#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
-                    if (WI(pats[0][i]-pats[0][0],0,withresh) == WI(pds[0][gr]-pds[0][0],0,withresh)){
+                    /*
+                    printf("\tpats[0][0]-pats[0][gr]=%f\n",pds[0][0]-pds[0][2*gr]);
+                    printf("\tt_pat[0]-t_pat[gr]=%f\n",pats[0][0]-pats[0][gr]);
+                    printf("\tWI? %d\n", WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh));
+                    printf("\tDIFF: %f\n", (pds[0][0]-pds[0][2*gr])-(pats[0][0]-pats[0][gr]));
+                    */
+                    if (WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh)){
+                        //printf("\tgr=%d, match!\n", gr);
                         pat_score++;
                     }
                 }
                 pat_score = pat_score/no;
+                printf("pat_score: %f\n", pat_score);
 
                 //add this perc correct score to sum
                 perc_sum += pat_score;
