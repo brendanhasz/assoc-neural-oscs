@@ -60,6 +60,9 @@ int main(void){
             perccorr[i][j] = perccorr_vec[i*NUMST+j];
         }
     }
+    
+    //save percorr
+    asave(NUMTR, NUMST, perccorr, "perccorr_all.dat");
 
     //SAVE DATA 
     //Save average perccorr

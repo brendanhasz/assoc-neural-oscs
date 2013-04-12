@@ -97,10 +97,10 @@ void * Pattern_Completion_worker(void * arg){
     double pds[g][g];
 
     //Randomness/heterogeinity
-    //double w_ran = 0.001;
-    double w_ran = 0.005;
+    double w_ran = 0.001;
+    //double w_ran = 0.005;
     //double r_ran = 0.02;
-    double r_ran = 0.5;
+    double r_ran = 0.05;
     double r_noise = 0.01;
 
     //filenames
@@ -169,6 +169,7 @@ void * Pattern_Completion_worker(void * arg){
                     //printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
+                    //if (IN->id==0){ printf("\tpats[%d][%d]=%f\tp_ind=%d    \trates[%d]=%f\n", pat, gr, pats[pat][gr], p_ind, gr*2, rates[p_ind][0]); }
                 }
 
                 //Simulate w/ pattern
@@ -181,9 +182,11 @@ void * Pattern_Completion_worker(void * arg){
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
                         W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                        /*
                         if ( IN->id==0 && i==0 && j%2==0 && j!=0 ){ //save 1v? weights over time
                             weights[st*2+pat][j/2] = W_tr[i][j];
                         }
+                        */
                     }
                 }
 
@@ -255,8 +258,19 @@ void * Pattern_Completion_worker(void * arg){
             }
 
             //Add this avg perc correct to array
-            IN->perccorr[tr*numsteps+st] = perc_sum/percres;
+            IN->perccorr[tr*numsteps+st] = perc_sum/((double) percres);
+            printf("percscore=%f\n", perc_sum/((double) percres));
 
+            //Performance gets terrible as weights get too high
+            //and performance goes-> zero quickly, so just assign zero
+            /*
+            if ( perc_sum/((double) percres) < 0.7 ){
+                for (i=st; i<numsteps; i++){
+                    IN->perccorr[tr*numsteps+i] = 0;
+                }
+                break;
+            }
+            */
         }
 
     }
