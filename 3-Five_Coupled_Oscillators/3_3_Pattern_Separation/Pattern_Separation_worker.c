@@ -280,11 +280,10 @@ void * Pattern_Separation_worker(void * arg){
                 //if (IN->id==0 && i==0){ printf("\tpercsumsofar=%f\n", perc_sum2); }
 
             //save rates to file
-            /*
-            if (IN->id==0 && i==0){
+            if (IN->id==0 && i==0 && st>100){
                 printf("saving weights\n");
                 cum_r_file = fopen(fname_cum_r, "a");
-                for (t=0; t<n_s-1; t++){
+                for (t=0; t<n_perc-1; t++){
                     for (gr=0; gr<no; gr++){
                         fprintf(cum_r_file, "%f \t", R_perc[t][gr*2]);
                     }
@@ -292,7 +291,6 @@ void * Pattern_Separation_worker(void * arg){
                 }
                 fclose(cum_r_file);
             }
-            */
 
             }
 
