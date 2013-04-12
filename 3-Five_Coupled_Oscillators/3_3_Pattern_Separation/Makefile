@@ -12,10 +12,10 @@ OFLAGS = $(DFLAGS)
 uts = ../../utils
 nro = $(uts)/neuro
 
-name = Pattern_Completion
+name = Pattern_Separation
 
-objects =	Pattern_Completion.o \
-		Pattern_Completion_worker.o \
+objects =	Pattern_Separation.o \
+		Pattern_Separation_worker.o \
 		rateN.o \
 		rateSTDP.o \
 		get_last_period.o \
@@ -28,11 +28,11 @@ objects =	Pattern_Completion.o \
 $(name): $(objects)
 	gcc $(OFLAGS) -o $(name) $(objects) -lm -lpthread
 
-Pattern_Completion.o: Pattern_Completion.c
-	gcc $(CFLAGS) Pattern_Completion.c
+Pattern_Separation.o: Pattern_Separation.c
+	gcc $(CFLAGS) Pattern_Separation.c
 		
-Pattern_Completion_worker.o: Pattern_Completion_worker.c
-	gcc $(CFLAGS) Pattern_Completion_worker.c
+Pattern_Separation_worker.o: Pattern_Separation_worker.c
+	gcc $(CFLAGS) Pattern_Separation_worker.c
 		
 rateN.o: $(nro)/rateN/rateN.c
 	gcc $(CFLAGS) $(nro)/rateN/rateN.c

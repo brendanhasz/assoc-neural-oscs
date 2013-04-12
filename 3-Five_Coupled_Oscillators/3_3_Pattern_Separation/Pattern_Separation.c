@@ -16,8 +16,8 @@
 //#include "../../utils/sig_proc/phdiff2.h"
 
 #include "../../utils/multithreads/multithreads.h"
-#include "Pattern_Completion.h"
-#include "Pattern_Completion_worker.h"
+#include "Pattern_Separation.h"
+#include "Pattern_Separation_worker.h"
 
 int main(void){
 
@@ -29,6 +29,8 @@ int main(void){
     //Multithreading
     double perccorr[NUMTR][NUMST]; //Percent correct over time and over trials
         double perccorr_vec[NUMTR*NUMST];
+    double perccorr2[NUMTR][NUMST]; //Percent correct over time and over trials
+        double perccorr_vec2[NUMTR*NUMST];
     THREAD_3_2_DAT t_args[NUM_THREADS];
     pthread_t threads[NUM_THREADS];
     int t_divs[NUM_THREADS+1];
@@ -41,6 +43,7 @@ int main(void){
         t_args[i].numsteps = NUMST;
         t_args[i].percres = PERCRES;
         t_args[i].perccorr = (double *)&perccorr_vec;
+        t_args[i].perccorr2 = (double *)&perccorr_vec2;
     }
         
 
@@ -49,7 +52,7 @@ int main(void){
 
     //run threads
     for (i=0; i<NUM_THREADS; i++){
-        pthread_create(&threads[i], NULL, Pattern_Completion_worker, (void*)&t_args[i]);
+        pthread_create(&threads[i], NULL, Pattern_Separation_worker, (void*)&t_args[i]);
     }
     waitfor_threads(NUM_THREADS, threads);
 
@@ -58,35 +61,19 @@ int main(void){
     for (i=0;i<NUMTR; i++){
         for (j=0; j<NUMST; j++){
             perccorr[i][j] = perccorr_vec[i*NUMST+j];
+            perccorr2[i][j] = perccorr_vec2[i*NUMST+j];
         }
     }
     
+
+    //SAVE DATA
+
     //save percorr
     asave(NUMTR, NUMST, perccorr, "perccorr_all.dat");
 
-    //SAVE DATA 
-    //Save average perccorr
-    double p_sum;
-    char * perccorr_avg_fname = "perccorr_avg.dat";
-    double perccorr_averaged[numsteps];
-    for (i=0; i<NUMST; i++){
-        p_sum = 0;
-        for (j=0; j<NUMTR; j++){
-            p_sum += perccorr[j][i];
-        }
-        perccorr_averaged[i] = p_sum/NUMTR;
-    }
-    vsave(NUMST, perccorr_averaged, perccorr_avg_fname); //Save vector
-
-    //Save stderr of perccorr
-    char * perccorr_stderr_fname = "perccorr_stderr.dat";
-    double stderr_out[NUMST];
-    stderrvec(NUMTR, NUMST, perccorr, stderr_out);
-    vsave(NUMST, stderr_out, perccorr_stderr_fname); //Save vector
+    //save percorr
+    asave(NUMTR, NUMST, perccorr2, "perccorr2_all.dat");
     
-    
-
-
 
     return 0;
 

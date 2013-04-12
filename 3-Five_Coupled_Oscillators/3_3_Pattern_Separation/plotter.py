@@ -12,62 +12,40 @@ import matplotlib.pyplot as plt
 
 numtrials = 32
 
-# Plot all the lines
-print "plotting..."
+# Plot accuracy for first pattern
+print "plotting plot 1 of 2..."
 fname_all = 'perccorr_all.dat'
-tit = 'Accuracy as a function of training time (ALL TRIALS)'
+tit = 'Accuracy as a function of training time for first pattern'
 xlab = 'Training Time (500ms presentations)'
 ylab = 'Average Accuracy'
-data_all = np.loadtxt(fname_all)
-data_all = data_all.transpose()
-x = np.linspace(0,data_all.shape[0],data_all.shape[0])
-y = data_all
-plt.figure()
-plt.title(tit)
-plt.xlabel(xlab)
-plt.ylabel(ylab)
-plt.plot(x, y)
-
-# Plot avg weights w/ errorbars for in
-print "plotting..."
-fname_avg = 'perccorr_avg.dat'
-fname_stderr = 'perccorr_stderr.dat'
-tit = 'Accuracy as a function of training time'
-xlab = 'Training Time (# of 0.5s presentations)'
-ylab = 'Accuracy'
-data_avg_all = np.loadtxt(fname_avg)
-#data_avg = data_avg_all[0::10]
-data_avg = data_avg_all
-data_stderr_all = np.loadtxt(fname_stderr)
-#data_stderr = data_stderr_all[0::10]
-data_stderr = data_stderr_all
+data_all = np.loadtxt(fname_all).transpose()
+#data_all = data_all.transpose()
+data_avg = np.mean(data_all, axis=1)
+data_stderr = np.sem(data_all, axis=1)
 x = np.linspace(0,data_avg.shape[0],data_avg.shape[0])
-y = data_avg
-#yerr = data_stderr*np.sqrt(numtrials) #use STD, not stderr
-yerr = data_stderr
 plt.figure()
 plt.title(tit)
 plt.xlabel(xlab)
 plt.ylabel(ylab)
-plt.errorbar(x, y, yerr=yerr, color='green')
+plt.errorbar(x, data_avg, yerr=data_stderr, color='green')
 
-'''
-# Plot cumulative rates
-fname = "cum_r.dat"
+
+# Plot accuracy for second pattern
+print "plotting plot 2 of 2..."
+fname_all2 = 'perccorr2_all.dat'
+tit = 'Accuracy as a function of training time for second pattern'
+xlab = 'Training Time (500ms presentations)'
+ylab = 'Average Accuracy'
+data_all = np.loadtxt(fname_all2).transpose()
+#data_all = data_all.transpose()
+data_avg = np.mean(data_all, axis=1)
+data_stderr = np.sem(data_all, axis=1)
+x = np.linspace(0,data_avg.shape[0],data_avg.shape[0])
 plt.figure()
-plt.subplot(2,1,1)
-plot_tools.linep(fname)
-plt.legend(('g1', 'g2', 'g3', 'g4', 'g5'))
-'''
-
-'''
-# Plot cumulative weights
-fname = "cum_w.dat"
-#plt.figure()
-plt.subplot(2,1,2)
-plot_tools.linep(fname)
-plt.legend(('1v2', '1v3', '1v4', '1v5'))
-'''
+plt.title(tit)
+plt.xlabel(xlab)
+plt.ylabel(ylab)
+plt.errorbar(x, data_avg, yerr=data_stderr, color='blue')
 
 
 #SHOW ALL THE PLOTS

@@ -5,9 +5,9 @@
 
 */
 
-#define NUMTR 24
-#define NUMST 100
-#define PERCRES 100 //should theoretically be higher than 100...
+#define NUMTR 4
+#define NUMST 50 //should be from 50-200
+#define PERCRES 50 //should theoretically be higher than 100...
 
 typedef struct {
     int id;
@@ -17,5 +17,6 @@ typedef struct {
     int numsteps;
     int percres;
     double * perccorr; //percent correct for this trial+step
+    double * perccorr2; //percent correct for this trial+step
 } THREAD_3_2_DAT;
 

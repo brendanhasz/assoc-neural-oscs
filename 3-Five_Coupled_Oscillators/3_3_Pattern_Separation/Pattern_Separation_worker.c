@@ -14,7 +14,7 @@
 #include "../../utils/neuro/rateN/rateN.h"
 #include "../../utils/neuro/rateSTDP/rateSTDP.h"
 #include "../../utils/sig_proc/phdiff2.h"
-#include "Pattern_Completion.h"
+#include "Pattern_Separation.h"
 #include "../../utils/multithreads/multithreads.h"
 
 //Define "within" function
@@ -37,7 +37,7 @@ void * Pattern_Completion_worker(void * arg){
 
     // Simulation Params
     int tr, st, i, j, k, l, t, pat, gr;  //counters
-    double pat_score;
+    double pat_score, pat_score2;
     double withresh = 0.8;
     int n_s = 5000;  //timesteps in each step
     int n_perc = 10000;  //timesteps in simulation for calculating perc correct
@@ -94,6 +94,7 @@ void * Pattern_Completion_worker(void * arg){
     //phasediff trial params
     int percres = IN->percres;    //resolution of phdiff measurements per step
     double perc_sum;
+    double perc_sum2;
     double pds[g][g];
 
     //Randomness/heterogeinity
@@ -129,12 +130,12 @@ void * Pattern_Completion_worker(void * arg){
         pats[1][2] = 0;
         pats[1][3] = 0;
         pats[1][4] = 0;
-    double t_pat[no];
+    double t_pat[no]; //TEST PATTERN FOR PATTERN SEPARATION
         t_pat[0] = 0; 
-        t_pat[1] = M_PI; 
-        t_pat[2] = 0; 
-        t_pat[3] = M_PI; 
-        t_pat[4] = M_PI; 
+        t_pat[1] = 0;
+        t_pat[2] = M_PI; 
+        t_pat[3] = 0;
+        t_pat[4] = 0; 
 
     //declare array for storing weights
     double weights[numsteps*numpats][no-1];
@@ -182,49 +183,14 @@ void * Pattern_Completion_worker(void * arg){
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
                         W_tr[i][j] = W_t[n_s/step-1][i][j]; 
-                        /*
-                        if ( IN->id==0 && i==0 && j%2==0 && j!=0 ){ //save 1v? weights over time
-                            weights[st*2+pat][j/2] = W_tr[i][j];
-                        }
-                        */
                     }
                 }
 
-                //append to file for rates + weights
-                /*
-                if (IN->id==0){
-                    //append weights
-                    printf("Saving weights...\n");
-                    cum_w_file = fopen(fname_cum_w,"a");
-                    for (i=0; i<n_s/step-1; i++){
-                        for (j=1; j<no; j++){
-                            fprintf(cum_w_file, "%f \t", W_t[i][0][j*2]);
-                        }
-                        fprintf(cum_w_file, "\n");
-                    }
-                    fclose(cum_w_file);
-
-                    //append rates
-                    printf("Saving rates...\n");
-                    cum_r_file = fopen(fname_cum_r,"a");
-                    for (i=0; i<n_s-1; i++){
-                        for (j=0; j<no; j++){
-                            fprintf(cum_r_file, "%f \t", R_s[i][j*2]);
-                        }
-                        fprintf(cum_r_file, "\n");
-                    }
-                    fclose(cum_r_file);
-
-
-
-                    printf("done...\n");
-                }
-                */
 
             }
 
             //find perc correct over lots of trials on TEST PATTERN
-            perc_sum= 0;
+            perc_sum = 0;
             for (i=0; i<percres; i++){
                     
                 //set init rates for test pattern w/ randomness
@@ -239,38 +205,37 @@ void * Pattern_Completion_worker(void * arg){
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
 
-                //simulate
+                //Simulate
                 rateN(g, n_perc, R_perc, R_i, W_tr, gamma, tau, dt);
 
-                //is the SS pattern correct? (use alpha-score?)
+                //accuracy on training 
                 phdiff2(n_perc, g, R_perc, pds);
+
+                //what % of the time does it end up in pat[0] first pattern
                 pat_score = 0;
                 for (gr=0; gr<no; gr++){
                     if (WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh)){
                         pat_score++;
                     }
                 }
-                pat_score = pat_score/no;
+                perc_sum += pat_score/no;
 
-                //add this perc correct score to sum
-                perc_sum += pat_score;
+                //what % of the time does it end up in pat[1] second pattern
+                pat_score2 = 0;
+                for (gr=0; gr<no; gr++){
+                    if (WITHN(pds[0][0]-pds[0][2*gr], pats[1][0]-pats[1][gr], withresh)){
+                        pat_score2++;
+                    }
+                }
+                perc_sum2 += pat_score2/no;
 
             }
 
             //Add this avg perc correct to array
             IN->perccorr[tr*numsteps+st] = perc_sum/((double) percres);
-            printf("percscore=%f\n", perc_sum/((double) percres));
+            IN->perccorr2[tr*numsteps+st] = perc_sum2/((double) percres);
+            printf("percscore=%f\tpercscore2=%f\n", perc_sum/((double) percres), perc_sum2/((double) percres));
 
-            //Performance gets terrible as weights get too high
-            //and performance goes-> zero quickly, so just assign zero
-            /*
-            if ( perc_sum/((double) percres) < 0.7 ){
-                for (i=st; i<numsteps; i++){
-                    IN->perccorr[tr*numsteps+i] = 0;
-                }
-                break;
-            }
-            */
         }
 
     }
