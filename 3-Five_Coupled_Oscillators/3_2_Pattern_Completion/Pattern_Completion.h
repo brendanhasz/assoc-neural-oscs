@@ -5,8 +5,8 @@
 
 */
 
-#define NUMTR 12
-#define NUMST 150
+#define NUMTR 24
+#define NUMST 100
 #define PERCRES 100 //should theoretically be higher than 100...
 
 typedef struct {

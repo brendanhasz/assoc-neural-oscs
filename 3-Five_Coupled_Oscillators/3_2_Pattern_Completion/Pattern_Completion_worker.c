@@ -100,7 +100,7 @@ void * Pattern_Completion_worker(void * arg){
     double w_ran = 0.001;
     //double w_ran = 0.005;
     //double r_ran = 0.02;
-    double r_ran = 0.05;
+    double r_ran = 0.02;
     double r_noise = 0.01;
 
     //filenames

@@ -33,8 +33,8 @@ print "plotting..."
 fname_avg = 'perccorr_avg.dat'
 fname_stderr = 'perccorr_stderr.dat'
 tit = 'Accuracy as a function of training time'
-xlab = 'Training Time (10 500ms presentations)'
-ylab = 'Average Accuracy'
+xlab = 'Training Time (# of 0.5s presentations)'
+ylab = 'Accuracy'
 data_avg_all = np.loadtxt(fname_avg)
 #data_avg = data_avg_all[0::10]
 data_avg = data_avg_all
