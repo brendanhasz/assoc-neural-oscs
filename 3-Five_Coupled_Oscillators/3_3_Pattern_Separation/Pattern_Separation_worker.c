@@ -27,6 +27,10 @@
 #define WITHN(x,v,t) ( ABS((x)-(v))<(t) ? 1 : 0 )
 #endif
 
+#ifndef MAX
+#define MAX(x,y) ( x>y ? x : y )
+#endif
+
 void * Pattern_Separation_worker(void * arg){
 
     //cast input args to data structure
@@ -192,10 +196,21 @@ void * Pattern_Separation_worker(void * arg){
                 //Apply STDP
                 rateSTDP(n_s, g, dt, R_s, W_t, W_tr, W_c); 
 
+                //print weights
+                printf("weights:\n");
+                for (i=0;i<no;i++){ 
+                    for (j=0;j<no;j++){ 
+                        printf("%f \t", W_tr[2*i][2*j]);
+                    }
+                    printf("\n");
+                }
+
                 //Update weights
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
-                        W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                        if (W_t[n_s/step-1][i][j]>0.0 && W_t[n_s/step-1][i][j]<1.0){
+                            W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                        }
                     }
                 }
 

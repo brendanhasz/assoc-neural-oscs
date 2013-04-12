@@ -19,8 +19,16 @@
 
 //Define "within" function
 //checks if x and v are within t of each other
+#ifndef ABS
+#define ABS(x) ( ((x)>0) ? (x) : (-(x)) )
+#endif
+
 #ifndef WITHN
-#define WITHN(x,v,t) (( ((x)-(v))*((x)-(v)) < (t)*(t)  ) ? 1 : 0)
+#define WITHN(x,v,t) ( ABS((x)-(v))<(t) ? 1 : 0 )
+#endif
+
+#ifndef MAX
+#define MAX(x,y) ( (x)>(y) ? (x) : (y) )
 #endif
 
 void * Pattern_Completion_worker(void * arg){
@@ -181,7 +189,7 @@ void * Pattern_Completion_worker(void * arg){
                 //Update weights
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
-                        W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                        W_tr[i][j] = MAX(0,W_t[n_s/step-1][i][j]); 
                         /*
                         if ( IN->id==0 && i==0 && j%2==0 && j!=0 ){ //save 1v? weights over time
                             weights[st*2+pat][j/2] = W_tr[i][j];
@@ -246,14 +254,15 @@ void * Pattern_Completion_worker(void * arg){
                 phdiff2(n_perc, g, R_perc, pds);
                 pat_score = 0;
                 for (gr=0; gr<no; gr++){
-                    if (WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh)){
+                    if (WITHN(ABS(pds[0][0]-pds[0][2*gr]), ABS(pats[0][0]-pats[0][gr]), withresh)){
                         pat_score++;
                     }
                 }
-                pat_score = pat_score/no;
 
-                //add this perc correct score to sum
-                perc_sum += pat_score;
+                //if match, add this perc correct score to sum
+                if (pat_score==no){
+                    perc_sum++;
+                }
 
             }
 
