@@ -23,7 +23,7 @@
 #define WITHN(x,v,t) (( ((x)-(v))*((x)-(v)) < (t)*(t)  ) ? 1 : 0)
 #endif
 
-void * Pattern_Completion_worker(void * arg){
+void * Pattern_Separation_worker(void * arg){
 
     //cast input args to data structure
     THREAD_3_2_DAT * IN = arg;
@@ -105,10 +105,12 @@ void * Pattern_Completion_worker(void * arg){
     double r_noise = 0.01;
 
     //filenames
+    /*
     char * fname_cum_w = "cum_w.dat";
         FILE * cum_w_file_n = fopen(fname_cum_w, "w");
         fclose(cum_w_file_n);
         FILE * cum_w_file;
+    */
     char * fname_cum_r = "cum_r.dat";
         FILE * cum_r_file_n = fopen(fname_cum_r, "w");
         fclose(cum_r_file_n);
@@ -131,10 +133,17 @@ void * Pattern_Completion_worker(void * arg){
         pats[1][3] = 0;
         pats[1][4] = 0;
     double t_pat[no]; //TEST PATTERN FOR PATTERN SEPARATION
+        /*
         t_pat[0] = 0; 
         t_pat[1] = 0;
         t_pat[2] = M_PI; 
         t_pat[3] = 0;
+        t_pat[4] = 0; 
+        */
+        t_pat[0] = 0; 
+        t_pat[1] = M_PI;
+        t_pat[2] = M_PI; 
+        t_pat[3] = M_PI;
         t_pat[4] = 0; 
 
     //declare array for storing weights
@@ -191,6 +200,7 @@ void * Pattern_Completion_worker(void * arg){
 
             //find perc correct over lots of trials on TEST PATTERN
             perc_sum = 0;
+            perc_sum2 = 0;
             for (i=0; i<percres; i++){
                     
                 //set init rates for test pattern w/ randomness
@@ -203,6 +213,7 @@ void * Pattern_Completion_worker(void * arg){
                         %p;
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
+                    if (IN->id==0 && i==0){ printf("\tgr=%d\tpind=%d\tR_i=%f\n", gr, p_ind, R_i[gr*2]); }
                 }
 
                 //Simulate
@@ -214,11 +225,12 @@ void * Pattern_Completion_worker(void * arg){
                 //what % of the time does it end up in pat[0] first pattern
                 pat_score = 0;
                 for (gr=0; gr<no; gr++){
+                    if (IN->id==0 && i==0){ printf("\tpds[0][%d]=%f\n", gr, pds[0][2*gr]); }
                     if (WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh)){
                         pat_score++;
                     }
                 }
-                perc_sum += pat_score/no;
+                perc_sum += pat_score/((double) no);
 
                 //what % of the time does it end up in pat[1] second pattern
                 pat_score2 = 0;
@@ -227,7 +239,20 @@ void * Pattern_Completion_worker(void * arg){
                         pat_score2++;
                     }
                 }
-                perc_sum2 += pat_score2/no;
+                perc_sum2 += pat_score2/((double) no);
+
+            //save rates to file
+            if (IN->id==0 && i==0){
+                printf("saving weights\n");
+                cum_r_file = fopen(fname_cum_r, "a");
+                for (t=0; t<n_s-1; t++){
+                    for (gr=0; gr<no; gr++){
+                        fprintf(cum_r_file, "%f \t", R_perc[t][gr*2]);
+                    }
+                    fprintf(cum_r_file, "\n");
+                }
+                fclose(cum_r_file);
+            }
 
             }
 
@@ -235,6 +260,7 @@ void * Pattern_Completion_worker(void * arg){
             IN->perccorr[tr*numsteps+st] = perc_sum/((double) percres);
             IN->perccorr2[tr*numsteps+st] = perc_sum2/((double) percres);
             printf("percscore=%f\tpercscore2=%f\n", perc_sum/((double) percres), perc_sum2/((double) percres));
+            
 
         }
 
