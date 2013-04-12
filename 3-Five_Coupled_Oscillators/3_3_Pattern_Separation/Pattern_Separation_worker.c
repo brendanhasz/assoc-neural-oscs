@@ -18,9 +18,9 @@
 #include "../../utils/multithreads/multithreads.h"
 
 //Define "within" function
-//takes number, a value, and a threshold (number w/i thresh of value)
-#ifndef WI
-#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
+//checks if x and v are within t of each other
+#ifndef WITHN
+#define WITHN(x,v,t) (( ((x)-(v))*((x)-(v)) < (t)*(t)  ) ? 1 : 0)
 #endif
 
 void * Pattern_Completion_worker(void * arg){
@@ -38,7 +38,7 @@ void * Pattern_Completion_worker(void * arg){
     // Simulation Params
     int tr, st, i, j, k, l, t, pat, gr;  //counters
     double pat_score;
-    double withresh = 0.5;
+    double withresh = 0.8;
     int n_s = 5000;  //timesteps in each step
     int n_perc = 10000;  //timesteps in simulation for calculating perc correct
     double dt = 1e-4;   //timestep duration
@@ -63,13 +63,23 @@ void * Pattern_Completion_worker(void * arg){
         wW[0][0]=wee;   wW[0][1]=wei;   //EE    EI
         wW[1][0]=wie;   wW[1][1]=wii;   //IE    II
     double W_0[g][g];
-        double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
+        //double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
+        double wf = 2/((double) no);
+        double xee=0.2*wf, xei=0.3*wf, xie=-0.5*wf, xii=0*wf;  //Init Between-osc weights
+        //double xee=0.2, xei=0.3, xie=-0.5, xii=0;  //Init Between-osc weights
         assignPingW(no, W_0, wee, wei, wie, wii, xee, xei, xie, xii);
     int step = 10; //step for recording plasticity
     double W_t[n_s/step][g][g];
     int W_c[g][g];  //Which synapses have plasticity?
-        for (i=0; i<g; i++){ for (j=0; j<g; j++){ W_c[i][j]=0; }}
-        W_c[0][2]=1;    W_c[2][0]=1;    //Only xee synapses change
+        for (i=0; i<g; i++){ 
+            for (j=0; j<g; j++){ 
+                if (i%2==0 && j%2==0){
+                    W_c[i][j]=1; //only xEE synapses change
+                } else {
+                    W_c[i][j]=0;
+                }
+            }
+        }
 
     //Get init rates
     double R_i[g];
@@ -87,10 +97,22 @@ void * Pattern_Completion_worker(void * arg){
     double pds[g][g];
 
     //Randomness/heterogeinity
-    double w_ran = 0.01;
-    double r_ran = 0.01;
-    double r_noise = 0.001;
+    double w_ran = 0.001;
+    //double w_ran = 0.005;
+    //double r_ran = 0.02;
+    double r_ran = 0.02;
+    double r_noise = 0.01;
 
+    //filenames
+    char * fname_cum_w = "cum_w.dat";
+        FILE * cum_w_file_n = fopen(fname_cum_w, "w");
+        fclose(cum_w_file_n);
+        FILE * cum_w_file;
+    char * fname_cum_r = "cum_r.dat";
+        FILE * cum_r_file_n = fopen(fname_cum_r, "w");
+        fclose(cum_r_file_n);
+        FILE * cum_r_file;
+    
     //Patterns
     int numpats = 2;
     int p_ind;
@@ -113,6 +135,9 @@ void * Pattern_Completion_worker(void * arg){
         t_pat[2] = 0; 
         t_pat[3] = M_PI; 
         t_pat[4] = M_PI; 
+
+    //declare array for storing weights
+    double weights[numsteps*numpats][no-1];
 
     //********************* SIMULATE STARTING IN-PHASE!!! ********************
 
@@ -141,9 +166,10 @@ void * Pattern_Completion_worker(void * arg){
                             (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
                         ))
                         %p;
-                    printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
+                    //printf("train: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
+                    //if (IN->id==0){ printf("\tpats[%d][%d]=%f\tp_ind=%d    \trates[%d]=%f\n", pat, gr, pats[pat][gr], p_ind, gr*2, rates[p_ind][0]); }
                 }
 
                 //Simulate w/ pattern
@@ -156,8 +182,44 @@ void * Pattern_Completion_worker(void * arg){
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
                         W_tr[i][j] = W_t[n_s/step-1][i][j]; 
+                        /*
+                        if ( IN->id==0 && i==0 && j%2==0 && j!=0 ){ //save 1v? weights over time
+                            weights[st*2+pat][j/2] = W_tr[i][j];
+                        }
+                        */
                     }
                 }
+
+                //append to file for rates + weights
+                /*
+                if (IN->id==0){
+                    //append weights
+                    printf("Saving weights...\n");
+                    cum_w_file = fopen(fname_cum_w,"a");
+                    for (i=0; i<n_s/step-1; i++){
+                        for (j=1; j<no; j++){
+                            fprintf(cum_w_file, "%f \t", W_t[i][0][j*2]);
+                        }
+                        fprintf(cum_w_file, "\n");
+                    }
+                    fclose(cum_w_file);
+
+                    //append rates
+                    printf("Saving rates...\n");
+                    cum_r_file = fopen(fname_cum_r,"a");
+                    for (i=0; i<n_s-1; i++){
+                        for (j=0; j<no; j++){
+                            fprintf(cum_r_file, "%f \t", R_s[i][j*2]);
+                        }
+                        fprintf(cum_r_file, "\n");
+                    }
+                    fclose(cum_r_file);
+
+
+
+                    printf("done...\n");
+                }
+                */
 
             }
 
@@ -173,7 +235,6 @@ void * Pattern_Completion_worker(void * arg){
                             (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
                         ))
                         %p;
-                    printf("test: p_ind for patt:%d gr:%d = %d\n", pat, gr, p_ind);
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
                 }
@@ -185,8 +246,7 @@ void * Pattern_Completion_worker(void * arg){
                 phdiff2(n_perc, g, R_perc, pds);
                 pat_score = 0;
                 for (gr=0; gr<no; gr++){
-//#define WI(x,v,t) (((x<v+t) && (x>v-t)) ? 1 : 0)
-                    if (WI(pats[0][i]-pats[0][0],0,withresh) == WI(pds[0][gr]-pds[0][0],0,withresh)){
+                    if (WITHN(pds[0][0]-pds[0][2*gr], pats[0][0]-pats[0][gr], withresh)){
                         pat_score++;
                     }
                 }
@@ -198,13 +258,22 @@ void * Pattern_Completion_worker(void * arg){
             }
 
             //Add this avg perc correct to array
-            IN->perccorr[tr*numsteps+st] = perc_sum/percres;
+            IN->perccorr[tr*numsteps+st] = perc_sum/((double) percres);
+            printf("percscore=%f\n", perc_sum/((double) percres));
 
+            //Performance gets terrible as weights get too high
+            //and performance goes-> zero quickly, so just assign zero
+            /*
+            if ( perc_sum/((double) percres) < 0.7 ){
+                for (i=st; i<numsteps; i++){
+                    IN->perccorr[tr*numsteps+i] = 0;
+                }
+                break;
+            }
+            */
         }
 
     }
-
-
 
 }
 
