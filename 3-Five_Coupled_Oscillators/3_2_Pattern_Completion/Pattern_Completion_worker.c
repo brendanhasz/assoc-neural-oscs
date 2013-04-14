@@ -189,18 +189,15 @@ void * Pattern_Completion_worker(void * arg){
                 //Update weights
                 for (i=0;i<g;i++){ 
                     for (j=0;j<g;j++){ 
-                        W_tr[i][j] = MAX(0,W_t[n_s/step-1][i][j]); 
-                        /*
-                        if ( IN->id==0 && i==0 && j%2==0 && j!=0 ){ //save 1v? weights over time
-                            weights[st*2+pat][j/2] = W_tr[i][j];
+                        if (W_t[n_s/step-1][i][j]>0){
+                            W_tr[i][j] = W_t[n_s/step-1][i][j]; 
                         }
-                        */
                     }
                 }
 
                 //append to file for rates + weights
                 /*
-                if (IN->id==0){
+                if (IN->id==0 && i==0 && (st>100 || st==1) ){
                     //append weights
                     printf("Saving weights...\n");
                     cum_w_file = fopen(fname_cum_w,"a");
@@ -211,7 +208,6 @@ void * Pattern_Completion_worker(void * arg){
                         fprintf(cum_w_file, "\n");
                     }
                     fclose(cum_w_file);
-
                     //append rates
                     printf("Saving rates...\n");
                     cum_r_file = fopen(fname_cum_r,"a");
@@ -230,6 +226,8 @@ void * Pattern_Completion_worker(void * arg){
                 */
 
             }
+
+            
 
             //find perc correct over lots of trials on TEST PATTERN
             perc_sum= 0;
@@ -269,6 +267,19 @@ void * Pattern_Completion_worker(void * arg){
             //Add this avg perc correct to array
             IN->perccorr[tr*numsteps+st] = perc_sum/((double) percres);
             printf("percscore=%f\n", perc_sum/((double) percres));
+
+            //append to file for rates + weights
+            if (IN->id==0 && i==0 && (st>100 || st<2) ){
+                printf("saving rates\n");
+                cum_r_file = fopen(fname_cum_r, "a");
+                for (t=0; t<n_perc-1; t++){
+                    for (gr=0; gr<no; gr++){
+                        fprintf(cum_r_file, "%f \t", R_perc[t][gr*2]);
+                    }
+                    fprintf(cum_r_file, "\n");
+                }
+                fclose(cum_r_file);
+            }
 
             //Performance gets terrible as weights get too high
             //and performance goes-> zero quickly, so just assign zero

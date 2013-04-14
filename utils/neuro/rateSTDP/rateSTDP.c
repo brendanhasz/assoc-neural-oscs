@@ -32,6 +32,7 @@ rateSTDP(int n, int g, double dt, double R[n][g],
     //Weight calculation paramters
     int wid = 100e-3/dt; //go out to 100ms on either side
     int step = 10; //how often to apply plasticity rule
+    //double tau_w = 10; //Weight change time constant used for pattern separation
     double tau_w = 10; //Weight change time constant
 
     //STDP rule parameters

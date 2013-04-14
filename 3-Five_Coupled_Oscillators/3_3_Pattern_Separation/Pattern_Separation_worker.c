@@ -262,13 +262,11 @@ void * Pattern_Separation_worker(void * arg){
                 pat_score2 = 0;
                 //if (IN->id==0 && i==0){ printf("\tPAT2TEST\n"); }
                 for (gr=0; gr<no; gr++){
-                    /*
                     if (IN->id==0 && i==0){
                         printf("\tpds[0][%d]=%f\tpats[1][gr]=%f\n", gr, pds[0][2*gr], pats[1][gr]);
-                        //printf("\t\tpds[0][0]-pds[0][2*gr] = %f\n", pds[0][0]-pds[0][2*gr]);
-                        //printf("\t\tpats[1][0]-pats[1][gr] = %f\n", pats[1][0]-pats[1][gr]);
+                        printf("\t\tpds[0][0]-pds[0][2*gr] = %f\n", pds[0][0]-pds[0][2*gr]);
+                        printf("\t\tpats[1][0]-pats[1][gr] = %f\n", pats[1][0]-pats[1][gr]);
                     }
-                    */
                     if (WITHN(ABS(pds[0][0]-pds[0][2*gr]), ABS(pats[1][0]-pats[1][gr]), withresh)){
                         pat_score2++;
                         //if (IN->id==0 && i==0){ printf("\t\tMATCH!\n"); }
@@ -280,7 +278,7 @@ void * Pattern_Separation_worker(void * arg){
                 //if (IN->id==0 && i==0){ printf("\tpercsumsofar=%f\n", perc_sum2); }
 
             //save rates to file
-            if (IN->id==0 && i==0 && st>100){
+            if (IN->id==0 && i==0 && (st>100 || st==1)){
                 printf("saving weights\n");
                 cum_r_file = fopen(fname_cum_r, "a");
                 for (t=0; t<n_perc-1; t++){
