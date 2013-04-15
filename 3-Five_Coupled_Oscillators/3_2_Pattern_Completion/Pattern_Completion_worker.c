@@ -24,11 +24,11 @@
 #endif
 
 #ifndef WITHN
-#define WITHN(x,v,t) ( ABS((x)-(v))<(t) ? 1 : 0 )
+#define WITHN(x,v,t) ( ABS((x)-(v))<t ? 1 : 0 )
 #endif
 
 #ifndef MAX
-#define MAX(x,y) ( (x)>(y) ? (x) : (y) )
+#define MAX(x,y) ( x>y ? (x) : (y) )
 #endif
 
 void * Pattern_Completion_worker(void * arg){
@@ -262,24 +262,25 @@ void * Pattern_Completion_worker(void * arg){
                     perc_sum++;
                 }
 
+                //append to file for rates + weights
+                if (IN->id==0 && i==0 && st%10==0 && (st>100 || st<2) ){
+                    printf("saving rates\n");
+                    cum_r_file = fopen(fname_cum_r, "a");
+                    for (t=0; t<n_perc-1; t++){
+                        for (gr=0; gr<no; gr++){
+                            fprintf(cum_r_file, "%f \t", R_perc[t][gr*2]);
+                        }
+                        fprintf(cum_r_file, "\n");
+                    }
+                    fclose(cum_r_file);
+                }
+
             }
 
             //Add this avg perc correct to array
             IN->perccorr[tr*numsteps+st] = perc_sum/((double) percres);
             printf("percscore=%f\n", perc_sum/((double) percres));
 
-            //append to file for rates + weights
-            if (IN->id==0 && i==0 && (st>100 || st<2) ){
-                printf("saving rates\n");
-                cum_r_file = fopen(fname_cum_r, "a");
-                for (t=0; t<n_perc-1; t++){
-                    for (gr=0; gr<no; gr++){
-                        fprintf(cum_r_file, "%f \t", R_perc[t][gr*2]);
-                    }
-                    fprintf(cum_r_file, "\n");
-                }
-                fclose(cum_r_file);
-            }
 
             //Performance gets terrible as weights get too high
             //and performance goes-> zero quickly, so just assign zero
