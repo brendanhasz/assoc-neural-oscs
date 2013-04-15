@@ -64,21 +64,30 @@ def linep(filename, tit=' ', xlab=' ', ylab=' ', smooth_w=0, xran=None, yran=Non
     #return fig
 
 
-def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=None, yran=None):
+def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=None, yran=None, flip=None):
     '''
     Plots an image w/ a colormap
     http://matplotlib.org/users/image_tutorial.html
     '''
     data = np.loadtxt(filename)
+    if flip=='horiz':
+        data = np.fliplr(data)
+    elif flip=='vert':
+        data = np.flipud(data)
+    elif flip=='trans':
+        data = data.transpose()
+    else:
+        data = data
     #plt.figure()
-    imgplot = plt.imshow(data)
-    #plt.pcolor(data, cmap='spectral')
-    #imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
-    imgplot.set_cmap('jet') #also 'jet', 'binary' (b&w)\
-    cbar = plt.colorbar()
-    cbar.set_label(clab)
+    #imgplot = plt.imshow(data)
+    imgplot = plt.pcolor(data)
+    imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
+    #imgplot.set_cmap('jet') #also 'jet', 'binary' (b&w)\
+    if clab!=' ':
+        cbar = plt.colorbar()
+        cbar.set_label(clab)
     #imgplot.set_interpolation('nearest') #pixelated
-    imgplot.set_interpolation('bicubic') #blurry but smooth
+    #imgplot.set_interpolation('bicubic') #blurry but smooth
     plt.title(tit)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
