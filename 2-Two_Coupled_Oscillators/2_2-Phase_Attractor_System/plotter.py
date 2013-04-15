@@ -14,9 +14,9 @@ import matplotlib.pyplot as plt
 
 fname = 'EE_Attractor.dat'
 tit = 'Steady-state Phase Difference\nX-Oxc EI=0.3, IE= -0.5, II=0'
-xlab = eval("r'$\Delta\Phi_{0}$'")
-ylab = eval("r'$W_{Xee}$'")
-clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$'")
+xlab = eval("r'$\Delta\Phi_{0}$ (initial phase difference)'")
+ylab = eval("r'$W_{Xee}$ (Cross-osc E->E syn. strength)'")
+clab = eval("r'$\langle \Delta\Phi_{SS} \\rangle$ (steady-state phase diff)'")
 clims = [0, math.pi]
 xran = [0, 2*math.pi]
 yran = [0.1, 0.3]

@@ -81,8 +81,8 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=Non
     #plt.figure()
     #imgplot = plt.imshow(data)
     imgplot = plt.pcolor(data)
-    imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
-    #imgplot.set_cmap('jet') #also 'jet', 'binary' (b&w)\
+    #imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
+    imgplot.set_cmap('jet') #also 'jet', 'binary' (b&w)\
     if clab!=' ':
         cbar = plt.colorbar()
         cbar.set_label(clab)
