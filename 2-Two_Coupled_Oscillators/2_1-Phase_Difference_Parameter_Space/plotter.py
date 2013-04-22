@@ -33,7 +33,7 @@ plot_tools.colorp_scaled(fname, tit, xlab, ylab, clab, clims, xran, yran)
 # Difference 
 print "Plotting graph 3 of 9..."
 fname = 'Phdiff_DIFF.dat'
-tit = 'Phase Difference, DIFFERENCE, X-Osc syn str param space'
+tit = 'Difference in Phase Difference\nX-osc Syn. Weight Param Space'
 clab = eval("r'$\Delta\Phi_{SS, \Delta\Phi_0=0}-\Delta\Phi_{SS, \Delta\Phi_0=\pi}$'")
 clims = [-math.pi, math.pi]
 plt.figure()
@@ -41,7 +41,7 @@ plot_tools.colorp_scaled(fname, tit, xlab, ylab, clab, clims, xran, yran)
 
 
 
-
+'''
 # Frequencies
 # Init in
 print "Plotting graph 4 of 9..."
@@ -93,6 +93,7 @@ clab = eval("r'$A_{\Psi_0=0}-A_{\Psi_0=0}$ (Hz)'")
 plt.figure()
 plot_tools.colorp_scaled(fname, tit, xlab, ylab, clab, clims, xran, yran)
 
+'''
 
 #SHOW THE PLOTS
 plt.show()

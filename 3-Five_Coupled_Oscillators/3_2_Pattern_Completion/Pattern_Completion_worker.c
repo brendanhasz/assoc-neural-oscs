@@ -28,7 +28,7 @@
 #endif
 
 #ifndef MAX
-#define MAX(x,y) ( x>y ? (x) : (y) )
+#define MAX(x,y) ( x>y ? x : y )
 #endif
 
 void * Pattern_Completion_worker(void * arg){

@@ -16,7 +16,7 @@ ylab = 'Rate (Hz)'
 s = 0
 xran = None
 yran = None
-xlims = [1000, 2000]
+xlims = [5000, 8000]
 
 
 plt.figure()

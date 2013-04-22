@@ -228,13 +228,12 @@ void * Pattern_Separation_worker(void * arg){
                 for (gr=0; gr<no; gr++){
                     p_ind = ( (int) (
                             p + 
-                            (((double) p)*t_pat[gr]/2/M_PI) + //plus pattern phase
+                            (((double) p)*t_pat[gr]/2.0/M_PI) + //plus pattern phase
                             (((double) p)*r_ran*gen_randn()/M_PI) // +/- r_ran phase
                         ))
                         %p;
                     R_i[gr*2] = rates[p_ind][0]+r_noise*gen_rand(); //E
                     R_i[gr*2+1] = rates[p_ind][1]+r_noise*gen_rand(); //I
-                    //if (IN->id==0 && i==0){ printf("\tgr=%d\tpind=%d\tR_i=%f\n", gr, p_ind, R_i[gr*2]); }
                 }
 
                 //Simulate
@@ -245,41 +244,25 @@ void * Pattern_Separation_worker(void * arg){
 
                 //what % of the time does it end up in pat[0] first pattern
                 pat_score = 0;
-                //if (IN->id==0 && i==0){ printf("\tPAT1TEST\n"); }
                 for (gr=0; gr<no; gr++){
-                    //if (IN->id==0 && i==0){ printf("\tpds[0][%d]=%f\tpats[0][gr]=%f\n", gr, pds[0][2*gr], pats[0][gr]); }
                     if (WITHN(ABS(pds[0][0]-pds[0][2*gr]), ABS(pats[0][0]-pats[0][gr]), withresh)){
                         pat_score++;
-                        //if (IN->id==0 && i==0){ printf("\t\tMATCH!\n"); }
                     }
                 }
-                if (pat_score==1){
+                if (pat_score==no){
                     perc_sum++;
                 }
 
-                //if (IN->id==0 && i==0){ printf("\tpercsumsofar=%f\n", perc_sum); }
-                
-
                 //what % of the time does it end up in pat[1] second pattern
                 pat_score2 = 0;
-                //if (IN->id==0 && i==0){ printf("\tPAT2TEST\n"); }
                 for (gr=0; gr<no; gr++){
-                    /*
-                    if (IN->id==0 && i==0){
-                        printf("\tpds[0][%d]=%f\tpats[1][gr]=%f\n", gr, pds[0][2*gr], pats[1][gr]);
-                        printf("\t\tpds[0][0]-pds[0][2*gr] = %f\n", pds[0][0]-pds[0][2*gr]);
-                        printf("\t\tpats[1][0]-pats[1][gr] = %f\n", pats[1][0]-pats[1][gr]);
-                    }
-                    */
                     if (WITHN(ABS(pds[0][0]-pds[0][2*gr]), ABS(pats[1][0]-pats[1][gr]), withresh)){
                         pat_score2++;
-                        //if (IN->id==0 && i==0){ printf("\t\tMATCH!\n"); }
                     }
                 }
-                if (pat_score2==1){
+                if (pat_score2==no){
                     perc_sum2++;
                 }
-                //if (IN->id==0 && i==0){ printf("\tpercsumsofar=%f\n", perc_sum2); }
 
             //save rates to file
             if (IN->id==0 && i==0 && st%10==0 && (st>100 || st<1)){
