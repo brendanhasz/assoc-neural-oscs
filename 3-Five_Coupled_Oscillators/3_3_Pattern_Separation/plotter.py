@@ -10,22 +10,23 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-numtrials = 32
+numtrials = 40
 
 # Plot accuracy for first pattern
 print "plotting plot 1 of 2..."
 fname_all = 'perccorr_all.dat'
-tit = 'Accuracy as a function of training time for first pattern'
+tit = 'Pattern Separation Accuracy as a function of training time'
 xlab = 'Training Time (500ms presentations)'
-ylab = 'Average Accuracy'
+ylab = 'Average Accuracy\n1st Training Pattern'
 data_all = np.loadtxt(fname_all).transpose()
 #data_all = data_all.transpose()
 data_avg = np.mean(data_all, axis=1)
-data_stderr = np.std(data_all, axis=1)
+data_stderr = np.std(data_all, axis=1)/np.sqrt(numtrials)
 x = np.linspace(0,data_avg.shape[0],data_avg.shape[0])
 plt.figure()
+plt.subplot(2,1,1)
 plt.title(tit)
-plt.xlabel(xlab)
+#plt.xlabel(xlab)
 plt.ylabel(ylab)
 plt.errorbar(x, data_avg, yerr=data_stderr, color='green')
 
@@ -35,14 +36,15 @@ print "plotting plot 2 of 2..."
 fname_all2 = 'perccorr2_all.dat'
 tit = 'Accuracy as a function of training time for second pattern'
 xlab = 'Training Time (500ms presentations)'
-ylab = 'Average Accuracy'
+ylab = 'Average Accuracy\n2nd Training Pattern'
 data_all = np.loadtxt(fname_all2).transpose()
 #data_all = data_all.transpose()
 data_avg = np.mean(data_all, axis=1)
-data_stderr = np.std(data_all, axis=1)
+data_stderr = np.std(data_all, axis=1)/np.sqrt(numtrials)
 x = np.linspace(0,data_avg.shape[0],data_avg.shape[0])
-plt.figure()
-plt.title(tit)
+#plt.figure()
+plt.subplot(2,1,2)
+#plt.title(tit)
 plt.xlabel(xlab)
 plt.ylabel(ylab)
 plt.errorbar(x, data_avg, yerr=data_stderr, color='blue')
