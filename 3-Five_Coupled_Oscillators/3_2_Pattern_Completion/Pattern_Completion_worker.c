@@ -116,10 +116,16 @@ void * Pattern_Completion_worker(void * arg){
         FILE * cum_w_file_n = fopen(fname_cum_w, "w");
         fclose(cum_w_file_n);
         FILE * cum_w_file;
+    /*
     char * fname_cum_r = "cum_r.dat";
         FILE * cum_r_file_n = fopen(fname_cum_r, "w");
         fclose(cum_r_file_n);
         FILE * cum_r_file;
+    */
+    char * fname_cum_r_t = "cum_r_t.dat";
+        FILE * cum_r_t_file_n = fopen(fname_cum_r_t, "w");
+        fclose(cum_r_t_file_n);
+        FILE * cum_r_t_file;
     
     //Patterns
     int numpats = 2;
@@ -182,6 +188,19 @@ void * Pattern_Completion_worker(void * arg){
 
                 //Simulate w/ pattern
                 rateN(g, n_s, R_s, R_i, W_tr, gamma, tau, dt);
+
+                //append to file for rates + weights
+                if (IN->id==0 && st%10==0 && (st>100 || st<2) ){
+                    printf("saving rates\n");
+                    cum_r_t_file = fopen(fname_cum_r_t, "a");
+                    for (t=0; t<n_s-1; t++){
+                        for (gr=0; gr<no; gr++){
+                            fprintf(cum_r_t_file, "%f \t", R_s[t][gr*2]);
+                        }
+                        fprintf(cum_r_t_file, "\n");
+                    }
+                    fclose(cum_r_t_file);
+                }
 
                 //Apply STDP
                 rateSTDP(n_s, g, dt, R_s, W_t, W_tr, W_c); 
@@ -263,6 +282,7 @@ void * Pattern_Completion_worker(void * arg){
                 }
 
                 //append to file for rates + weights
+                /*
                 if (IN->id==0 && i==0 && st%10==0 && (st>100 || st<2) ){
                     printf("saving rates\n");
                     cum_r_file = fopen(fname_cum_r, "a");
@@ -274,6 +294,7 @@ void * Pattern_Completion_worker(void * arg){
                     }
                     fclose(cum_r_file);
                 }
+                */
 
             }
 

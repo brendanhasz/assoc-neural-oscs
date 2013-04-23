@@ -85,6 +85,7 @@ def colorp(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, xran=Non
     imgplot.set_cmap('jet') #also 'jet', 'binary' (b&w)\
     if clab!=' ':
         cbar = plt.colorbar()
+        #cbar.set_label(clab, size=40)
         cbar.set_label(clab)
     #imgplot.set_interpolation('nearest') #pixelated
     #imgplot.set_interpolation('bicubic') #blurry but smooth
@@ -130,7 +131,8 @@ def colorp_scaled(filename, tit=' ', xlab=' ', ylab=' ', clab=' ', clims=None, x
     #plt.pcolor(data, cmap='spectral')
     imgplot.set_cmap('spectral') #also 'jet', 'binary' (b&w)\
     cbar = plt.colorbar()
-    cbar.set_label(clab)
+    #cbar.set_label(clab)
+    cbar.set_label(clab, size=16)
     imgplot.set_interpolation('nearest') #pixelated
     #imgplot.set_interpolation('bicubic') #blurry but smooth
     plt.title(tit)
