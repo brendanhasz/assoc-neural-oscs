@@ -24,7 +24,7 @@ $ ./executable_name
 ```
 
 ## Plotting
-The routines output data into ascii text files, so you can use your preferred graphing utility.  Alternatively, you can use the provided python plotting tools in `/graphing`.  To use these tools you will need python installed, along witht the python packages [`numpy`](http://www.numpy.org/) and [`matlibplot`](http://matplotlib.org/)
+The routines output data into ascii text files, so you can use your preferred graphing utility.  Alternatively, you can use the provided python plotting tools in `/graphing`.  To use these tools you will need python installed, along witht the python packages [`numpy`](http://www.numpy.org/) and [`matplotlib`](http://matplotlib.org/)
 
 The data produced by the routines in the main numbered folders can be plotted by running that folder's plot routine:
 
